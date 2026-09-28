@@ -1,0 +1,127 @@
+{
+  "meta": {
+    "title": "Pinyin — the alphabet you actually read",
+    "why": "Chinese has no alphabet, but pinyin is the alphabet-like system every learner reads from day one. Almost nobody is taught it properly, so they guess from English spelling and get it wrong for years. Roughly a dozen letters do not say what an English speaker expects, and those dozen cause most of the accent.",
+    "license": "CC0"
+  },
+  "structure": {
+    "note": "Every Mandarin syllable is at most: initial + final + tone. There are only 21 initials and about 35 finals, so the whole sound system is a closed set of roughly 400 syllables. Learn these and you can pronounce any word you ever meet.",
+    "example": { "syllable": "hǎo", "initial": "h", "final": "ao", "tone": 3 }
+  },
+  "initials": [
+    { "p": "b", "group": "lips", "say": "like the p in 'spy' — a soft, unaspirated p, not an English b", "eg": { "h": "爸", "p": "bà", "e": "dad" } },
+    { "p": "p", "group": "lips", "say": "like the p in 'pie' — a big puff of air", "eg": { "h": "怕", "p": "pà", "e": "to fear" } },
+    { "p": "m", "group": "lips", "say": "as in English", "eg": { "h": "妈", "p": "mā", "e": "mum" } },
+    { "p": "f", "group": "lips", "say": "as in English", "eg": { "h": "饭", "p": "fàn", "e": "rice, a meal" } },
+    { "p": "d", "group": "tongue tip", "say": "like the t in 'stop' — unaspirated", "eg": { "h": "大", "p": "dà", "e": "big" } },
+    { "p": "t", "group": "tongue tip", "say": "like the t in 'top' — with a puff", "eg": { "h": "他", "p": "tā", "e": "he" } },
+    { "p": "n", "group": "tongue tip", "say": "as in English", "eg": { "h": "你", "p": "nǐ", "e": "you" } },
+    { "p": "l", "group": "tongue tip", "say": "as in English", "eg": { "h": "来", "p": "lái", "e": "to come" } },
+    { "p": "g", "group": "throat", "say": "like the k in 'skill' — unaspirated, not a hard English g", "eg": { "h": "狗", "p": "gǒu", "e": "dog" } },
+    { "p": "k", "group": "throat", "say": "like the k in 'kill' — with a puff", "eg": { "h": "看", "p": "kàn", "e": "to look" } },
+    { "p": "h", "group": "throat", "say": "rougher than English h, scraped at the back like Scottish 'loch'", "eg": { "h": "好", "p": "hǎo", "e": "good" } },
+    { "p": "j", "group": "flat tongue, smiling", "say": "like the j in 'jeep', lips spread wide", "trap": true, "eg": { "h": "几", "p": "jǐ", "e": "how many" } },
+    { "p": "q", "group": "flat tongue, smiling", "say": "like 'ch' in 'cheap' — NOT a k sound", "trap": true, "eg": { "h": "去", "p": "qù", "e": "to go" } },
+    { "p": "x", "group": "flat tongue, smiling", "say": "like 'sh' in 'sheep', but lighter and further forward — NOT ks or z", "trap": true, "eg": { "h": "谢", "p": "xiè", "e": "thanks" } },
+    { "p": "zh", "group": "curled tongue", "say": "like the j in 'jar', tongue curled back", "trap": true, "eg": { "h": "这", "p": "zhè", "e": "this" } },
+    { "p": "ch", "group": "curled tongue", "say": "like 'ch' in 'char', tongue curled back", "eg": { "h": "吃", "p": "chī", "e": "to eat" } },
+    { "p": "sh", "group": "curled tongue", "say": "like 'sh' in 'shine', tongue curled back", "eg": { "h": "是", "p": "shì", "e": "to be" } },
+    { "p": "r", "group": "curled tongue", "say": "between English r and the s in 'measure'. Not an English r", "trap": true, "eg": { "h": "人", "p": "rén", "e": "person" } },
+    { "p": "z", "group": "flat tongue, buzzing", "say": "like 'ds' in 'kids' — NOT an English z", "trap": true, "eg": { "h": "在", "p": "zài", "e": "at" } },
+    { "p": "c", "group": "flat tongue, buzzing", "say": "like 'ts' in 'cats' — NOT a k or s sound", "trap": true, "eg": { "h": "从", "p": "cóng", "e": "from" } },
+    { "p": "s", "group": "flat tongue, buzzing", "say": "as in English", "eg": { "h": "三", "p": "sān", "e": "three" } }
+  ],
+  "finals": [
+    { "p": "a", "say": "'ah' as in father", "eg": { "h": "他", "p": "tā", "e": "he" } },
+    { "p": "o", "say": "'aw', rounded", "eg": { "h": "我", "p": "wǒ", "e": "I" } },
+    { "p": "e", "say": "'uh' as in 'the' — NOT 'eh'", "trap": true, "eg": { "h": "喝", "p": "hē", "e": "to drink" } },
+    { "p": "i", "say": "'ee' as in 'see'", "eg": { "h": "你", "p": "nǐ", "e": "you" } },
+    { "p": "u", "say": "'oo' as in 'soon'", "eg": { "h": "不", "p": "bù", "e": "not" } },
+    { "p": "ü", "say": "say 'ee' then round your lips without moving your tongue", "trap": true, "eg": { "h": "女", "p": "nǚ", "e": "woman" } },
+    { "p": "ai", "say": "'eye'", "eg": { "h": "来", "p": "lái", "e": "come" } },
+    { "p": "ei", "say": "'ay' as in 'day'", "eg": { "h": "给", "p": "gěi", "e": "give" } },
+    { "p": "ao", "say": "'ow' as in 'how'", "eg": { "h": "好", "p": "hǎo", "e": "good" } },
+    { "p": "ou", "say": "'oh'", "eg": { "h": "走", "p": "zǒu", "e": "walk" } },
+    { "p": "an", "say": "'ahn'", "eg": { "h": "看", "p": "kàn", "e": "look" } },
+    { "p": "en", "say": "'un' as in 'sun'", "eg": { "h": "很", "p": "hěn", "e": "very" } },
+    { "p": "ang", "say": "'ahng', held at the back", "eg": { "h": "忙", "p": "máng", "e": "busy" } },
+    { "p": "eng", "say": "'ung'", "eg": { "h": "冷", "p": "lěng", "e": "cold" } },
+    { "p": "ong", "say": "'oong' — closer to oo than to o", "trap": true, "eg": { "h": "中", "p": "zhōng", "e": "middle" } },
+    { "p": "ian", "say": "'yen' — NOT 'yahn'", "trap": true, "eg": { "h": "天", "p": "tiān", "e": "sky, day" } },
+    { "p": "iu", "say": "'yoh' — there is a hidden o: it is really i-o-u", "trap": true, "eg": { "h": "六", "p": "liù", "e": "six" } },
+    { "p": "ui", "say": "'way' — there is a hidden e: it is really u-e-i", "trap": true, "eg": { "h": "对", "p": "duì", "e": "correct" } },
+    { "p": "un", "say": "'wun' — a hidden e again", "trap": true, "eg": { "h": "论", "p": "lùn", "e": "discuss" } },
+    { "p": "ie", "say": "'yeh'", "eg": { "h": "谢", "p": "xiè", "e": "thanks" } },
+    { "p": "üe", "say": "ü then 'eh'", "eg": { "h": "学", "p": "xué", "e": "study" } },
+    { "p": "in", "say": "'een'", "eg": { "h": "今", "p": "jīn", "e": "today" } },
+    { "p": "ing", "say": "'eeng'", "eg": { "h": "请", "p": "qǐng", "e": "please" } },
+    { "p": "uo", "say": "'waw'", "eg": { "h": "说", "p": "shuō", "e": "speak" } },
+    { "p": "uan", "say": "'wahn'", "eg": { "h": "关", "p": "guān", "e": "close" } },
+    { "p": "er", "say": "'arr' — the tongue curls", "eg": { "h": "二", "p": "èr", "e": "two" } }
+  ],
+  "traps": [
+    { "id": "qxj", "title": "q, x and j are the biggest trap",
+      "detail": "English speakers read q as 'kw' and x as 'ks' or 'z'. Both are wrong, and they make you unintelligible. All three are made with the tongue flat and the lips spread as if smiling.",
+      "rows": [
+        { "wrong": "q = kw", "right": "q = ch (cheap)", "eg": "去 qù = 'chü', not 'koo'" },
+        { "wrong": "x = ks / z", "right": "x = sh (sheep)", "eg": "谢谢 xièxie = 'shyeh-shyeh'" },
+        { "wrong": "j = h / y", "right": "j = j (jeep)", "eg": "几 jǐ = 'jee'" }
+      ] },
+    { "id": "cz", "title": "c is 'ts', z is 'ds'",
+      "detail": "Neither is an English c or z. Both are two sounds squeezed together at the front of the mouth.",
+      "rows": [
+        { "wrong": "c = k or s", "right": "c = ts (cats)", "eg": "从 cóng = 'tsong'" },
+        { "wrong": "z = z (zoo)", "right": "z = ds (kids)", "eg": "在 zài = 'dsigh'" }
+      ] },
+    { "id": "buzz-i", "title": "The silent i",
+      "detail": "After zi ci si zhi chi shi ri, the letter i is NOT 'ee'. It is a buzz with the tongue held still — the sound your mouth already makes after that consonant. Saying 'shee' for 是 shì is one of the loudest beginner tells.",
+      "rows": [
+        { "wrong": "shì = 'shee'", "right": "shì = 'shrr'", "eg": "是 shì — to be" },
+        { "wrong": "sì = 'see'", "right": "sì = 'srr'", "eg": "四 sì — four" }
+      ] },
+    { "id": "aspiration", "title": "b d g are not voiced",
+      "detail": "Mandarin does not contrast voiced and voiceless like English. It contrasts puff of air versus no puff. b d g are unaspirated p t k — hold a hand in front of your mouth: b/d/g move no air, p/t/k blow it.",
+      "rows": [
+        { "wrong": "b = English b", "right": "b = p in 'spy'", "eg": "爸 bà vs 怕 pà" },
+        { "wrong": "g = English g", "right": "g = k in 'skill'", "eg": "狗 gǒu vs 口 kǒu" }
+      ] },
+    { "id": "u-umlaut", "title": "The hidden ü",
+      "detail": "After j, q, x and y the two dots are dropped, but the sound is still ü. So ju qu xu yu are jü qü xü yü. Only after n and l are the dots kept, because there both u and ü exist.",
+      "rows": [
+        { "wrong": "qù = 'koo'", "right": "qù = 'chü'", "eg": "去 qù — to go" },
+        { "wrong": "xué = 'zoo-eh'", "right": "xué = 'shü-eh'", "eg": "学 xué — to study" },
+        { "wrong": "nǚ = 'noo'", "right": "nǚ = 'nü' (dots kept)", "eg": "女 nǚ — woman" }
+      ] },
+    { "id": "hidden-vowels", "title": "iu, ui and un hide a vowel",
+      "detail": "These three are written short but said long. The missing vowel is always in the middle.",
+      "rows": [
+        { "wrong": "liù = 'lyoo'", "right": "iu = i-o-u, 'lyoh'", "eg": "六 liù — six" },
+        { "wrong": "duì = 'dwee'", "right": "ui = u-e-i, 'dway'", "eg": "对 duì — correct" },
+        { "wrong": "lùn = 'loon'", "right": "un = u-e-n, 'lwun'", "eg": "论 lùn — discuss" }
+      ] },
+    { "id": "e-alone", "title": "e on its own is 'uh'",
+      "detail": "Standing alone or after a consonant, e is the vowel in English 'the' — not 'eh' and not 'ee'. It only becomes 'eh' inside ie, üe and ei.",
+      "rows": [
+        { "wrong": "hē = 'hay'", "right": "hē = 'huh'", "eg": "喝 hē — to drink" },
+        { "wrong": "kě = 'kay'", "right": "kě = 'kuh'", "eg": "可以 kěyǐ — may" }
+      ] },
+    { "id": "ian", "title": "-ian is 'yen'",
+      "detail": "Despite the spelling, ian does not rhyme with 'ahn'. It rhymes with English 'yen'.",
+      "rows": [
+        { "wrong": "tiān = 'tyahn'", "right": "tiān = 'tyen'", "eg": "天 tiān — sky" },
+        { "wrong": "qián = 'chyahn'", "right": "qián = 'chyen'", "eg": "钱 qián — money" }
+      ] }
+  ],
+  "pairs": [
+    { "prompt": "Which did you hear?", "a": { "h": "去", "p": "qù", "e": "to go" }, "b": { "h": "哭", "p": "kū", "e": "to cry" }, "tests": "q is 'ch', not k" },
+    { "prompt": "Which did you hear?", "a": { "h": "西", "p": "xī", "e": "west" }, "b": { "h": "七", "p": "qī", "e": "seven" }, "tests": "x (sh) vs q (ch)" },
+    { "prompt": "Which did you hear?", "a": { "h": "四", "p": "sì", "e": "four" }, "b": { "h": "是", "p": "shì", "e": "to be" }, "tests": "flat s vs curled sh" },
+    { "prompt": "Which did you hear?", "a": { "h": "爸", "p": "bà", "e": "dad" }, "b": { "h": "怕", "p": "pà", "e": "to fear" }, "tests": "no puff vs puff" },
+    { "prompt": "Which did you hear?", "a": { "h": "狗", "p": "gǒu", "e": "dog" }, "b": { "h": "口", "p": "kǒu", "e": "mouth" }, "tests": "no puff vs puff" },
+    { "prompt": "Which did you hear?", "a": { "h": "在", "p": "zài", "e": "at" }, "b": { "h": "菜", "p": "cài", "e": "dish, food" }, "tests": "z (ds) vs c (ts)" },
+    { "prompt": "Which did you hear?", "a": { "h": "六", "p": "liù", "e": "six" }, "b": { "h": "路", "p": "lù", "e": "road" }, "tests": "iu has a hidden o" },
+    { "prompt": "Which did you hear?", "a": { "h": "女", "p": "nǚ", "e": "woman" }, "b": { "h": "努", "p": "nǔ", "e": "to strive" }, "tests": "ü vs u — the dots matter" },
+    { "prompt": "Which did you hear?", "a": { "h": "中", "p": "zhōng", "e": "middle" }, "b": { "h": "从", "p": "cóng", "e": "from" }, "tests": "zh (curled) vs c (ts)" },
+    { "prompt": "Which did you hear?", "a": { "h": "人", "p": "rén", "e": "person" }, "b": { "h": "很", "p": "hěn", "e": "very" }, "tests": "r is not an English r" }
+  ]
+}

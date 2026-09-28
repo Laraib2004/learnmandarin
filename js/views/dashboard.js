@@ -1,6 +1,6 @@
 import { h } from '../ui.js';
 import { stats, stageProgress, buildQueue } from '../deck.js';
-import { get } from '../store.js';
+import { get, getSession } from '../store.js';
 
 /**
  * The dashboard's one job: remove the "what do I do today?" decision.
@@ -37,6 +37,8 @@ export default function dashboard(root, { navigate }) {
     h('div', { class: 'stack' },
       firstTime ? welcome() : null,
 
+      resumeCard(navigate),
+
       h('section', { class: 'hero stack' },
         h('h1', {}, firstTime ? 'Start here' : 'Today'),
         h('p', { class: 'muted', style: 'margin:0' }, next.why),
@@ -55,6 +57,14 @@ export default function dashboard(root, { navigate }) {
         stat(s.spoken + s.drilled, 'said out loud'),
         stat(s.streak, 'day streak')),
 
+      s.chars.known > 0
+        ? h('div', { class: 'stats' },
+            stat(s.chars.known, 'characters known'),
+            stat(s.chars.due, 'characters due'),
+            stat(s.conversations, 'conversations'),
+            stat(s.mature, 'solid in memory'))
+        : null,
+
       journey(s),
 
       h('section', { class: 'card stack' },
@@ -63,6 +73,7 @@ export default function dashboard(root, { navigate }) {
         step('Sentences, not words', 'Every card is a whole usable phrase. You learn 很 by using it, not by memorising "very".', s.known > 0),
         step('Say it, get scored', 'Speech recognition checks whether a Mandarin engine actually understood you.', s.spoken > 0),
         step('Build, don\'t recite', 'Pattern drills fill a frame at random so you produce sentences you have never said — under time pressure.', s.drilled > 0),
+        step('Read the script (optional)', 'Pinyin is the alphabet-like part; characters are a separate system built from reusable components. Neither is required to speak.', s.chars.known > 0),
         step('Both directions at once', 'Conversations alternate: understand their Chinese, then produce your own. Drilling one direction only is why people freeze mid-chat.', s.conversations > 0),
         step('Return at the right moment', 'The scheduler brings each sentence back just before you would forget it.', s.mature > 0)),
     ),
@@ -71,6 +82,31 @@ export default function dashboard(root, { navigate }) {
 }
 
 const stat = (n, label) => h('div', { class: 'stat' }, h('b', {}, String(n)), h('span', {}, label));
+
+/**
+ * Nothing should ever have to be restarted. Cards, scores and streaks are
+ * already permanent; this covers the half-finished session you walked away
+ * from — the thing that actually feels like losing your place.
+ */
+function resumeCard(navigate) {
+  const s = getSession();
+  if (!s) return null;
+  const labels = {
+    dialogue: s.detail?.title ? `Conversation: ${s.detail.title}` : 'a conversation',
+    review: 'your review session',
+    drill: 'pattern drills',
+    script: 'character practice',
+  };
+  const when = new Date(s.at);
+  const ago = Math.round((Date.now() - s.at) / 3600000);
+  return h('section', { class: 'card stack' },
+    h('div', { class: 'row', style: 'justify-content:space-between;gap:.5rem' },
+      h('b', {}, 'Unfinished: ', labels[s.view] || s.view),
+      h('span', { class: 'muted small' },
+        ago < 1 ? 'just now' : ago < 24 ? `${ago}h ago` : when.toLocaleDateString())),
+    h('div', { class: 'row' },
+      h('button', { class: 'btn btn-primary tappable', onclick: () => navigate(s.view) }, 'Continue')));
+}
 
 /** The A1 → C1 spine, with the current stage opened up. */
 function journey(s) {

@@ -1,0 +1,1243 @@
+{
+ "meta": {
+  "title": "Hanzi — how characters are built",
+  "why": "Characters look like random squiggles only until you learn that they are assembled from a small set of reusable parts. There are roughly 200 common components; learn about 60 and most characters become readable structures rather than pictures to memorise. The characters here are ordered by how often they appear in THIS course, so every one you learn pays off immediately: the top 100 cover about 68% of all the text in the app.",
+  "license": "CC0"
+ },
+ "strokeRules": [
+  {
+   "rule": "Top to bottom",
+   "eg": "三",
+   "note": "The three lines of 三 (three) are written from the top down."
+  },
+  {
+   "rule": "Left to right",
+   "eg": "们",
+   "note": "The person radical on the left is finished before the right side."
+  },
+  {
+   "rule": "Horizontal before crossing vertical",
+   "eg": "十",
+   "note": "In 十 (ten) the horizontal comes first, then the vertical through it."
+  },
+  {
+   "rule": "Outside before inside",
+   "eg": "问",
+   "note": "The doorframe of 问 (ask) is drawn before the 口 inside it."
+  },
+  {
+   "rule": "Close the box last",
+   "eg": "回",
+   "note": "Draw the three sides, fill the inside, then seal the bottom."
+  },
+  {
+   "rule": "Centre before wings",
+   "eg": "小",
+   "note": "In 小 (small) the middle stroke comes first, then left and right."
+  },
+  {
+   "rule": "Left-falling before right-falling",
+   "eg": "人",
+   "note": "人 (person) is two strokes: the left sweep, then the right."
+  },
+  {
+   "rule": "Dots last",
+   "eg": "我",
+   "note": "A finishing dot or tick is usually the final stroke."
+  }
+ ],
+ "components": [
+  {
+   "c": "人",
+   "alt": "亻",
+   "name": "person",
+   "meaning": "a human being; appears on the left as 亻",
+   "in": [
+    "你",
+    "他",
+    "们",
+    "什",
+    "住"
+   ]
+  },
+  {
+   "c": "口",
+   "name": "mouth",
+   "meaning": "mouth, opening; anything to do with speaking or eating",
+   "in": [
+    "吗",
+    "吃",
+    "叫",
+    "喝",
+    "和"
+   ]
+  },
+  {
+   "c": "女",
+   "name": "woman",
+   "meaning": "woman, female",
+   "in": [
+    "好",
+    "她",
+    "妈",
+    "姐"
+   ]
+  },
+  {
+   "c": "子",
+   "name": "child",
+   "meaning": "child, seed, small thing",
+   "in": [
+    "好",
+    "字",
+    "学"
+   ]
+  },
+  {
+   "c": "心",
+   "alt": "忄",
+   "name": "heart",
+   "meaning": "heart, feeling; as 忄 on the left it marks emotions",
+   "in": [
+    "想",
+    "您",
+    "快",
+    "忙",
+    "怕"
+   ]
+  },
+  {
+   "c": "手",
+   "alt": "扌",
+   "name": "hand",
+   "meaning": "hand; as 扌 it marks actions done with hands",
+   "in": [
+    "打",
+    "找",
+    "把",
+    "我"
+   ]
+  },
+  {
+   "c": "言",
+   "alt": "讠",
+   "name": "speech",
+   "meaning": "words; as 讠 it marks anything spoken",
+   "in": [
+    "说",
+    "请",
+    "谢",
+    "话",
+    "语"
+   ]
+  },
+  {
+   "c": "水",
+   "alt": "氵",
+   "name": "water",
+   "meaning": "water; as 氵 (three drops) it marks liquids",
+   "in": [
+    "没",
+    "汉",
+    "酒",
+    "洗"
+   ]
+  },
+  {
+   "c": "日",
+   "name": "sun",
+   "meaning": "sun, day",
+   "in": [
+    "时",
+    "明",
+    "早",
+    "是"
+   ]
+  },
+  {
+   "c": "月",
+   "name": "moon / flesh",
+   "meaning": "moon and month; also body parts",
+   "in": [
+    "明",
+    "朋",
+    "有",
+    "服"
+   ]
+  },
+  {
+   "c": "木",
+   "name": "tree",
+   "meaning": "wood, tree",
+   "in": [
+    "机",
+    "样",
+    "李",
+    "休"
+   ]
+  },
+  {
+   "c": "火",
+   "alt": "灬",
+   "name": "fire",
+   "meaning": "fire, heat",
+   "in": [
+    "烧",
+    "热",
+    "点",
+    "然"
+   ]
+  },
+  {
+   "c": "土",
+   "name": "earth",
+   "meaning": "soil, ground",
+   "in": [
+    "在",
+    "地",
+    "坐",
+    "块"
+   ]
+  },
+  {
+   "c": "金",
+   "alt": "钅",
+   "name": "metal",
+   "meaning": "gold, metal",
+   "in": [
+    "钱",
+    "银",
+    "错"
+   ]
+  },
+  {
+   "c": "辵",
+   "alt": "辶",
+   "name": "walk",
+   "meaning": "movement, travelling; wraps the bottom-left",
+   "in": [
+    "这",
+    "还",
+    "过",
+    "近",
+    "道"
+   ]
+  },
+  {
+   "c": "食",
+   "alt": "饣",
+   "name": "food",
+   "meaning": "eating, food",
+   "in": [
+    "饭",
+    "饿",
+    "馆"
+   ]
+  },
+  {
+   "c": "大",
+   "name": "big",
+   "meaning": "a person with arms stretched wide",
+   "in": [
+    "天",
+    "太",
+    "头"
+   ]
+  },
+  {
+   "c": "小",
+   "name": "small",
+   "meaning": "small, few",
+   "in": [
+    "少",
+    "尖"
+   ]
+  },
+  {
+   "c": "目",
+   "name": "eye",
+   "meaning": "eye, seeing",
+   "in": [
+    "看",
+    "睡",
+    "眼"
+   ]
+  },
+  {
+   "c": "耳",
+   "name": "ear",
+   "meaning": "ear, hearing",
+   "in": [
+    "听",
+    "取"
+   ]
+  },
+  {
+   "c": "足",
+   "alt": "⻊",
+   "name": "foot",
+   "meaning": "foot, walking",
+   "in": [
+    "跑",
+    "路",
+    "跟"
+   ]
+  },
+  {
+   "c": "力",
+   "name": "strength",
+   "meaning": "force, effort",
+   "in": [
+    "男",
+    "动",
+    "办"
+   ]
+  },
+  {
+   "c": "门",
+   "name": "door",
+   "meaning": "gate, doorway",
+   "in": [
+    "问",
+    "间",
+    "们"
+   ]
+  },
+  {
+   "c": "宀",
+   "name": "roof",
+   "meaning": "a roof — marks buildings and homes",
+   "in": [
+    "家",
+    "宝",
+    "客",
+    "安"
+   ]
+  },
+  {
+   "c": "艹",
+   "name": "grass",
+   "meaning": "plants, vegetation; sits on top",
+   "in": [
+    "菜",
+    "茶",
+    "花",
+    "苦"
+   ]
+  },
+  {
+   "c": "竹",
+   "alt": "⺮",
+   "name": "bamboo",
+   "meaning": "bamboo; on top it marks writing tools",
+   "in": [
+    "等",
+    "笔",
+    "第"
+   ]
+  },
+  {
+   "c": "衣",
+   "alt": "衤",
+   "name": "clothing",
+   "meaning": "clothes, fabric",
+   "in": [
+    "被",
+    "衬"
+   ]
+  },
+  {
+   "c": "刀",
+   "alt": "刂",
+   "name": "knife",
+   "meaning": "blade, cutting",
+   "in": [
+    "到",
+    "别",
+    "前"
+   ]
+  },
+  {
+   "c": "又",
+   "name": "again / right hand",
+   "meaning": "a hand; also 'again'",
+   "in": [
+    "对",
+    "友",
+    "双"
+   ]
+  },
+  {
+   "c": "王",
+   "name": "jade / king",
+   "meaning": "jade or king",
+   "in": [
+    "现",
+    "球",
+    "玩"
+   ]
+  },
+  {
+   "c": "车",
+   "name": "vehicle",
+   "meaning": "cart, car",
+   "in": [
+    "较",
+    "轻"
+   ]
+  },
+  {
+   "c": "见",
+   "name": "see",
+   "meaning": "to see, to meet",
+   "in": [
+    "觉",
+    "现",
+    "视"
+   ]
+  },
+  {
+   "c": "贝",
+   "name": "shell / money",
+   "meaning": "cowrie shell — ancient money, so wealth and cost",
+   "in": [
+    "贵",
+    "买",
+    "费"
+   ]
+  },
+  {
+   "c": "彳",
+   "name": "step",
+   "meaning": "a step, going",
+   "in": [
+    "很",
+    "得",
+    "往"
+   ]
+  },
+  {
+   "c": "冫",
+   "name": "ice",
+   "meaning": "two drops — ice, cold",
+   "in": [
+    "冷",
+    "冰"
+   ]
+  },
+  {
+   "c": "灬",
+   "name": "fire dots",
+   "meaning": "fire underneath something",
+   "in": [
+    "热",
+    "点",
+    "煮"
+   ]
+  },
+  {
+   "c": "阝",
+   "name": "mound / city",
+   "meaning": "on the left a hill, on the right a city",
+   "in": [
+    "都",
+    "那",
+    "院"
+   ]
+  },
+  {
+   "c": "疒",
+   "name": "sickness",
+   "meaning": "illness — a person on a bed",
+   "in": [
+    "病",
+    "疼",
+    "痛"
+   ]
+  },
+  {
+   "c": "示",
+   "alt": "礻",
+   "name": "altar",
+   "meaning": "ritual, spirits",
+   "in": [
+    "谢",
+    "礼",
+    "神"
+   ]
+  }
+ ],
+ "characters": [
+  {
+   "c": "我",
+   "p": "wǒ",
+   "e": "I, me",
+   "strokes": 7,
+   "parts": [
+    "手",
+    "戈"
+   ],
+   "type": "compound",
+   "story": "A hand 手 holding a weapon 戈 — 'the one defending myself'."
+  },
+  {
+   "c": "你",
+   "p": "nǐ",
+   "e": "you",
+   "strokes": 7,
+   "parts": [
+    "亻",
+    "尔"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Person 亻 plus 尔 (which supplies the sound)."
+  },
+  {
+   "c": "他",
+   "p": "tā",
+   "e": "he, him",
+   "strokes": 5,
+   "parts": [
+    "亻",
+    "也"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Person 亻 + 也 for sound. 她 swaps in 女 for 'she'."
+  },
+  {
+   "c": "们",
+   "p": "men",
+   "e": "(plural marker)",
+   "strokes": 5,
+   "parts": [
+    "亻",
+    "门"
+   ],
+   "type": "semantic-phonetic",
+   "story": "People 亻 at a gate 门 — a group of people."
+  },
+  {
+   "c": "好",
+   "p": "hǎo",
+   "e": "good",
+   "strokes": 6,
+   "parts": [
+    "女",
+    "子"
+   ],
+   "type": "compound",
+   "story": "A woman 女 with a child 子 — the classic image of 'good'."
+  },
+  {
+   "c": "不",
+   "p": "bù",
+   "e": "not",
+   "strokes": 4,
+   "parts": [],
+   "type": "pictograph",
+   "story": "A bird flying up against the sky — blocked, hence negation. Learn as one shape."
+  },
+  {
+   "c": "是",
+   "p": "shì",
+   "e": "to be",
+   "strokes": 9,
+   "parts": [
+    "日",
+    "正"
+   ],
+   "type": "compound",
+   "story": "Sun 日 over 正 (upright) — 'that which is correct', so 'to be'."
+  },
+  {
+   "c": "了",
+   "p": "le",
+   "e": "(completed action)",
+   "strokes": 2,
+   "parts": [],
+   "type": "pictograph",
+   "story": "Two strokes. A child with arms wrapped — learn the shape directly."
+  },
+  {
+   "c": "一",
+   "p": "yī",
+   "e": "one",
+   "strokes": 1,
+   "parts": [],
+   "type": "pictograph",
+   "story": "One line, one. 二 is two lines, 三 is three."
+  },
+  {
+   "c": "这",
+   "p": "zhè",
+   "e": "this",
+   "strokes": 7,
+   "parts": [
+    "辶",
+    "文"
+   ],
+   "type": "semantic-phonetic",
+   "story": "The walking radical 辶 wraps 文 — something you can walk to: this one here."
+  },
+  {
+   "c": "说",
+   "p": "shuō",
+   "e": "to speak",
+   "strokes": 9,
+   "parts": [
+    "讠",
+    "兑"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Speech 讠 on the left tells you the meaning; 兑 gives the sound."
+  },
+  {
+   "c": "有",
+   "p": "yǒu",
+   "e": "to have",
+   "strokes": 6,
+   "parts": [
+    "𠂇",
+    "月"
+   ],
+   "type": "compound",
+   "story": "A hand over meat 月 — holding food is having."
+  },
+  {
+   "c": "的",
+   "p": "de",
+   "e": "(possessive / linker)",
+   "strokes": 8,
+   "parts": [
+    "白",
+    "勺"
+   ],
+   "type": "semantic-phonetic",
+   "story": "白 (white) + 勺 (ladle). The most frequent character in Chinese — learn it as a unit."
+  },
+  {
+   "c": "个",
+   "p": "gè",
+   "e": "(general measure word)",
+   "strokes": 3,
+   "parts": [],
+   "type": "pictograph",
+   "story": "A single stalk of bamboo — one item."
+  },
+  {
+   "c": "在",
+   "p": "zài",
+   "e": "to be at",
+   "strokes": 6,
+   "parts": [
+    "土"
+   ],
+   "type": "compound",
+   "story": "Earth 土 underneath — being somewhere, planted on the ground."
+  },
+  {
+   "c": "要",
+   "p": "yào",
+   "e": "to want",
+   "strokes": 9,
+   "parts": [
+    "西",
+    "女"
+   ],
+   "type": "compound",
+   "story": "西 (west) over 女 (woman). Memorise as a shape; the parts are historical."
+  },
+  {
+   "c": "没",
+   "p": "méi",
+   "e": "not have",
+   "strokes": 7,
+   "parts": [
+    "氵",
+    "几",
+    "又"
+   ],
+   "type": "compound",
+   "story": "Water 氵 with a hand 又 — sinking under water, so something is gone."
+  },
+  {
+   "c": "么",
+   "p": "me",
+   "e": "(in 什么 what)",
+   "strokes": 3,
+   "parts": [],
+   "type": "pictograph",
+   "story": "Three strokes, almost always paired with 什."
+  },
+  {
+   "c": "什",
+   "p": "shén",
+   "e": "what",
+   "strokes": 4,
+   "parts": [
+    "亻",
+    "十"
+   ],
+   "type": "compound",
+   "story": "Person 亻 + ten 十. Appears almost only in 什么."
+  },
+  {
+   "c": "去",
+   "p": "qù",
+   "e": "to go",
+   "strokes": 5,
+   "parts": [
+    "土",
+    "厶"
+   ],
+   "type": "compound",
+   "story": "Earth 土 above a private mark — leaving the ground behind."
+  },
+  {
+   "c": "吗",
+   "p": "ma",
+   "e": "(question marker)",
+   "strokes": 6,
+   "parts": [
+    "口",
+    "马"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Mouth 口 (it is spoken) + horse 马 (mǎ, the sound). A perfect example of the pattern."
+  },
+  {
+   "c": "很",
+   "p": "hěn",
+   "e": "very (linker)",
+   "strokes": 9,
+   "parts": [
+    "彳",
+    "艮"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Step 彳 + 艮. Learn it as the word that glues subject to adjective."
+  },
+  {
+   "c": "人",
+   "p": "rén",
+   "e": "person",
+   "strokes": 2,
+   "parts": [],
+   "type": "pictograph",
+   "story": "Two legs walking — a person seen from the side."
+  },
+  {
+   "c": "中",
+   "p": "zhōng",
+   "e": "middle, China",
+   "strokes": 4,
+   "parts": [],
+   "type": "pictograph",
+   "story": "A line through the centre of a box — the middle."
+  },
+  {
+   "c": "国",
+   "p": "guó",
+   "e": "country",
+   "strokes": 8,
+   "parts": [
+    "囗",
+    "玉"
+   ],
+   "type": "compound",
+   "story": "A border 囗 around jade 玉 — treasure inside walls is a state."
+  },
+  {
+   "c": "文",
+   "p": "wén",
+   "e": "writing, culture",
+   "strokes": 4,
+   "parts": [],
+   "type": "pictograph",
+   "story": "Crossed marks — the oldest image of writing."
+  },
+  {
+   "c": "想",
+   "p": "xiǎng",
+   "e": "to think, to want",
+   "strokes": 13,
+   "parts": [
+    "相",
+    "心"
+   ],
+   "type": "semantic-phonetic",
+   "story": "相 over heart 心 — the heart is doing the thinking."
+  },
+  {
+   "c": "时",
+   "p": "shí",
+   "e": "time",
+   "strokes": 7,
+   "parts": [
+    "日",
+    "寸"
+   ],
+   "type": "compound",
+   "story": "Sun 日 + a measure 寸 — measuring the sun is telling time."
+  },
+  {
+   "c": "候",
+   "p": "hòu",
+   "e": "wait, period",
+   "strokes": 10,
+   "parts": [
+    "亻"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Person 亻 waiting. Appears in 时候 (time) and 等候."
+  },
+  {
+   "c": "来",
+   "p": "lái",
+   "e": "to come",
+   "strokes": 7,
+   "parts": [],
+   "type": "pictograph",
+   "story": "A wheat plant — grain 'coming in' at harvest."
+  },
+  {
+   "c": "吃",
+   "p": "chī",
+   "e": "to eat",
+   "strokes": 6,
+   "parts": [
+    "口",
+    "乞"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Mouth 口 + 乞 (beg) — mouth asking for food."
+  },
+  {
+   "c": "喝",
+   "p": "hē",
+   "e": "to drink",
+   "strokes": 12,
+   "parts": [
+    "口",
+    "曷"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Mouth 口 again — anything you do with your mouth tends to carry 口."
+  },
+  {
+   "c": "看",
+   "p": "kàn",
+   "e": "to look",
+   "strokes": 9,
+   "parts": [
+    "手",
+    "目"
+   ],
+   "type": "compound",
+   "story": "A hand 手 above an eye 目 — shading your eyes to look into the distance."
+  },
+  {
+   "c": "听",
+   "p": "tīng",
+   "e": "to listen",
+   "strokes": 7,
+   "parts": [
+    "口",
+    "斤"
+   ],
+   "type": "semantic-phonetic",
+   "story": "In simplified form mouth 口 + 斤. The traditional 聽 shows an ear 耳."
+  },
+  {
+   "c": "请",
+   "p": "qǐng",
+   "e": "please, to invite",
+   "strokes": 10,
+   "parts": [
+    "讠",
+    "青"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Speech 讠 + 青 (qīng) for sound — a spoken request."
+  },
+  {
+   "c": "谢",
+   "p": "xiè",
+   "e": "thanks",
+   "strokes": 12,
+   "parts": [
+    "讠",
+    "身",
+    "寸"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Speech 讠 — thanking is something you say."
+  },
+  {
+   "c": "家",
+   "p": "jiā",
+   "e": "home, family",
+   "strokes": 10,
+   "parts": [
+    "宀",
+    "豕"
+   ],
+   "type": "compound",
+   "story": "A roof 宀 over a pig 豕 — a house with livestock was a home."
+  },
+  {
+   "c": "学",
+   "p": "xué",
+   "e": "to study",
+   "strokes": 8,
+   "parts": [
+    "子"
+   ],
+   "type": "compound",
+   "story": "A child 子 under a roof with hands above — a child being taught."
+  },
+  {
+   "c": "钱",
+   "p": "qián",
+   "e": "money",
+   "strokes": 10,
+   "parts": [
+    "钅",
+    "戋"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Metal 钅 — coins were metal. Any character about money tends to carry 钅 or 贝."
+  },
+  {
+   "c": "买",
+   "p": "mǎi",
+   "e": "to buy",
+   "strokes": 6,
+   "parts": [
+    "买"
+   ],
+   "type": "compound",
+   "story": "Contains 头-like top over 买. Compare 卖 mài (sell) — one extra stroke on top."
+  },
+  {
+   "c": "贵",
+   "p": "guì",
+   "e": "expensive",
+   "strokes": 9,
+   "parts": [
+    "贝"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Shell 贝 at the bottom — shells were money, so this is about cost."
+  },
+  {
+   "c": "天",
+   "p": "tiān",
+   "e": "sky, day",
+   "strokes": 4,
+   "parts": [
+    "大"
+   ],
+   "type": "compound",
+   "story": "A big person 大 with a line above — what is above people is the sky."
+  },
+  {
+   "c": "明",
+   "p": "míng",
+   "e": "bright, next",
+   "strokes": 8,
+   "parts": [
+    "日",
+    "月"
+   ],
+   "type": "compound",
+   "story": "Sun 日 + moon 月 — the two bright things. 明天 is 'the next bright' = tomorrow."
+  },
+  {
+   "c": "点",
+   "p": "diǎn",
+   "e": "dot, o'clock",
+   "strokes": 9,
+   "parts": [
+    "占",
+    "灬"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Fire dots 灬 underneath — originally a spot of flame."
+  },
+  {
+   "c": "现",
+   "p": "xiàn",
+   "e": "now, appear",
+   "strokes": 8,
+   "parts": [
+    "王",
+    "见"
+   ],
+   "type": "compound",
+   "story": "Jade 王 + see 见 — what is visible right now."
+  },
+  {
+   "c": "多",
+   "p": "duō",
+   "e": "many",
+   "strokes": 6,
+   "parts": [
+    "夕",
+    "夕"
+   ],
+   "type": "compound",
+   "story": "Two evenings 夕 stacked — one after another, so 'many'."
+  },
+  {
+   "c": "少",
+   "p": "shǎo",
+   "e": "few",
+   "strokes": 4,
+   "parts": [
+    "小"
+   ],
+   "type": "compound",
+   "story": "小 (small) with a stroke taken off — even less than small."
+  },
+  {
+   "c": "大",
+   "p": "dà",
+   "e": "big",
+   "strokes": 3,
+   "parts": [],
+   "type": "pictograph",
+   "story": "A person standing with arms spread as wide as possible."
+  },
+  {
+   "c": "小",
+   "p": "xiǎo",
+   "e": "small",
+   "strokes": 3,
+   "parts": [],
+   "type": "pictograph",
+   "story": "Three tiny marks — specks."
+  },
+  {
+   "c": "上",
+   "p": "shàng",
+   "e": "up, above",
+   "strokes": 3,
+   "parts": [],
+   "type": "pictograph",
+   "story": "A mark above a line. 下 is the mirror image — below."
+  },
+  {
+   "c": "下",
+   "p": "xià",
+   "e": "down, below",
+   "strokes": 3,
+   "parts": [],
+   "type": "pictograph",
+   "story": "A mark below a line — the opposite of 上."
+  },
+  {
+   "c": "会",
+   "p": "huì",
+   "e": "can, will",
+   "strokes": 6,
+   "parts": [
+    "人"
+   ],
+   "type": "compound",
+   "story": "People 人 gathered under a roof — a meeting; also 'to know how'."
+  },
+  {
+   "c": "能",
+   "p": "néng",
+   "e": "able to",
+   "strokes": 10,
+   "parts": [
+    "月"
+   ],
+   "type": "compound",
+   "story": "Originally a bear — strength, hence ability."
+  },
+  {
+   "c": "可",
+   "p": "kě",
+   "e": "may, can",
+   "strokes": 5,
+   "parts": [
+    "口"
+   ],
+   "type": "compound",
+   "story": "A mouth 口 giving permission."
+  },
+  {
+   "c": "以",
+   "p": "yǐ",
+   "e": "by means of",
+   "strokes": 4,
+   "parts": [],
+   "type": "pictograph",
+   "story": "Almost always seen in 可以 (may) and 以前 (before)."
+  },
+  {
+   "c": "对",
+   "p": "duì",
+   "e": "correct, toward",
+   "strokes": 5,
+   "parts": [
+    "又",
+    "寸"
+   ],
+   "type": "compound",
+   "story": "Two hands 又 and 寸 facing each other — matching, hence correct."
+  },
+  {
+   "c": "起",
+   "p": "qǐ",
+   "e": "to rise",
+   "strokes": 10,
+   "parts": [
+    "走",
+    "己"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Walk 走 + 己 — getting up and moving."
+  },
+  {
+   "c": "做",
+   "p": "zuò",
+   "e": "to do, make",
+   "strokes": 11,
+   "parts": [
+    "亻",
+    "故"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Person 亻 doing something."
+  },
+  {
+   "c": "工",
+   "p": "gōng",
+   "e": "work",
+   "strokes": 3,
+   "parts": [],
+   "type": "pictograph",
+   "story": "A carpenter's tool — work."
+  },
+  {
+   "c": "作",
+   "p": "zuò",
+   "e": "to work, make",
+   "strokes": 7,
+   "parts": [
+    "亻",
+    "乍"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Person 亻 at work. 工作 = work."
+  },
+  {
+   "c": "太",
+   "p": "tài",
+   "e": "too, excessively",
+   "strokes": 4,
+   "parts": [
+    "大"
+   ],
+   "type": "compound",
+   "story": "Big 大 with an extra dot — bigger than big."
+  },
+  {
+   "c": "还",
+   "p": "hái",
+   "e": "still, also",
+   "strokes": 7,
+   "parts": [
+    "辶",
+    "不"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Walking 辶 + 不 — going back, still going."
+  },
+  {
+   "c": "过",
+   "p": "guò",
+   "e": "to pass, (experienced)",
+   "strokes": 6,
+   "parts": [
+    "辶",
+    "寸"
+   ],
+   "type": "semantic-phonetic",
+   "story": "The walking radical 辶 — crossing over, having passed through."
+  },
+  {
+   "c": "给",
+   "p": "gěi",
+   "e": "to give",
+   "strokes": 9,
+   "parts": [
+    "纟",
+    "合"
+   ],
+   "type": "semantic-phonetic",
+   "story": "Silk 纟 + 合 — handing over cloth."
+  },
+  {
+   "c": "问",
+   "p": "wèn",
+   "e": "to ask",
+   "strokes": 6,
+   "parts": [
+    "门",
+    "口"
+   ],
+   "type": "compound",
+   "story": "A mouth 口 in a doorway 门 — calling a question through the door."
+  },
+  {
+   "c": "题",
+   "p": "tí",
+   "e": "topic, question",
+   "strokes": 15,
+   "parts": [
+    "是",
+    "页"
+   ],
+   "type": "semantic-phonetic",
+   "story": "页 (head/page) on the right — headings and topics."
+  },
+  {
+   "c": "为",
+   "p": "wèi",
+   "e": "for, because",
+   "strokes": 4,
+   "parts": [],
+   "type": "pictograph",
+   "story": "Appears in 因为 (because) and 为什么 (why)."
+  },
+  {
+   "c": "因",
+   "p": "yīn",
+   "e": "cause",
+   "strokes": 6,
+   "parts": [
+    "囗",
+    "大"
+   ],
+   "type": "compound",
+   "story": "A big person 大 enclosed 囗 — hemmed in by a reason."
+  },
+  {
+   "c": "所",
+   "p": "suǒ",
+   "e": "place; (in 所以)",
+   "strokes": 8,
+   "parts": [
+    "户",
+    "斤"
+   ],
+   "type": "compound",
+   "story": "A door 户 and an axe 斤. Mostly seen in 所以 (therefore)."
+  }
+ ]
+}

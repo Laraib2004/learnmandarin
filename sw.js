@@ -14,7 +14,7 @@
  * Bump CACHE when shipping changed assets — the old cache is dropped on activate.
  */
 
-const CACHE = 'shuoba-v3';
+const CACHE = 'shuoba-v4';
 
 const PRECACHE = [
   './',
@@ -29,18 +29,22 @@ const PRECACHE = [
   './js/tts.js',
   './js/asr.js',
   './js/feedback.js',
+  './js/reminder.js',
   './js/views/dashboard.js',
   './js/views/tones.js',
   './js/views/review.js',
   './js/views/speak.js',
   './js/views/drill.js',
   './js/views/dialogue.js',
+  './js/views/script.js',
   './js/views/library.js',
   './js/views/settings.js',
   './data/course.json',
   './data/tones.json',
   './data/patterns.json',
   './data/dialogues.json',
+  './data/pinyin.json',
+  './data/characters.json',
   './data/corpus/st1.json',
   './data/corpus/st2.json',
   './data/corpus/st3.json',

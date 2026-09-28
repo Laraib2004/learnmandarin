@@ -35,6 +35,9 @@ generating novel sentences fast. The app therefore has two distinct engines:
 - **Drill** (`views/drill.js`) trains *production* — grammar frames with slots
   filled at random, so the learner assembles sentences never seen before.
 - **Dialogue** (`views/dialogue.js`) trains *both, alternating*.
+- **Script** (`views/script.js`) is the reading track: pinyin + characters. It is
+  deliberately OPTIONAL and on its own FSRS schedule (`store.charCards`), never
+  mixed into the sentence queue.
 
 If you are adding a feature, know which engine it serves. The timer in Drill is
 load-bearing, not decoration: correct-but-slow plateaus, so `TARGET_MS = 4000`
@@ -55,6 +58,23 @@ subtitles, and that is the whole point of the exercise. Comprehension
 distractors are drawn from other turns at the same stage so wrong answers are
 plausible Chinese rather than obvious filler.
 
+### Chinese has no alphabet — say so
+
+Learners arrive believing there is one. The app must keep two things distinct:
+
+- **Pinyin** is the romanisation, the nearest thing to an alphabet. The value is
+  in the *traps* (`data/pinyin.json` → `traps`): q=ch, x=sh, c=ts, z=ds, the
+  buzzing i after zi/ci/si/zhi/chi/shi/ri, bare e = "uh", -ian = "yen", hidden
+  vowels in iu/ui/un, and the ü hidden inside ju/qu/xu/yu. These cause most of a
+  beginner accent and almost no app teaches them.
+- **Hanzi** are not letters. Taught components-first: know 讠 and you can guess a
+  character is about speech. Never present characters as shapes to memorise —
+  every entry needs `parts` and a `story`.
+
+Characters are ordered by frequency **in this corpus**, not by textbook order or
+HSK. Regenerate that ordering if the corpus grows substantially; the payoff claim
+("55% of course text") is asserted by a test and must stay true.
+
 ## Architecture
 
 ```
@@ -65,6 +85,7 @@ index.html → js/main.js (hash router) → js/views/<route>.js
       fsrs.js (scheduling) · tts.js (audio) · asr.js (scoring)
                     ↓
       feedback.js (toasts · audio cues · haptics)
+      reminder.js (daily nudge · .ics calendar alarm)
 
 sw.js + manifest.webmanifest + icons/   →  installable, offline PWA
 ```
@@ -108,6 +129,8 @@ data/course.json           stages: {id, level, title, goal, canDo[], file}
 data/corpus/st1..st5.json  {stage, units[], sentences[]}
 data/patterns.json         generative frames
 data/dialogues.json        two-way conversations
+data/pinyin.json           initials, finals, and the 8 spelling traps
+data/characters.json       components, stroke rules, characters
 data/tones.json            minimal pairs + sandhi rules
 ```
 
@@ -210,6 +233,40 @@ Marks always align 1:1 with the target string; there's a test for that.
 Firefox has no `SpeechRecognition`. Every path that uses it must degrade, never
 throw — `views/speak.js` and `views/drill.js` show the fallback pattern.
 
+## Persistence and resume
+
+**Nothing may ever force a restart.** Two separate mechanisms:
+
+- *Permanent progress* — cards, scores, streaks, character cards. Already
+  written on every interaction via `store.update()`.
+- *Session position* — `store.saveSession(view, detail)` / `getSession()` /
+  `clearSession()`. Views that span multiple steps must record position as they
+  go (see `views/dialogue.js`, which saves `{id, turn, title}` every turn).
+  `getSession()` returns null for anything older than 7 days: a stale resume is
+  noise. Always call `clearSession()` on completion, or the dashboard offers to
+  resume something already finished.
+
+The dashboard's `resumeCard()` surfaces it. If you add a multi-step view, wire
+`saveSession` into it and add a label to the `labels` map there.
+
+## Reminders — know what is impossible
+
+`js/reminder.js`. **A static site cannot notify a user while it is closed.** Web
+Push needs a server to hold subscriptions; this app has no backend by design. Do
+not add a feature that implies otherwise, and do not "fix" this by adding a
+server without revisiting Hard Constraint #2.
+
+- iOS is stricter: `Notification` only exists for a PWA added to the Home Screen
+  (16.4+), and background delivery still needs push. `iosNeedsInstall()` detects
+  the pre-install case so Settings can explain instead of offering a dead button.
+- The layer that genuinely works is `buildICS()` — a daily-recurring VEVENT with
+  a VALARM, downloaded and imported into the user's own calendar. It uses
+  **floating local time** (no `Z`, no TZID) deliberately, so it fires at the
+  chosen wall-clock time in any timezone. ICS requires **CRLF** line endings;
+  there is a test for that.
+- `reminderDue()` is suppressed by: reminder off, already studied today, already
+  reminded today, or before the chosen time. All four are tested.
+
 ## Mobile and PWA
 
 Built mobile-first against **iPhone 16 (393 x 852pt)**. Rules that are load-bearing:
@@ -249,7 +306,7 @@ Built mobile-first against **iPhone 16 (393 x 852pt)**. Rules that are load-bear
 ## Testing
 
 ```bash
-npm test            # both suites, 78 checks
+npm test            # both suites, 103 checks
 npm run test:engine # FSRS maths + alignment scoring (pure logic)
 npm run test:views  # renders every view against a DOM shim
 ```
@@ -288,6 +345,12 @@ Note the shim needs `globalThis.Node` defined, since `ui.js → h()` does
 - When testing layout in a browser, the dev server sends no cache headers but
   Chrome still serves a stale `app.css`; bust it with a query string. A stale
   stylesheet reads exactly like "my CSS fix did nothing".
+- Windows consoles are cp1252: printing Chinese from a Python one-liner throws
+  `UnicodeEncodeError`. Write to a file and read it back instead.
+- Never assume `window.navigator` exists — it is absent in the test shim and in
+  some embedded webviews. `reminder.js` uses optional chaining for this reason.
+- The bottom tab bar holds **7** items at 393px with no clipping (verified).
+  Adding an eighth will overflow; move something to the header icons instead.
 
 ## Roadmap priorities
 
@@ -300,7 +363,9 @@ In rough order of learner value:
 3. **Pitch-contour feedback** from the mic — show the learner's actual tone curve
    against the target. The single biggest possible upgrade to Speak.
 4. **More dialogues**, and branching replies instead of a fixed script.
-5. Recording playback; optional character track; pitch-contour visualisation.
+5. **More characters** — 69 now; the top 100 by corpus frequency reach ~68%.
+6. Recording playback; pitch-contour visualisation; animated stroke order
+   (the last needs a stroke-path dataset, which is a real download).
 
 ## Style
 

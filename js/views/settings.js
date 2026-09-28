@@ -2,7 +2,8 @@ import { h } from '../ui.js';
 import { get, update, exportJSON, importJSON, reset } from '../store.js';
 import { chineseVoices, setVoice, speak, initVoices } from '../tts.js';
 import { primeMicrophone, isSupported as asrOk } from '../asr.js';
-import { signal, unlockAudio, hapticsSupported } from '../feedback.js';
+import { signal, unlockAudio, hapticsSupported, toast } from '../feedback.js';
+import * as reminder from '../reminder.js';
 
 export default function settings(root) {
   const pane = h('div', { class: 'stack' });
@@ -58,6 +59,14 @@ export default function settings(root) {
             onchange: paint,
           })),
 
+        h('label', { class: 'field' }, `New characters per day — ${s.settings.newCharsPerDay}`,
+          h('small', {}, 'Characters are slower to learn than sentences. Five a day is about 100 in three weeks, which covers most of the course text.'),
+          h('input', {
+            type: 'range', min: '0', max: '20', step: '1', value: String(s.settings.newCharsPerDay),
+            oninput: (e) => { update((st) => { st.settings.newCharsPerDay = Number(e.target.value); }); },
+            onchange: paint,
+          })),
+
         h('label', { class: 'field' }, 'Theme',
           h('div', { class: 'row' },
             themeBtn('', 'Match system'), themeBtn('light', 'Light'), themeBtn('dark', 'Dark')))),
@@ -82,6 +91,58 @@ export default function settings(root) {
         }, 'Test feedback')),
 
       h('section', { class: 'card stack' },
+        h('h2', {}, 'Daily reminder'),
+        h('label', { class: 'field' }, 'Remind me every day at',
+          h('small', {}, 'Pick the time you actually have ten free minutes. Consistency beats length.'),
+          h('input', {
+            type: 'time', value: s.settings.reminderTime || '15:00',
+            style: 'padding:.6rem;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:16px;min-height:44px',
+            onchange: (e) => { update((st) => { st.settings.reminderTime = e.target.value || '15:00'; }); paint(); },
+          })),
+        h('div', { class: 'row' },
+          boolToggle('reminderOn', true, 'Reminder on'),
+          boolToggle('reminderOn', false, 'Off')),
+
+        h('div', { class: 'notice' },
+          h('b', {}, 'Read this before relying on it. '),
+          'This app has no server — that is what keeps it free and private. But a website can only ' +
+          'notify you while it is open; waking a closed app needs a push server. So the in-app nudge ' +
+          'below only fires when you happen to open the app after your chosen time.'),
+
+        h('div', { class: 'stack' },
+          h('b', { style: 'font-size:.95rem' }, 'The reliable way: a real calendar alarm'),
+          h('p', { class: 'muted small', style: 'margin:0' },
+            'Add a repeating event to your phone’s own calendar. It fires every day at your chosen time ' +
+            'whether or not this app is open, forever, with no server involved. This is the one that actually works.'),
+          h('button', {
+            class: 'btn btn-primary tappable',
+            onclick: () => {
+              reminder.downloadICS(get().settings.reminderTime || '15:00');
+              toast('Calendar file downloaded — open it to add the daily alarm', 'correct', 4500);
+            },
+          }, `Add daily ${s.settings.reminderTime || '15:00'} reminder to my calendar`)),
+
+        h('div', { class: 'stack' },
+          h('b', { style: 'font-size:.95rem' }, 'Browser notifications (while the app is open)'),
+          h('p', { class: 'muted small', style: 'margin:0' },
+            reminder.iosNeedsInstall()
+              ? 'On iPhone, notifications only exist for an installed app. Add this to your Home Screen first (Share → Add to Home Screen), then come back.'
+              : reminder.notificationPermission() === 'granted'
+                ? 'Granted. You will get a notification if the app is open past your reminder time.'
+                : reminder.notificationPermission() === 'denied'
+                  ? 'Blocked. Re-allow notifications for this site in your browser settings.'
+                  : 'Not yet granted.'),
+          h('button', {
+            class: 'btn tappable',
+            disabled: reminder.iosNeedsInstall() || reminder.notificationPermission() === 'granted',
+            onclick: async () => {
+              const r = await reminder.requestPermission();
+              toast(r === 'granted' ? 'Notifications allowed' : `Notifications: ${r}`, r === 'granted' ? 'correct' : 'partial');
+              paint();
+            },
+          }, 'Allow notifications'))),
+
+      h('section', { class: 'card stack' },
         h('h2', {}, 'Microphone'),
         h('p', { class: 'muted small', style: 'margin:0' },
           asrOk()
@@ -97,8 +158,10 @@ export default function settings(root) {
       h('section', { class: 'card stack' },
         h('h2', {}, 'Your data'),
         h('p', { class: 'muted small', style: 'margin:0' },
-          'Progress lives in this browser only. Nothing is uploaded, and there is no account to lose. ' +
-          'That also means clearing site data erases it — export a backup if you care about your streak.'),
+          'Progress lives in this browser only — every card, score, streak and half-finished ' +
+          'conversation is saved automatically as you go, so nothing ever restarts unless you ask it to. ' +
+          'Nothing is uploaded and there is no account to lose. The catch: clearing site data erases it, ' +
+          'so export a backup if you care.'),
         h('div', { class: 'row' },
           h('button', { class: 'btn btn-primary', onclick: download }, 'Export backup'),
           h('button', { class: 'btn', onclick: () => pane.querySelector('#import-box').hidden = false }, 'Import backup'),

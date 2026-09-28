@@ -20,6 +20,8 @@ front of a Mandarin speaker and have to say something. This one inverts that.
 | Never ask you to speak | **Speech scoring** — a Mandarin recogniser either understood you or it didn't, marked character by character |
 | Only ever test recall | **Pattern drills** — you *build* sentences you have never said, against a clock |
 | Test one direction only | **Two-way conversations** — understand their Chinese, then produce your own |
+| Never explain pinyin | **The alphabet you were never taught** — q, x, c, z and ü do not say what English spelling suggests |
+| Characters as rote squiggles | **Components first** — 39 reusable parts, characters ordered by frequency *in this course* |
 | Weld reading to speaking | **Characters are optional** — you can complete the course in pinyin and audio alone |
 | SM-2 or a hand-tuned interval ladder | **FSRS-5** — models memory stability and difficulty per card, schedules the review for the day you'd otherwise forget |
 | Gamified streaks in place of feedback | **Recall probability** — the Library shows your real chance of remembering each sentence right now |
@@ -54,6 +56,24 @@ Partner turns are **audio-first with no subtitles** — the Chinese stays hidden
 until you commit to an answer, because a real conversation has no subtitles.
 10 dialogues ship, 81 turns, 41 comprehension / 40 production.
 
+### Chinese has no alphabet
+
+This confuses every beginner, so the app is explicit about it. There are **two
+separate systems**, and conflating them is why people stall:
+
+- **Pinyin** — the romanisation. Alphabet-like, and the closest thing to one.
+  It is also a trap: `q` is *ch*, `x` is *sh*, `c` is *ts*, `z` is *ds*, `e`
+  alone is *uh*, `-ian` is *yen*, and `ju/qu/xu` secretly contain `ü`. Nobody
+  teaches this, so learners guess from English and build an accent that takes
+  years to undo. The **Script → Pinyin traps** tab covers all eight.
+- **Hanzi** — not letters at all. Characters are assembled from ~200 reusable
+  **components**: 讠 means it is spoken, 氵 means liquid, 忄 means a feeling.
+  39 components ship, plus 8 stroke-order rules and 69 characters — ordered by
+  how often they appear in *this* course, so they cover **55% of all its text**.
+
+Characters are a **separate, optional track** on their own FSRS schedule. You
+can reach speaking fluency without ever touching them.
+
 ---
 
 ## The course
@@ -69,7 +89,7 @@ Five stages, defined by what you can **do** — not by how many words you've see
 | Native-adjacent | C1 | Hedge, use chengyu, shift register, argue a point | 40 |
 
 **250 sentences · 500 glossed words · 32 pattern frames · 217 drillable
-variations · 10 two-way conversations**
+variations · 10 two-way conversations · 69 characters · 39 components**
 
 Every sentence carries a word-by-word gloss, so grammar is visible without ever
 being a grammar lesson. Tone sandhi is marked where the spoken form differs from
@@ -102,8 +122,9 @@ study app: reviews happen on the metro.
 ### Tests
 
 ```bash
-npm test          # 78 checks: scheduler, speech scoring, corpus integrity,
-                  # every view rendered, PWA assets, and mobile-layout rules
+npm test          # 103 checks: scheduler, speech scoring, corpus integrity,
+                  # every view rendered, PWA assets, mobile-layout rules,
+                  # session resume, and reminder/ICS generation
 ```
 
 ### Deploy for free
@@ -136,6 +157,34 @@ that exact viewport:
 - No tap-highlight flash; press states and `touch-action: manipulation` instead
   (which also removes the 300ms double-tap delay)
 - No horizontal overflow on any route
+
+## Nothing ever restarts
+
+Every card, score, streak and half-finished conversation is written to
+`localStorage` as it happens. Close the tab mid-dialogue and the picker offers
+**Resume — turn 4 of 8**; the dashboard shows an **Unfinished** card for whatever
+you walked away from. Sessions older than a week are dropped, because a stale
+"resume" is noise rather than help. Start over is always one tap away.
+
+## Daily reminder
+
+Set a time in Settings (default 15:00). Two layers, and the README is honest
+about which one actually works:
+
+1. **In-app nudge** — if you open the app after your time and haven't studied,
+   it tells you. Free and universal, but only fires once you've already opened
+   the app, which is exactly when you don't need reminding.
+2. **A calendar alarm (.ics)** ← **this is the one that works.** One tap adds a
+   daily repeating event to your phone's own calendar. It fires whether or not
+   the app is open, forever, with no server anywhere.
+
+**Why not real push notifications?** Waking a closed website requires Web Push,
+which requires a server to hold subscriptions and send messages. This app has no
+backend by design — that is what keeps it free and private. A static site
+physically cannot do it. On iOS it is stricter still: `Notification` only exists
+for a PWA added to the Home Screen (16.4+), and background delivery still needs
+push. So the app offers the calendar route instead of shipping a toggle that
+quietly does nothing.
 
 ## Feedback
 
@@ -187,13 +236,16 @@ js/
   deck.js               corpus loading, study queue, progress stats
   ui.js                 DOM helpers, tone colouring
   feedback.js           toasts, audio cues, haptics
-  views/                dashboard · tones · review · speak · drill ·
+  reminder.js           daily nudge + .ics calendar alarm
+  views/                dashboard · tones · script · review · speak · drill ·
                         dialogue · library · settings
 data/
   course.json           the five stages and where their sentences live
   corpus/st1..st5.json  250 sentences, 25 units
   patterns.json         32 generative grammar frames
   dialogues.json        10 two-way conversations
+  pinyin.json           the sound system + the 8 spelling traps
+  characters.json       components, stroke rules, 69 characters
   tones.json            minimal pairs + the 4 tone-change rules
 scripts/                node test harnesses
 ```
@@ -213,11 +265,12 @@ gives you a JSON file you can re-import anywhere, including on another device.
 ## Roadmap
 
 - [ ] Grow the corpus toward ~1,000 sentences (C1 is the thinnest stage)
+- [ ] Extend the character set past 69 (the top 100 would cover ~68% of the text)
+- [ ] Animated stroke-order playback (needs a stroke-path dataset)
 - [ ] More dialogues, and branching replies rather than a fixed script
 - [ ] Pitch-contour feedback from the mic — see your tone curve against the target
 - [ ] Recording playback so you can hear yourself beside the native audio
 - [ ] Listening mode at natural speed with connected speech
-- [ ] Optional character track: stroke order + radical decomposition
 - [ ] Offline support via a service worker (PWA)
 
 ## Contributing

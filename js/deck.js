@@ -20,11 +20,13 @@ export async function loadCorpus() {
   if (corpus) return corpus;
 
   const course = await fetch('data/course.json').then((r) => r.json());
-  const [stageFiles, tones, patterns, dialogues] = await Promise.all([
+  const [stageFiles, tones, patterns, dialogues, pinyin, characters] = await Promise.all([
     Promise.all(course.stages.map((s) => fetch(s.file).then((r) => r.json()))),
     fetch('data/tones.json').then((r) => r.json()),
     fetch('data/patterns.json').then((r) => r.json()),
     fetch('data/dialogues.json').then((r) => r.json()),
+    fetch('data/pinyin.json').then((r) => r.json()),
+    fetch('data/characters.json').then((r) => r.json()),
   ]);
 
   const units = stageFiles.flatMap((f) => f.units);
@@ -40,6 +42,8 @@ export async function loadCorpus() {
     patternsMeta: patterns.meta,
     dialogues: dialogues.dialogues,
     dialoguesMeta: dialogues.meta,
+    pinyin,
+    characters,
     byId: Object.fromEntries(sentences.map((s) => [s.id, s])),
     unitById: Object.fromEntries(units.map((u) => [u.id, u])),
     stageById: Object.fromEntries(course.stages.map((s) => [s.id, s])),
@@ -146,6 +150,41 @@ export function fillPattern(pattern, slot) {
   };
 }
 
+/* ---------------- character track (separate SRS from sentences) ---------------- */
+
+/** The FSRS card for a single character, created lazily. */
+export function charCardFor(ch) {
+  const s = get();
+  if (!s.charCards) update((st) => { st.charCards = st.charCards || {}; });
+  if (!get().charCards[ch]) update((st) => { st.charCards[ch] = newCard(ch); });
+  return get().charCards[ch];
+}
+
+export function dueCharCards(now = Date.now()) {
+  const cards = get().charCards || {};
+  return corpus.characters.characters
+    .filter((c) => cards[c.c]?.reps > 0 && cards[c.c].due <= now)
+    .sort((a, b) => cards[a.c].due - cards[b.c].due);
+}
+
+/** Next unseen characters, in corpus-frequency order, capped by the daily budget. */
+export function newCharacters(limit = 5) {
+  const cards = get().charCards || {};
+  const doneToday = get().daily[todayStr()]?.chars ?? 0;
+  const budget = Math.max(0, limit - doneToday);
+  return corpus.characters.characters.filter((c) => !cards[c.c]?.reps).slice(0, budget);
+}
+
+export function charStats() {
+  const cards = Object.values(get().charCards || {}).filter((c) => c.reps > 0);
+  return {
+    known: cards.length,
+    total: corpus.characters.characters.length,
+    mature: cards.filter((c) => c.stability >= 21).length,
+    due: dueCharCards().length,
+  };
+}
+
 /** Aggregate progress numbers for the dashboard. */
 export function stats() {
   const s = get();
@@ -166,6 +205,7 @@ export function stats() {
     drilled: drills.filter((d) => (d.best ?? 0) >= 80).length,
     drillAttempts: drills.reduce((a, d) => a + (d.attempts || 0), 0),
     conversations: convos.reduce((a, d) => a + (d.runs || 0), 0),
+    chars: charStats(),
     toneAccuracy: toneAccuracy(),
     streak: streak(),
     stage: currentStage(),

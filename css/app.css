@@ -380,3 +380,47 @@ input[type="range"] { height: var(--tap); accent-color: var(--accent); }
   /* Installed: there is no browser chrome to scroll away, so lock the bounce. */
   body { overscroll-behavior: none; }
 }
+
+/* ---------- script track: pinyin + characters ---------- */
+.sound-row {
+  display: flex; align-items: center; gap: .6rem; width: 100%;
+  text-align: left; padding: .5rem .4rem; min-height: var(--tap);
+  border: 0; border-bottom: 1px solid var(--line); border-radius: 0;
+}
+.sound-row:last-child { border-bottom: 0; }
+
+.trap-row {
+  display: flex; flex-wrap: wrap; gap: .4rem; align-items: center;
+  padding: .45rem 0; border-bottom: 1px solid var(--line); font-size: .88rem;
+}
+.trap-row:last-child { border-bottom: 0; }
+.trap-wrong { color: var(--bad); text-decoration: line-through; }
+.trap-right { color: var(--good); font-weight: 600; }
+
+/* Components and characters are scanned, not read — a grid beats a list. */
+.comp-grid {
+  display: grid; gap: .5rem;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+.comp {
+  background: var(--surface-2); border-radius: 10px; padding: .5rem .6rem;
+  display: flex; flex-direction: column; gap: .1rem; font-size: .78rem;
+}
+.comp > b { font-size: 1.6rem; font-family: var(--font-zh); line-height: 1.1; }
+.comp > span:nth-of-type(1) { font-weight: 650; font-size: .82rem; }
+.comp-in { color: var(--muted); font-size: 1rem; letter-spacing: .1em; }
+
+.char-grid {
+  display: grid; gap: .4rem;
+  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+}
+.char-cell {
+  padding: .45rem .2rem; min-height: 76px; border-radius: 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+}
+.char-cell b { font-family: var(--font-zh); font-size: 1.75rem; font-weight: 600; line-height: 1.1; }
+.char-cell i { font-style: normal; font-size: .72rem; color: var(--muted); }
+.char-cell u { text-decoration: none; font-size: .64rem; color: var(--muted);
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.char-cell.known { border-color: var(--good); background: color-mix(in srgb, var(--good) 12%, var(--surface)); }
+.char-cell.known u { color: var(--good); }

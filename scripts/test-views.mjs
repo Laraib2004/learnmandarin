@@ -74,13 +74,15 @@ globalThis.document = {
   addEventListener: () => {},
   removeEventListener: () => {},
 };
+globalThis.navigator = { mediaDevices: null, userAgent: 'node-test' };
 globalThis.window = {
   addEventListener: () => {}, removeEventListener: () => {},
   scrollTo: () => {}, location: { hash: '' },
   SpeechRecognition: null, webkitSpeechRecognition: null,
+  navigator: globalThis.navigator,
+  matchMedia: () => ({ matches: false }),
 };
 globalThis.location = window.location;
-globalThis.navigator = { mediaDevices: null };
 globalThis.alert = () => {}; globalThis.confirm = () => false;
 globalThis.requestAnimationFrame = (fn) => setTimeout(fn, 0);
 // No AudioContext and no navigator.vibrate: feedback.js must degrade silently.
@@ -142,6 +144,7 @@ const views = {
   speak: (await import('../js/views/speak.js')).default,
   drill: (await import('../js/views/drill.js')).default,
   dialogue: (await import('../js/views/dialogue.js')).default,
+  script: (await import('../js/views/script.js')).default,
   library: (await import('../js/views/library.js')).default,
   settings: (await import('../js/views/settings.js')).default,
 };
@@ -264,6 +267,79 @@ ok('service worker registers even if load already fired',
 ok('wide layout reorders nav above content',
    css.includes('.tabbar { order: 2; }') && css.includes('.main   { order: 3; }'),
    'sticky does not reorder the DOM; the bar is after <main> in source');
+
+
+console.log('\nScript track (pinyin + characters)');
+ok('pinyin data loads', corpus.pinyin.initials.length === 21 && corpus.pinyin.finals.length > 20,
+   `${corpus.pinyin.initials.length} initials / ${corpus.pinyin.finals.length} finals`);
+ok('pinyin traps documented', corpus.pinyin.traps.length >= 8, `${corpus.pinyin.traps.length} traps`);
+ok('the q/x/j trap is covered', corpus.pinyin.traps.some((t) => t.id === 'qxj'));
+ok('every sound has a playable example',
+   [...corpus.pinyin.initials, ...corpus.pinyin.finals].every((x) => x.eg && x.eg.h && x.eg.p));
+ok('discrimination pairs exist', corpus.pinyin.pairs.length >= 8, `${corpus.pinyin.pairs.length} pairs`);
+
+const chars = corpus.characters.characters;
+ok('characters load', chars.length >= 60, `${chars.length} characters`);
+ok('components load', corpus.characters.components.length >= 35,
+   `${corpus.characters.components.length} components`);
+ok('stroke rules present', corpus.characters.strokeRules.length === 8);
+ok('every character is a real CJK glyph and fully described',
+   chars.every((c) => /^[\u4e00-\u9fff]$/.test(c.c) && c.p && c.e && c.story && c.strokes > 0));
+ok('no duplicate characters', new Set(chars.map((c) => c.c)).size === chars.length);
+
+// The pedagogical claim: these characters must actually cover the course text.
+const freq = new Map();
+for (const s of corpus.sentences) for (const ch of s.hanzi) {
+  if (/[\u4e00-\u9fff]/.test(ch)) freq.set(ch, (freq.get(ch) || 0) + 1);
+}
+const totalTok = [...freq.values()].reduce((a, b) => a + b, 0);
+const taught = new Set(chars.map((c) => c.c));
+const covered = [...freq.entries()].filter(([ch]) => taught.has(ch)).reduce((a, [, n]) => a + n, 0);
+const pct = Math.round((covered / totalTok) * 100);
+ok('taught characters cover most of the course text', pct >= 50, `${pct}% of character tokens`);
+
+console.log('\nSession resume');
+const storeMod = await import('../js/store.js');
+storeMod.clearSession();
+ok('no session when nothing started', storeMod.getSession() === null);
+storeMod.saveSession('dialogue', { id: 'd01', turn: 3, title: 'Meeting someone new' });
+const sess = storeMod.getSession();
+ok('session is recorded', sess?.view === 'dialogue' && sess.detail.turn === 3);
+ok('session carries a human label', sess.detail.title === 'Meeting someone new');
+// A stale session is noise, not help.
+storeMod.update((st) => { st.session.at = Date.now() - 8 * 86400000; });
+ok('week-old sessions are ignored', storeMod.getSession() === null);
+storeMod.clearSession();
+ok('clearSession wipes it', storeMod.getSession() === null);
+
+console.log('\nDaily reminder');
+const rem = await import('../js/reminder.js');
+storeMod.update((st) => {
+  st.settings.reminderOn = false;
+  st.settings.reminderTime = '15:00';
+  st.lastReminded = null;
+  st.daily = {};
+});
+ok('no nudge while the reminder is off', rem.reminderDue(new Date(2026, 0, 1, 18, 0)) === false);
+storeMod.update((st) => { st.settings.reminderOn = true; });
+ok('no nudge before the chosen time', rem.reminderDue(new Date(2026, 0, 1, 9, 0)) === false);
+ok('nudge once the time has passed', rem.reminderDue(new Date(2026, 0, 1, 15, 30)) === true);
+storeMod.bumpDaily('reviews');
+ok('no nudge if you already studied today', rem.reminderDue(new Date(2026, 0, 1, 18, 0)) === false);
+storeMod.update((st) => { st.daily = {}; });
+rem.markReminded();
+ok('nudges only once per day', rem.reminderDue(new Date(2026, 0, 1, 18, 0)) === false);
+
+// The layer that actually works: a real OS calendar alarm, no server involved.
+const ics = rem.buildICS('15:00');
+ok('ICS is a valid calendar', ics.startsWith('BEGIN:VCALENDAR') && ics.trimEnd().endsWith('END:VCALENDAR'));
+ok('ICS repeats daily', ics.includes('RRULE:FREQ=DAILY'));
+ok('ICS carries an alarm', ics.includes('BEGIN:VALARM') && ics.includes('ACTION:DISPLAY'));
+ok('ICS uses floating local time (fires at 15:00 wherever you are)',
+   /DTSTART:\d{8}T150000$/m.test(ics), ics.match(/DTSTART:[^\r\n]*/)?.[0]);
+ok('ICS honours a custom time', /DTSTART:\d{8}T073000$/m.test(rem.buildICS('07:30')));
+ok('ICS uses CRLF line endings as the spec requires', ics.includes('\r\n'));
+storeMod.update((st) => { st.settings.reminderOn = false; st.lastReminded = null; });
 
 
 console.log(fails ? `\n${fails} FAILING\n` : '\nAll view tests passed.\n');

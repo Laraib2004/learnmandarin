@@ -4,6 +4,7 @@ import { loadCorpus, dueCards } from './deck.js';
 import { initVoices } from './tts.js';
 import { load } from './store.js';
 import { unlockAudio, toast } from './feedback.js';
+import { startReminderLoop } from './reminder.js';
 
 import dashboard from './views/dashboard.js';
 import tones from './views/tones.js';
@@ -11,10 +12,11 @@ import review from './views/review.js';
 import speak from './views/speak.js';
 import drill from './views/drill.js';
 import dialogue from './views/dialogue.js';
+import script from './views/script.js';
 import library from './views/library.js';
 import settings from './views/settings.js';
 
-const routes = { '': dashboard, tones, review, speak, drill, dialogue, library, settings };
+const routes = { '': dashboard, tones, script, review, speak, drill, dialogue, library, settings };
 
 const main = document.getElementById('main');
 let cleanup = null;
@@ -86,6 +88,7 @@ async function boot() {
   registerServiceWorker();
   setupInstall();
   primeAudioOnFirstTap();
+  startReminderLoop((msg) => toast(msg, 'info', 6000));
   window.addEventListener('hashchange', render);
   await render();
 }

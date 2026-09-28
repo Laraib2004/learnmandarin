@@ -2,7 +2,7 @@ import { h, pinyinEl, keys, shuffle } from '../ui.js';
 import { getCorpus, availableDialogues } from '../deck.js';
 import { speak } from '../tts.js';
 import * as asr from '../asr.js';
-import { get, update, bumpDaily } from '../store.js';
+import { get, update, bumpDaily, saveSession, clearSession, getSession } from '../store.js';
 import { signal, cue, unlockAudio, toast } from '../feedback.js';
 
 /**
@@ -39,10 +39,28 @@ export default function dialogue(root, { navigate }) {
 
   function picker() {
     const done = get().dialogues || {};
+    const saved = getSession();
+    const resumable =
+      saved?.view === 'dialogue' && saved.detail?.turn > 0
+        ? list.find((d) => d.id === saved.detail.id)
+        : null;
+
     return h('div', { class: 'stack' },
       h('section', { class: 'card stack' },
         h('h1', {}, 'Conversations'),
         h('p', { class: 'muted small', style: 'margin:0' }, corpus.dialoguesMeta.why)),
+
+      resumable
+        ? h('section', { class: 'card stack' },
+            h('h2', {}, 'Pick up where you stopped'),
+            h('p', { class: 'muted small', style: 'margin:0' },
+              `${resumable.title} — turn ${saved.detail.turn + 1} of ${resumable.turns.length}`),
+            h('div', { class: 'row' },
+              h('button', { class: 'btn btn-primary tappable',
+                onclick: () => { unlockAudio(); startConvo(resumable, saved.detail.turn); } }, 'Resume'),
+              h('button', { class: 'btn btn-ghost tappable',
+                onclick: () => { clearSession(); paint(); } }, 'Start over')))
+        : null,
       ...list.map((d) => {
         const rec = done[d.id];
         const stage = corpus.stageById[d.stage];
@@ -60,12 +78,13 @@ export default function dialogue(root, { navigate }) {
       }));
   }
 
-  function startConvo(d) {
+  function startConvo(d, atTurn = 0) {
     convo = d;
-    idx = 0;
+    idx = Math.min(atTurn, d.turns.length - 1);
     correct = 0;
     attempts = 0;
     reset();
+    saveSession('dialogue', { id: d.id, turn: idx, title: d.title });
     paint();
     autoplay();
   }
@@ -174,6 +193,9 @@ export default function dialogue(root, { navigate }) {
     if (idx >= convo.turns.length - 1) return finish();
     idx++;
     reset();
+    // Record the position every turn: closing the app mid-conversation should
+    // never mean starting the conversation over.
+    saveSession('dialogue', { id: convo.id, turn: idx, title: convo.title });
     paint();
     autoplay();
   }
@@ -188,6 +210,7 @@ export default function dialogue(root, { navigate }) {
       st.dialogues[convo.id] = rec;
     });
     cue('done');
+    clearSession();
     pane.replaceChildren(
       h('section', { class: 'card stack center' },
         h('h1', {}, '聊完了 — conversation complete'),

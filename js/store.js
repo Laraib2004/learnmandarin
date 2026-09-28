@@ -20,14 +20,21 @@ const defaultState = () => ({
     voiceURI: null,
     haptics: true,         // no-op on iOS: Safari does not implement navigator.vibrate
     sounds: true,          // synthesised cues; the main feedback channel on iPhone
+    newCharsPerDay: 5,     // characters are slower than sentences; keep this low
+    reminderOn: false,
+    reminderTime: '15:00', // 24h local time
   },
   cards: {},               // sentenceId -> FSRS card
   tones: {},               // toneDrillKey -> { seen, correct }
   speech: {},              // sentenceId -> { attempts, best }
+  charCards: {},           // character   -> FSRS card (separate track from sentences)
+  pinyinDrill: null,       // { seen, correct }
+  session: null,           // where the learner was, so nothing has to restart
+  lastReminded: null,      // 'YYYY-MM-DD' the daily nudge last fired
   drills: {},              // patternId  -> { attempts, best, fast }
   dialogues: {},           // dialogueId -> { runs, best, turns }
   log: [],                 // { t, id, grade } review history
-  daily: {},               // 'YYYY-MM-DD' -> { new, reviews, speak, drill }
+  daily: {},               // 'YYYY-MM-DD' -> { new, reviews, speak, drill, chars }
 });
 
 let state = null;
@@ -72,9 +79,33 @@ export const todayKey = (d = new Date()) =>
 export function bumpDaily(field, n = 1) {
   return update((s) => {
     const k = todayKey();
-    s.daily[k] = s.daily[k] || { new: 0, reviews: 0, speak: 0, drill: 0 };
+    s.daily[k] = s.daily[k] || { new: 0, reviews: 0, speak: 0, drill: 0, chars: 0 };
     s.daily[k][field] = (s.daily[k][field] || 0) + n;
   });
+}
+
+/* ---------------- session resume ----------------
+ * Lessons should never restart from zero. Every study view records where the
+ * learner is; the dashboard offers to pick it back up. Progress itself (cards,
+ * scores, streaks) is already permanent — this is about the half-finished
+ * session you walked away from.
+ */
+export function saveSession(view, detail = {}) {
+  return update((s) => {
+    s.session = { view, detail, at: Date.now() };
+  });
+}
+
+export function getSession() {
+  const s = load().session;
+  if (!s) return null;
+  // A week-old "resume" is noise, not help.
+  if (Date.now() - s.at > 7 * 86400000) return null;
+  return s;
+}
+
+export function clearSession() {
+  return update((s) => { s.session = null; });
 }
 
 export function exportJSON() {

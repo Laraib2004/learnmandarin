@@ -1,0 +1,22 @@
+{
+  "name": "learnchinese",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A free, open, speaking-first Mandarin course that runs entirely in the browser.",
+  "license": "MIT",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "test": "node scripts/test-engine.mjs && node scripts/test-views.mjs",
+    "test:engine": "node scripts/test-engine.mjs",
+    "test:views": "node scripts/test-views.mjs"
+  },
+  "keywords": [
+    "mandarin",
+    "chinese",
+    "language-learning",
+    "spaced-repetition",
+    "fsrs",
+    "speech-recognition"
+  ]
+}

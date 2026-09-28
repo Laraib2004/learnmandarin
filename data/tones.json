@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "title": "Tone Lab",
+    "note": "Mandarin has 4 contour tones plus a neutral tone. The same syllable with a different tone is a different word. This is the single biggest reason learners are not understood, and the reason most apps fail: they never drill it."
+  },
+  "tones": [
+    { "num": 1, "name": "First (high level)",   "mark": "ā", "contour": "55", "desc": "High and flat, like holding a note. Sung, not spoken.", "gesture": "→" },
+    { "num": 2, "name": "Second (rising)",      "mark": "á", "contour": "35", "desc": "Rises like the English question 'huh?'", "gesture": "↗" },
+    { "num": 3, "name": "Third (low dipping)",  "mark": "ǎ", "contour": "214", "desc": "Mostly just LOW. In real speech it rarely dips and rises fully.", "gesture": "↘↗" },
+    { "num": 4, "name": "Fourth (falling)",     "mark": "à", "contour": "51", "desc": "Sharp fall, like a firm command: 'No!'", "gesture": "↘" },
+    { "num": 5, "name": "Neutral (light)",      "mark": "a", "contour": "-",  "desc": "Short, weak, unstressed. Pitch borrowed from the syllable before it.", "gesture": "·" }
+  ],
+  "pairs": [
+    { "syllable": "ma", "items": [
+      { "hanzi": "妈", "pinyin": "mā", "tone": 1, "gloss": "mother" },
+      { "hanzi": "麻", "pinyin": "má", "tone": 2, "gloss": "hemp / numb" },
+      { "hanzi": "马", "pinyin": "mǎ", "tone": 3, "gloss": "horse" },
+      { "hanzi": "骂", "pinyin": "mà", "tone": 4, "gloss": "to scold" }
+    ]},
+    { "syllable": "shu", "items": [
+      { "hanzi": "书", "pinyin": "shū", "tone": 1, "gloss": "book" },
+      { "hanzi": "熟", "pinyin": "shú", "tone": 2, "gloss": "cooked / familiar" },
+      { "hanzi": "数", "pinyin": "shǔ", "tone": 3, "gloss": "to count" },
+      { "hanzi": "树", "pinyin": "shù", "tone": 4, "gloss": "tree" }
+    ]},
+    { "syllable": "tang", "items": [
+      { "hanzi": "汤", "pinyin": "tāng", "tone": 1, "gloss": "soup" },
+      { "hanzi": "糖", "pinyin": "táng", "tone": 2, "gloss": "sugar" },
+      { "hanzi": "躺", "pinyin": "tǎng", "tone": 3, "gloss": "to lie down" },
+      { "hanzi": "烫", "pinyin": "tàng", "tone": 4, "gloss": "scalding hot" }
+    ]},
+    { "syllable": "yan", "items": [
+      { "hanzi": "烟", "pinyin": "yān", "tone": 1, "gloss": "smoke" },
+      { "hanzi": "盐", "pinyin": "yán", "tone": 2, "gloss": "salt" },
+      { "hanzi": "眼", "pinyin": "yǎn", "tone": 3, "gloss": "eye" },
+      { "hanzi": "燕", "pinyin": "yàn", "tone": 4, "gloss": "swallow (bird)" }
+    ]},
+    { "syllable": "bei", "items": [
+      { "hanzi": "杯", "pinyin": "bēi", "tone": 1, "gloss": "cup" },
+      { "hanzi": "北", "pinyin": "běi", "tone": 3, "gloss": "north" },
+      { "hanzi": "背", "pinyin": "bèi", "tone": 4, "gloss": "back / to carry" }
+    ]},
+    { "syllable": "wen", "items": [
+      { "hanzi": "温", "pinyin": "wēn", "tone": 1, "gloss": "warm" },
+      { "hanzi": "闻", "pinyin": "wén", "tone": 2, "gloss": "to smell / hear" },
+      { "hanzi": "吻", "pinyin": "wěn", "tone": 3, "gloss": "to kiss" },
+      { "hanzi": "问", "pinyin": "wèn", "tone": 4, "gloss": "to ask" }
+    ]},
+    { "syllable": "ji", "items": [
+      { "hanzi": "鸡", "pinyin": "jī", "tone": 1, "gloss": "chicken" },
+      { "hanzi": "级", "pinyin": "jí", "tone": 2, "gloss": "level / rank" },
+      { "hanzi": "几", "pinyin": "jǐ", "tone": 3, "gloss": "how many" },
+      { "hanzi": "记", "pinyin": "jì", "tone": 4, "gloss": "to record" }
+    ]},
+    { "syllable": "mai", "items": [
+      { "hanzi": "买", "pinyin": "mǎi", "tone": 3, "gloss": "to buy" },
+      { "hanzi": "卖", "pinyin": "mài", "tone": 4, "gloss": "to sell" }
+    ]}
+  ],
+  "rules": [
+    { "id": "t3t3", "title": "Third + third → second + third",
+      "detail": "When two 3rd tones collide, the first becomes a 2nd tone. 你好 is written nǐ hǎo but said ní hǎo.",
+      "examples": [ { "hanzi": "你好", "written": "nǐ hǎo", "spoken": "ní hǎo" }, { "hanzi": "很好", "written": "hěn hǎo", "spoken": "hén hǎo" }, { "hanzi": "我想", "written": "wǒ xiǎng", "spoken": "wó xiǎng" } ] },
+    { "id": "bu", "title": "不 bù → bú before a 4th tone",
+      "detail": "不 is 4th tone, but flips to 2nd tone when the next syllable is 4th tone.",
+      "examples": [ { "hanzi": "不是", "written": "bù shì", "spoken": "bú shì" }, { "hanzi": "不要", "written": "bù yào", "spoken": "bú yào" }, { "hanzi": "不客气", "written": "bù kèqi", "spoken": "bú kèqi" } ] },
+    { "id": "yi", "title": "一 yī shifts by context",
+      "detail": "一 is 1st tone alone, becomes yì before tones 1/2/3, and yí before a 4th tone.",
+      "examples": [ { "hanzi": "一杯", "written": "yī bēi", "spoken": "yì bēi" }, { "hanzi": "一遍", "written": "yī biàn", "spoken": "yí biàn" }, { "hanzi": "一起", "written": "yī qǐ", "spoken": "yì qǐ" } ] },
+    { "id": "half3", "title": "The half-third tone",
+      "detail": "Before tones 1, 2, 4 or neutral, a 3rd tone only falls and stays low. It never rises back up. Rising on every 3rd tone is the most common beginner accent tell.",
+      "examples": [ { "hanzi": "你说", "written": "nǐ shuō", "spoken": "nì(low) shuō" }, { "hanzi": "我去", "written": "wǒ qù", "spoken": "wò(low) qù" } ] }
+  ]
+}

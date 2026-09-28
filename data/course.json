@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "title": "Shuo Ba — Mandarin, zero to fluent",
+    "principle": "Stages are defined by what you can DO, not by how many words you have seen.",
+    "license": "CC0"
+  },
+  "stages": [
+    { "id": "st1", "level": "A1", "title": "Foundation",
+      "goal": "Survive a first encounter without freezing.",
+      "canDo": ["Greet, thank, apologise, say goodbye", "Say who you are and where you are from", "Ask for repetition when lost", "Order food and ask a price", "Tell time and arrange to meet"],
+      "file": "data/corpus/st1.json" },
+    { "id": "st2", "level": "A2", "title": "Survival",
+      "goal": "Handle a day in a Chinese-speaking city alone.",
+      "canDo": ["Get around by taxi, metro and on foot", "Shop, compare and complain about price", "Order a full meal with preferences", "Describe your family and where you live", "Explain that something hurts or is broken"],
+      "file": "data/corpus/st2.json" },
+    { "id": "st3", "level": "B1", "title": "Conversation",
+      "goal": "Hold a real conversation about your life, past and future.",
+      "canDo": ["Narrate what you did", "State plans and intentions", "Give and defend an opinion", "Compare options", "Talk about work and study"],
+      "file": "data/corpus/st3.json" },
+    { "id": "st4", "level": "B2", "title": "Fluency",
+      "goal": "Say what you actually mean, including things that are awkward.",
+      "canDo": ["Express nuanced feelings", "Explain reasoning and cause", "Complain, apologise, negotiate", "Tell a story with sequence and detail", "Handle hypotheticals and give advice"],
+      "file": "data/corpus/st4.json" },
+    { "id": "st5", "level": "C1", "title": "Native-adjacent",
+      "goal": "Sound like a person, not a textbook.",
+      "canDo": ["Hedge and soften like a native", "Use set phrases and chengyu naturally", "Shift register for formal settings", "Argue a position and concede a point", "Understand implication, not just words"],
+      "file": "data/corpus/st5.json" }
+  ]
+}

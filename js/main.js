@@ -8,10 +8,11 @@ import dashboard from './views/dashboard.js';
 import tones from './views/tones.js';
 import review from './views/review.js';
 import speak from './views/speak.js';
+import drill from './views/drill.js';
 import library from './views/library.js';
 import settings from './views/settings.js';
 
-const routes = { '': dashboard, tones, review, speak, library, settings };
+const routes = { '': dashboard, tones, review, speak, drill, library, settings };
 
 const main = document.getElementById('main');
 let cleanup = null;

@@ -6,6 +6,9 @@
  *     queue is how people end up with 400 overdue cards and quit.
  *  2. New sentences are introduced in course order and rate-limited per day,
  *     so the review load stays flat instead of compounding into a cliff.
+ *
+ * The corpus is split per stage (data/corpus/st*.json) and listed in
+ * data/course.json, so content can grow without touching any code.
  */
 
 import { get, update } from './store.js';
@@ -15,12 +18,29 @@ let corpus = null;
 
 export async function loadCorpus() {
   if (corpus) return corpus;
-  const [sentences, tones] = await Promise.all([
-    fetch('data/sentences.json').then((r) => r.json()),
+
+  const course = await fetch('data/course.json').then((r) => r.json());
+  const [stageFiles, tones, patterns] = await Promise.all([
+    Promise.all(course.stages.map((s) => fetch(s.file).then((r) => r.json()))),
     fetch('data/tones.json').then((r) => r.json()),
+    fetch('data/patterns.json').then((r) => r.json()),
   ]);
-  corpus = { ...sentences, tones };
-  corpus.byId = Object.fromEntries(corpus.sentences.map((s) => [s.id, s]));
+
+  const units = stageFiles.flatMap((f) => f.units);
+  const sentences = stageFiles.flatMap((f) => f.sentences);
+
+  corpus = {
+    meta: course.meta,
+    stages: course.stages,
+    units,
+    sentences,
+    tones,
+    patterns: patterns.patterns,
+    patternsMeta: patterns.meta,
+    byId: Object.fromEntries(sentences.map((s) => [s.id, s])),
+    unitById: Object.fromEntries(units.map((u) => [u.id, u])),
+    stageById: Object.fromEntries(course.stages.map((s) => [s.id, s])),
+  };
   return corpus;
 }
 
@@ -55,13 +75,14 @@ export function newSentences(limit = Infinity) {
   return corpus.sentences.filter((s) => !cards[s.id]?.reps).slice(0, limit);
 }
 
+export const todayStr = (d = new Date()) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
 /** How many new cards today's budget still allows. */
 export function newBudgetLeft() {
   const s = get();
-  const key = new Date().toISOString().slice(0, 10);
-  const todayLocal = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`;
-  const doneToday = s.daily[todayLocal]?.new ?? s.daily[key]?.new ?? 0;
-  return Math.max(0, (s.settings.newPerDay ?? 8) - doneToday);
+  const done = s.daily[todayStr()]?.new ?? 0;
+  return Math.max(0, (s.settings.newPerDay ?? 8) - done);
 }
 
 /**
@@ -80,6 +101,36 @@ export function speakableSentences() {
   return seen.length ? seen : corpus.sentences.slice(0, 5);
 }
 
+/**
+ * Patterns unlocked for drilling. A pattern opens once you have studied any
+ * sentence from its stage — drilling a frame you have never heard in context
+ * is just translation homework.
+ */
+export function availablePatterns() {
+  const reached = new Set(studied().map((s) => corpus.unitById[s.unit]?.stage));
+  if (!reached.size) reached.add('st1');
+  const open = corpus.patterns.filter((p) => reached.has(p.stage));
+  return open.length ? open : corpus.patterns.filter((p) => p.stage === 'st1');
+}
+
+/**
+ * Compose one concrete sentence from a pattern frame and a slot filler.
+ * replaceAll, not replace: a frame may carry the placeholder more than once
+ * (e.g. "Do you have {X}? / Is there {X}?"), and a single replace would leave
+ * a raw {X} sitting in the learner's prompt.
+ */
+export function fillPattern(pattern, slot) {
+  return {
+    patternId: pattern.id,
+    hanzi: pattern.zh.replaceAll('{X}', slot.h),
+    pinyin: pattern.pinyin.replaceAll('{X}', slot.p),
+    en: pattern.en.replaceAll('{X}', slot.e),
+    slot,
+    note: pattern.note,
+    name: pattern.name,
+  };
+}
+
 /** Aggregate progress numbers for the dashboard. */
 export function stats() {
   const s = get();
@@ -87,8 +138,8 @@ export function stats() {
   const mature = cards.filter((c) => c.stability >= 21).length;
   const words = new Set();
   for (const sen of studied()) for (const w of sen.words) words.add(w.h);
-  const speechAttempts = Object.values(s.speech);
-  const spoken = speechAttempts.filter((x) => (x.best ?? 0) >= 80).length;
+  const spoken = Object.values(s.speech).filter((x) => (x.best ?? 0) >= 80).length;
+  const drills = Object.values(s.drills || {});
   return {
     known: cards.length,
     total: corpus.sentences.length,
@@ -96,8 +147,11 @@ export function stats() {
     words: words.size,
     due: dueCards().length,
     spoken,
+    drilled: drills.filter((d) => (d.best ?? 0) >= 80).length,
+    drillAttempts: drills.reduce((a, d) => a + (d.attempts || 0), 0),
     toneAccuracy: toneAccuracy(),
     streak: streak(),
+    stage: currentStage(),
   };
 }
 
@@ -114,9 +168,9 @@ function streak() {
   let n = 0;
   const d = new Date();
   for (;;) {
-    const k = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const k = todayStr(d);
     const day = daily[k];
-    const active = day && (day.new || day.reviews || day.speak);
+    const active = day && (day.new || day.reviews || day.speak || day.drill);
     if (!active) {
       // Today not yet studied should not break a streak earned yesterday.
       if (n === 0 && k === todayStr()) { d.setDate(d.getDate() - 1); continue; }
@@ -128,12 +182,7 @@ function streak() {
   return n;
 }
 
-const todayStr = () => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-};
-
-/** Which of the 6 units the learner has unlocked, and how far into each. */
+/** Progress through every unit, grouped by stage. */
 export function unitProgress() {
   const { cards } = get();
   return corpus.units.map((u) => {
@@ -141,4 +190,21 @@ export function unitProgress() {
     const done = all.filter((s) => cards[s.id]?.reps > 0).length;
     return { ...u, total: all.length, done, pct: Math.round((done / all.length) * 100) };
   });
+}
+
+/** Progress through each of the five stages. */
+export function stageProgress() {
+  const units = unitProgress();
+  return corpus.stages.map((st) => {
+    const mine = units.filter((u) => u.stage === st.id);
+    const total = mine.reduce((a, u) => a + u.total, 0);
+    const done = mine.reduce((a, u) => a + u.done, 0);
+    return { ...st, units: mine, total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+  });
+}
+
+/** The stage the learner is currently working in — first one not yet finished. */
+export function currentStage() {
+  const stages = stageProgress();
+  return stages.find((s) => s.done < s.total) || stages[stages.length - 1];
 }

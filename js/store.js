@@ -22,8 +22,9 @@ const defaultState = () => ({
   cards: {},               // sentenceId -> FSRS card
   tones: {},               // toneDrillKey -> { seen, correct }
   speech: {},              // sentenceId -> { attempts, best }
+  drills: {},              // patternId  -> { attempts, best, fast }
   log: [],                 // { t, id, grade } review history
-  daily: {},               // 'YYYY-MM-DD' -> { new, reviews, speak }
+  daily: {},               // 'YYYY-MM-DD' -> { new, reviews, speak, drill }
 });
 
 let state = null;
@@ -68,7 +69,7 @@ export const todayKey = (d = new Date()) =>
 export function bumpDaily(field, n = 1) {
   return update((s) => {
     const k = todayKey();
-    s.daily[k] = s.daily[k] || { new: 0, reviews: 0, speak: 0 };
+    s.daily[k] = s.daily[k] || { new: 0, reviews: 0, speak: 0, drill: 0 };
     s.daily[k][field] = (s.daily[k][field] || 0) + n;
   });
 }

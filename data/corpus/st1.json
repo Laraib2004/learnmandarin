@@ -1,0 +1,1551 @@
+{
+ "stage": "st1",
+ "units": [
+  {
+   "id": "u1",
+   "title": "Say hello and survive",
+   "goal": "Open and close a conversation without freezing.",
+   "stage": "st1"
+  },
+  {
+   "id": "u2",
+   "title": "Who you are, what you missed",
+   "goal": "Identify yourself and repair a conversation that got too fast.",
+   "stage": "st1"
+  },
+  {
+   "id": "u3",
+   "title": "Want, order, pay",
+   "goal": "Get food, drink, and a price. The highest-value beginner unit.",
+   "stage": "st1"
+  },
+  {
+   "id": "u4",
+   "title": "Where and when",
+   "goal": "Find places, tell time, make plans.",
+   "stage": "st1"
+  },
+  {
+   "id": "u5",
+   "title": "Join ideas together",
+   "goal": "Stop speaking in fragments: because / so / but / I think.",
+   "stage": "st1"
+  },
+  {
+   "id": "u6",
+   "title": "Hold a real exchange",
+   "goal": "A full small-talk conversation about learning Chinese.",
+   "stage": "st1"
+  }
+ ],
+ "sentences": [
+  {
+   "id": "s001",
+   "unit": "u1",
+   "hanzi": "你好",
+   "pinyin": "nǐ hǎo",
+   "spoken": "ní hǎo",
+   "en": "Hello",
+   "words": [
+    {
+     "h": "你",
+     "p": "nǐ",
+     "e": "you"
+    },
+    {
+     "h": "好",
+     "p": "hǎo",
+     "e": "good"
+    }
+   ]
+  },
+  {
+   "id": "s002",
+   "unit": "u1",
+   "hanzi": "你好吗？",
+   "pinyin": "nǐ hǎo ma?",
+   "spoken": "ní hǎo ma",
+   "en": "How are you?",
+   "words": [
+    {
+     "h": "你",
+     "p": "nǐ",
+     "e": "you"
+    },
+    {
+     "h": "好",
+     "p": "hǎo",
+     "e": "good"
+    },
+    {
+     "h": "吗",
+     "p": "ma",
+     "e": "(yes/no question marker)"
+    }
+   ]
+  },
+  {
+   "id": "s003",
+   "unit": "u1",
+   "hanzi": "我很好",
+   "pinyin": "wǒ hěn hǎo",
+   "spoken": "wó hén hǎo",
+   "en": "I am good",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I, me"
+    },
+    {
+     "h": "很",
+     "p": "hěn",
+     "e": "very (often just a linker)"
+    },
+    {
+     "h": "好",
+     "p": "hǎo",
+     "e": "good"
+    }
+   ]
+  },
+  {
+   "id": "s004",
+   "unit": "u1",
+   "hanzi": "谢谢",
+   "pinyin": "xièxie",
+   "en": "Thank you",
+   "words": [
+    {
+     "h": "谢谢",
+     "p": "xièxie",
+     "e": "thanks"
+    }
+   ]
+  },
+  {
+   "id": "s005",
+   "unit": "u1",
+   "hanzi": "不客气",
+   "pinyin": "bú kèqi",
+   "en": "You are welcome",
+   "words": [
+    {
+     "h": "不",
+     "p": "bú",
+     "e": "not"
+    },
+    {
+     "h": "客气",
+     "p": "kèqi",
+     "e": "polite, formal"
+    }
+   ]
+  },
+  {
+   "id": "s006",
+   "unit": "u1",
+   "hanzi": "对不起",
+   "pinyin": "duìbuqǐ",
+   "en": "Sorry",
+   "words": [
+    {
+     "h": "对不起",
+     "p": "duìbuqǐ",
+     "e": "sorry, my apologies"
+    }
+   ]
+  },
+  {
+   "id": "s007",
+   "unit": "u1",
+   "hanzi": "没关系",
+   "pinyin": "méi guānxi",
+   "en": "It is fine, no worries",
+   "words": [
+    {
+     "h": "没",
+     "p": "méi",
+     "e": "not have"
+    },
+    {
+     "h": "关系",
+     "p": "guānxi",
+     "e": "relation, consequence"
+    }
+   ]
+  },
+  {
+   "id": "s008",
+   "unit": "u1",
+   "hanzi": "再见",
+   "pinyin": "zàijiàn",
+   "en": "Goodbye",
+   "words": [
+    {
+     "h": "再",
+     "p": "zài",
+     "e": "again"
+    },
+    {
+     "h": "见",
+     "p": "jiàn",
+     "e": "to see, to meet"
+    }
+   ]
+  },
+  {
+   "id": "s009",
+   "unit": "u1",
+   "hanzi": "你叫什么名字？",
+   "pinyin": "nǐ jiào shénme míngzi?",
+   "en": "What is your name?",
+   "words": [
+    {
+     "h": "你",
+     "p": "nǐ",
+     "e": "you"
+    },
+    {
+     "h": "叫",
+     "p": "jiào",
+     "e": "to be called"
+    },
+    {
+     "h": "什么",
+     "p": "shénme",
+     "e": "what"
+    },
+    {
+     "h": "名字",
+     "p": "míngzi",
+     "e": "name"
+    }
+   ]
+  },
+  {
+   "id": "s010",
+   "unit": "u1",
+   "hanzi": "我叫李明",
+   "pinyin": "wǒ jiào Lǐ Míng",
+   "en": "My name is Li Ming",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "叫",
+     "p": "jiào",
+     "e": "to be called"
+    },
+    {
+     "h": "李明",
+     "p": "Lǐ Míng",
+     "e": "Li Ming (a name)"
+    }
+   ]
+  },
+  {
+   "id": "s011",
+   "unit": "u2",
+   "hanzi": "你是哪国人？",
+   "pinyin": "nǐ shì nǎ guó rén?",
+   "en": "What country are you from?",
+   "words": [
+    {
+     "h": "你",
+     "p": "nǐ",
+     "e": "you"
+    },
+    {
+     "h": "是",
+     "p": "shì",
+     "e": "to be"
+    },
+    {
+     "h": "哪",
+     "p": "nǎ",
+     "e": "which"
+    },
+    {
+     "h": "国",
+     "p": "guó",
+     "e": "country"
+    },
+    {
+     "h": "人",
+     "p": "rén",
+     "e": "person"
+    }
+   ]
+  },
+  {
+   "id": "s012",
+   "unit": "u2",
+   "hanzi": "我是美国人",
+   "pinyin": "wǒ shì Měiguó rén",
+   "en": "I am American",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "是",
+     "p": "shì",
+     "e": "to be"
+    },
+    {
+     "h": "美国",
+     "p": "Měiguó",
+     "e": "USA"
+    },
+    {
+     "h": "人",
+     "p": "rén",
+     "e": "person"
+    }
+   ]
+  },
+  {
+   "id": "s013",
+   "unit": "u2",
+   "hanzi": "我不是中国人",
+   "pinyin": "wǒ bú shì Zhōngguó rén",
+   "en": "I am not Chinese",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "不",
+     "p": "bú",
+     "e": "not"
+    },
+    {
+     "h": "是",
+     "p": "shì",
+     "e": "to be"
+    },
+    {
+     "h": "中国",
+     "p": "Zhōngguó",
+     "e": "China"
+    },
+    {
+     "h": "人",
+     "p": "rén",
+     "e": "person"
+    }
+   ]
+  },
+  {
+   "id": "s014",
+   "unit": "u2",
+   "hanzi": "你会说中文吗？",
+   "pinyin": "nǐ huì shuō Zhōngwén ma?",
+   "en": "Can you speak Chinese?",
+   "words": [
+    {
+     "h": "你",
+     "p": "nǐ",
+     "e": "you"
+    },
+    {
+     "h": "会",
+     "p": "huì",
+     "e": "can (learned skill)"
+    },
+    {
+     "h": "说",
+     "p": "shuō",
+     "e": "to speak"
+    },
+    {
+     "h": "中文",
+     "p": "Zhōngwén",
+     "e": "Chinese language"
+    },
+    {
+     "h": "吗",
+     "p": "ma",
+     "e": "(question marker)"
+    }
+   ]
+  },
+  {
+   "id": "s015",
+   "unit": "u2",
+   "hanzi": "我会说一点儿",
+   "pinyin": "wǒ huì shuō yìdiǎnr",
+   "en": "I can speak a little",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "会",
+     "p": "huì",
+     "e": "can"
+    },
+    {
+     "h": "说",
+     "p": "shuō",
+     "e": "to speak"
+    },
+    {
+     "h": "一点儿",
+     "p": "yìdiǎnr",
+     "e": "a little"
+    }
+   ]
+  },
+  {
+   "id": "s016",
+   "unit": "u2",
+   "hanzi": "我听不懂",
+   "pinyin": "wǒ tīng bu dǒng",
+   "en": "I do not understand what I am hearing",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "听",
+     "p": "tīng",
+     "e": "to listen"
+    },
+    {
+     "h": "不",
+     "p": "bu",
+     "e": "cannot"
+    },
+    {
+     "h": "懂",
+     "p": "dǒng",
+     "e": "to understand"
+    }
+   ]
+  },
+  {
+   "id": "s017",
+   "unit": "u2",
+   "hanzi": "请再说一遍",
+   "pinyin": "qǐng zài shuō yí biàn",
+   "en": "Please say it again",
+   "words": [
+    {
+     "h": "请",
+     "p": "qǐng",
+     "e": "please"
+    },
+    {
+     "h": "再",
+     "p": "zài",
+     "e": "again"
+    },
+    {
+     "h": "说",
+     "p": "shuō",
+     "e": "to say"
+    },
+    {
+     "h": "一遍",
+     "p": "yí biàn",
+     "e": "one time through"
+    }
+   ]
+  },
+  {
+   "id": "s018",
+   "unit": "u2",
+   "hanzi": "请说慢一点儿",
+   "pinyin": "qǐng shuō màn yìdiǎnr",
+   "en": "Please speak a bit slower",
+   "words": [
+    {
+     "h": "请",
+     "p": "qǐng",
+     "e": "please"
+    },
+    {
+     "h": "说",
+     "p": "shuō",
+     "e": "to speak"
+    },
+    {
+     "h": "慢",
+     "p": "màn",
+     "e": "slow"
+    },
+    {
+     "h": "一点儿",
+     "p": "yìdiǎnr",
+     "e": "a bit"
+    }
+   ]
+  },
+  {
+   "id": "s019",
+   "unit": "u2",
+   "hanzi": "这是什么？",
+   "pinyin": "zhè shì shénme?",
+   "en": "What is this?",
+   "words": [
+    {
+     "h": "这",
+     "p": "zhè",
+     "e": "this"
+    },
+    {
+     "h": "是",
+     "p": "shì",
+     "e": "to be"
+    },
+    {
+     "h": "什么",
+     "p": "shénme",
+     "e": "what"
+    }
+   ]
+  },
+  {
+   "id": "s020",
+   "unit": "u2",
+   "hanzi": "我不知道",
+   "pinyin": "wǒ bù zhīdào",
+   "en": "I do not know",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "不",
+     "p": "bù",
+     "e": "not"
+    },
+    {
+     "h": "知道",
+     "p": "zhīdào",
+     "e": "to know"
+    }
+   ]
+  },
+  {
+   "id": "s021",
+   "unit": "u3",
+   "hanzi": "我要这个",
+   "pinyin": "wǒ yào zhège",
+   "en": "I want this one",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "要",
+     "p": "yào",
+     "e": "to want"
+    },
+    {
+     "h": "这个",
+     "p": "zhège",
+     "e": "this one"
+    }
+   ]
+  },
+  {
+   "id": "s022",
+   "unit": "u3",
+   "hanzi": "我不要那个",
+   "pinyin": "wǒ bú yào nàge",
+   "en": "I do not want that one",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "不",
+     "p": "bú",
+     "e": "not"
+    },
+    {
+     "h": "要",
+     "p": "yào",
+     "e": "to want"
+    },
+    {
+     "h": "那个",
+     "p": "nàge",
+     "e": "that one"
+    }
+   ]
+  },
+  {
+   "id": "s023",
+   "unit": "u3",
+   "hanzi": "我想喝水",
+   "pinyin": "wǒ xiǎng hē shuǐ",
+   "en": "I want to drink water",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "想",
+     "p": "xiǎng",
+     "e": "would like to"
+    },
+    {
+     "h": "喝",
+     "p": "hē",
+     "e": "to drink"
+    },
+    {
+     "h": "水",
+     "p": "shuǐ",
+     "e": "water"
+    }
+   ]
+  },
+  {
+   "id": "s024",
+   "unit": "u3",
+   "hanzi": "我想吃饭",
+   "pinyin": "wǒ xiǎng chī fàn",
+   "en": "I want to eat",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "想",
+     "p": "xiǎng",
+     "e": "would like to"
+    },
+    {
+     "h": "吃",
+     "p": "chī",
+     "e": "to eat"
+    },
+    {
+     "h": "饭",
+     "p": "fàn",
+     "e": "rice, a meal"
+    }
+   ]
+  },
+  {
+   "id": "s025",
+   "unit": "u3",
+   "hanzi": "你要喝什么？",
+   "pinyin": "nǐ yào hē shénme?",
+   "en": "What do you want to drink?",
+   "words": [
+    {
+     "h": "你",
+     "p": "nǐ",
+     "e": "you"
+    },
+    {
+     "h": "要",
+     "p": "yào",
+     "e": "to want"
+    },
+    {
+     "h": "喝",
+     "p": "hē",
+     "e": "to drink"
+    },
+    {
+     "h": "什么",
+     "p": "shénme",
+     "e": "what"
+    }
+   ]
+  },
+  {
+   "id": "s026",
+   "unit": "u3",
+   "hanzi": "我要一杯咖啡",
+   "pinyin": "wǒ yào yì bēi kāfēi",
+   "en": "I would like a cup of coffee",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "要",
+     "p": "yào",
+     "e": "to want"
+    },
+    {
+     "h": "一杯",
+     "p": "yì bēi",
+     "e": "one cup of"
+    },
+    {
+     "h": "咖啡",
+     "p": "kāfēi",
+     "e": "coffee"
+    }
+   ]
+  },
+  {
+   "id": "s027",
+   "unit": "u3",
+   "hanzi": "多少钱？",
+   "pinyin": "duōshao qián?",
+   "en": "How much is it?",
+   "words": [
+    {
+     "h": "多少",
+     "p": "duōshao",
+     "e": "how much"
+    },
+    {
+     "h": "钱",
+     "p": "qián",
+     "e": "money"
+    }
+   ]
+  },
+  {
+   "id": "s028",
+   "unit": "u3",
+   "hanzi": "太贵了",
+   "pinyin": "tài guì le",
+   "en": "That is too expensive",
+   "words": [
+    {
+     "h": "太",
+     "p": "tài",
+     "e": "too, excessively"
+    },
+    {
+     "h": "贵",
+     "p": "guì",
+     "e": "expensive"
+    },
+    {
+     "h": "了",
+     "p": "le",
+     "e": "(marks the state)"
+    }
+   ]
+  },
+  {
+   "id": "s029",
+   "unit": "u3",
+   "hanzi": "有没有便宜一点儿的？",
+   "pinyin": "yǒu méiyǒu piányi yìdiǎnr de?",
+   "en": "Do you have a cheaper one?",
+   "words": [
+    {
+     "h": "有没有",
+     "p": "yǒu méiyǒu",
+     "e": "is there / is there not"
+    },
+    {
+     "h": "便宜",
+     "p": "piányi",
+     "e": "cheap"
+    },
+    {
+     "h": "一点儿",
+     "p": "yìdiǎnr",
+     "e": "a bit"
+    },
+    {
+     "h": "的",
+     "p": "de",
+     "e": "(turns it into: one that is)"
+    }
+   ]
+  },
+  {
+   "id": "s030",
+   "unit": "u3",
+   "hanzi": "买单",
+   "pinyin": "mǎidān",
+   "en": "Check, please",
+   "words": [
+    {
+     "h": "买单",
+     "p": "mǎidān",
+     "e": "pay the bill"
+    }
+   ]
+  },
+  {
+   "id": "s031",
+   "unit": "u4",
+   "hanzi": "你在哪儿？",
+   "pinyin": "nǐ zài nǎr?",
+   "en": "Where are you?",
+   "words": [
+    {
+     "h": "你",
+     "p": "nǐ",
+     "e": "you"
+    },
+    {
+     "h": "在",
+     "p": "zài",
+     "e": "to be at"
+    },
+    {
+     "h": "哪儿",
+     "p": "nǎr",
+     "e": "where"
+    }
+   ]
+  },
+  {
+   "id": "s032",
+   "unit": "u4",
+   "hanzi": "我在家",
+   "pinyin": "wǒ zài jiā",
+   "en": "I am at home",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "在",
+     "p": "zài",
+     "e": "to be at"
+    },
+    {
+     "h": "家",
+     "p": "jiā",
+     "e": "home"
+    }
+   ]
+  },
+  {
+   "id": "s033",
+   "unit": "u4",
+   "hanzi": "洗手间在哪儿？",
+   "pinyin": "xǐshǒujiān zài nǎr?",
+   "en": "Where is the bathroom?",
+   "words": [
+    {
+     "h": "洗手间",
+     "p": "xǐshǒujiān",
+     "e": "restroom"
+    },
+    {
+     "h": "在",
+     "p": "zài",
+     "e": "to be at"
+    },
+    {
+     "h": "哪儿",
+     "p": "nǎr",
+     "e": "where"
+    }
+   ]
+  },
+  {
+   "id": "s034",
+   "unit": "u4",
+   "hanzi": "现在几点？",
+   "pinyin": "xiànzài jǐ diǎn?",
+   "en": "What time is it now?",
+   "words": [
+    {
+     "h": "现在",
+     "p": "xiànzài",
+     "e": "now"
+    },
+    {
+     "h": "几",
+     "p": "jǐ",
+     "e": "how many"
+    },
+    {
+     "h": "点",
+     "p": "diǎn",
+     "e": "o'clock"
+    }
+   ]
+  },
+  {
+   "id": "s035",
+   "unit": "u4",
+   "hanzi": "三点半",
+   "pinyin": "sān diǎn bàn",
+   "en": "Half past three",
+   "words": [
+    {
+     "h": "三",
+     "p": "sān",
+     "e": "three"
+    },
+    {
+     "h": "点",
+     "p": "diǎn",
+     "e": "o'clock"
+    },
+    {
+     "h": "半",
+     "p": "bàn",
+     "e": "half"
+    }
+   ]
+  },
+  {
+   "id": "s036",
+   "unit": "u4",
+   "hanzi": "我们几点见？",
+   "pinyin": "wǒmen jǐ diǎn jiàn?",
+   "en": "What time shall we meet?",
+   "words": [
+    {
+     "h": "我们",
+     "p": "wǒmen",
+     "e": "we"
+    },
+    {
+     "h": "几",
+     "p": "jǐ",
+     "e": "what (number)"
+    },
+    {
+     "h": "点",
+     "p": "diǎn",
+     "e": "o'clock"
+    },
+    {
+     "h": "见",
+     "p": "jiàn",
+     "e": "to meet"
+    }
+   ]
+  },
+  {
+   "id": "s037",
+   "unit": "u4",
+   "hanzi": "明天见",
+   "pinyin": "míngtiān jiàn",
+   "en": "See you tomorrow",
+   "words": [
+    {
+     "h": "明天",
+     "p": "míngtiān",
+     "e": "tomorrow"
+    },
+    {
+     "h": "见",
+     "p": "jiàn",
+     "e": "to see"
+    }
+   ]
+  },
+  {
+   "id": "s038",
+   "unit": "u4",
+   "hanzi": "我今天很忙",
+   "pinyin": "wǒ jīntiān hěn máng",
+   "en": "I am busy today",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "今天",
+     "p": "jīntiān",
+     "e": "today"
+    },
+    {
+     "h": "很",
+     "p": "hěn",
+     "e": "(linker)"
+    },
+    {
+     "h": "忙",
+     "p": "máng",
+     "e": "busy"
+    }
+   ]
+  },
+  {
+   "id": "s039",
+   "unit": "u4",
+   "hanzi": "昨天我没去",
+   "pinyin": "zuótiān wǒ méi qù",
+   "en": "I did not go yesterday",
+   "words": [
+    {
+     "h": "昨天",
+     "p": "zuótiān",
+     "e": "yesterday"
+    },
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "没",
+     "p": "méi",
+     "e": "did not"
+    },
+    {
+     "h": "去",
+     "p": "qù",
+     "e": "to go"
+    }
+   ]
+  },
+  {
+   "id": "s040",
+   "unit": "u4",
+   "hanzi": "等一下",
+   "pinyin": "děng yíxià",
+   "en": "Hold on a second",
+   "words": [
+    {
+     "h": "等",
+     "p": "děng",
+     "e": "to wait"
+    },
+    {
+     "h": "一下",
+     "p": "yíxià",
+     "e": "a moment"
+    }
+   ]
+  },
+  {
+   "id": "s041",
+   "unit": "u5",
+   "hanzi": "因为我很累",
+   "pinyin": "yīnwèi wǒ hěn lèi",
+   "en": "Because I am tired",
+   "words": [
+    {
+     "h": "因为",
+     "p": "yīnwèi",
+     "e": "because"
+    },
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "很",
+     "p": "hěn",
+     "e": "(linker)"
+    },
+    {
+     "h": "累",
+     "p": "lèi",
+     "e": "tired"
+    }
+   ]
+  },
+  {
+   "id": "s042",
+   "unit": "u5",
+   "hanzi": "所以我不去",
+   "pinyin": "suǒyǐ wǒ bú qù",
+   "en": "So I am not going",
+   "words": [
+    {
+     "h": "所以",
+     "p": "suǒyǐ",
+     "e": "so, therefore"
+    },
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "不",
+     "p": "bú",
+     "e": "not"
+    },
+    {
+     "h": "去",
+     "p": "qù",
+     "e": "to go"
+    }
+   ]
+  },
+  {
+   "id": "s043",
+   "unit": "u5",
+   "hanzi": "但是我喜欢",
+   "pinyin": "dànshì wǒ xǐhuan",
+   "en": "But I like it",
+   "words": [
+    {
+     "h": "但是",
+     "p": "dànshì",
+     "e": "but"
+    },
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "喜欢",
+     "p": "xǐhuan",
+     "e": "to like"
+    }
+   ]
+  },
+  {
+   "id": "s044",
+   "unit": "u5",
+   "hanzi": "我觉得很好",
+   "pinyin": "wǒ juéde hěn hǎo",
+   "en": "I think it is good",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "觉得",
+     "p": "juéde",
+     "e": "to feel, to think"
+    },
+    {
+     "h": "很好",
+     "p": "hěn hǎo",
+     "e": "good"
+    }
+   ]
+  },
+  {
+   "id": "s045",
+   "unit": "u5",
+   "hanzi": "你觉得呢？",
+   "pinyin": "nǐ juéde ne?",
+   "en": "What do you think?",
+   "words": [
+    {
+     "h": "你",
+     "p": "nǐ",
+     "e": "you"
+    },
+    {
+     "h": "觉得",
+     "p": "juéde",
+     "e": "to think"
+    },
+    {
+     "h": "呢",
+     "p": "ne",
+     "e": "(and you? marker)"
+    }
+   ]
+  },
+  {
+   "id": "s046",
+   "unit": "u5",
+   "hanzi": "可以吗？",
+   "pinyin": "kěyǐ ma?",
+   "en": "Is that OK?",
+   "words": [
+    {
+     "h": "可以",
+     "p": "kěyǐ",
+     "e": "may, can, OK"
+    },
+    {
+     "h": "吗",
+     "p": "ma",
+     "e": "(question marker)"
+    }
+   ]
+  },
+  {
+   "id": "s047",
+   "unit": "u5",
+   "hanzi": "当然可以",
+   "pinyin": "dāngrán kěyǐ",
+   "en": "Of course",
+   "words": [
+    {
+     "h": "当然",
+     "p": "dāngrán",
+     "e": "of course"
+    },
+    {
+     "h": "可以",
+     "p": "kěyǐ",
+     "e": "can, OK"
+    }
+   ]
+  },
+  {
+   "id": "s048",
+   "unit": "u5",
+   "hanzi": "没问题",
+   "pinyin": "méi wèntí",
+   "en": "No problem",
+   "words": [
+    {
+     "h": "没",
+     "p": "méi",
+     "e": "not have"
+    },
+    {
+     "h": "问题",
+     "p": "wèntí",
+     "e": "problem"
+    }
+   ]
+  },
+  {
+   "id": "s049",
+   "unit": "u5",
+   "hanzi": "我们一起去吧",
+   "pinyin": "wǒmen yìqǐ qù ba",
+   "en": "Let us go together",
+   "words": [
+    {
+     "h": "我们",
+     "p": "wǒmen",
+     "e": "we"
+    },
+    {
+     "h": "一起",
+     "p": "yìqǐ",
+     "e": "together"
+    },
+    {
+     "h": "去",
+     "p": "qù",
+     "e": "to go"
+    },
+    {
+     "h": "吧",
+     "p": "ba",
+     "e": "(softens it to a suggestion)"
+    }
+   ]
+  },
+  {
+   "id": "s050",
+   "unit": "u5",
+   "hanzi": "太好了",
+   "pinyin": "tài hǎo le",
+   "en": "That is great!",
+   "words": [
+    {
+     "h": "太",
+     "p": "tài",
+     "e": "so, too"
+    },
+    {
+     "h": "好",
+     "p": "hǎo",
+     "e": "good"
+    },
+    {
+     "h": "了",
+     "p": "le",
+     "e": "(marks the state)"
+    }
+   ]
+  },
+  {
+   "id": "s051",
+   "unit": "u6",
+   "hanzi": "你在做什么？",
+   "pinyin": "nǐ zài zuò shénme?",
+   "en": "What are you doing?",
+   "words": [
+    {
+     "h": "你",
+     "p": "nǐ",
+     "e": "you"
+    },
+    {
+     "h": "在",
+     "p": "zài",
+     "e": "(in the middle of)"
+    },
+    {
+     "h": "做",
+     "p": "zuò",
+     "e": "to do"
+    },
+    {
+     "h": "什么",
+     "p": "shénme",
+     "e": "what"
+    }
+   ]
+  },
+  {
+   "id": "s052",
+   "unit": "u6",
+   "hanzi": "我在学中文",
+   "pinyin": "wǒ zài xué Zhōngwén",
+   "en": "I am studying Chinese",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "在",
+     "p": "zài",
+     "e": "(in the middle of)"
+    },
+    {
+     "h": "学",
+     "p": "xué",
+     "e": "to study"
+    },
+    {
+     "h": "中文",
+     "p": "Zhōngwén",
+     "e": "Chinese"
+    }
+   ]
+  },
+  {
+   "id": "s053",
+   "unit": "u6",
+   "hanzi": "学了多久了？",
+   "pinyin": "xué le duō jiǔ le?",
+   "en": "How long have you been studying?",
+   "words": [
+    {
+     "h": "学",
+     "p": "xué",
+     "e": "to study"
+    },
+    {
+     "h": "了",
+     "p": "le",
+     "e": "(completed)"
+    },
+    {
+     "h": "多久",
+     "p": "duō jiǔ",
+     "e": "how long"
+    },
+    {
+     "h": "了",
+     "p": "le",
+     "e": "(up to now)"
+    }
+   ]
+  },
+  {
+   "id": "s054",
+   "unit": "u6",
+   "hanzi": "学了三个月",
+   "pinyin": "xué le sān ge yuè",
+   "en": "Three months",
+   "words": [
+    {
+     "h": "学",
+     "p": "xué",
+     "e": "studied"
+    },
+    {
+     "h": "了",
+     "p": "le",
+     "e": "(completed)"
+    },
+    {
+     "h": "三个月",
+     "p": "sān ge yuè",
+     "e": "three months"
+    }
+   ]
+  },
+  {
+   "id": "s055",
+   "unit": "u6",
+   "hanzi": "中文很难",
+   "pinyin": "Zhōngwén hěn nán",
+   "en": "Chinese is hard",
+   "words": [
+    {
+     "h": "中文",
+     "p": "Zhōngwén",
+     "e": "Chinese"
+    },
+    {
+     "h": "很",
+     "p": "hěn",
+     "e": "(linker)"
+    },
+    {
+     "h": "难",
+     "p": "nán",
+     "e": "difficult"
+    }
+   ]
+  },
+  {
+   "id": "s056",
+   "unit": "u6",
+   "hanzi": "慢慢来",
+   "pinyin": "mànmàn lái",
+   "en": "Take it slow, one step at a time",
+   "words": [
+    {
+     "h": "慢慢",
+     "p": "mànmàn",
+     "e": "slowly"
+    },
+    {
+     "h": "来",
+     "p": "lái",
+     "e": "come, go at it"
+    }
+   ]
+  },
+  {
+   "id": "s057",
+   "unit": "u6",
+   "hanzi": "你去过中国吗？",
+   "pinyin": "nǐ qù guo Zhōngguó ma?",
+   "en": "Have you been to China?",
+   "words": [
+    {
+     "h": "你",
+     "p": "nǐ",
+     "e": "you"
+    },
+    {
+     "h": "去",
+     "p": "qù",
+     "e": "to go"
+    },
+    {
+     "h": "过",
+     "p": "guo",
+     "e": "(ever, experienced)"
+    },
+    {
+     "h": "中国",
+     "p": "Zhōngguó",
+     "e": "China"
+    },
+    {
+     "h": "吗",
+     "p": "ma",
+     "e": "(question marker)"
+    }
+   ]
+  },
+  {
+   "id": "s058",
+   "unit": "u6",
+   "hanzi": "我还没去过",
+   "pinyin": "wǒ hái méi qù guo",
+   "en": "I have not been yet",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "还没",
+     "p": "hái méi",
+     "e": "not yet"
+    },
+    {
+     "h": "去过",
+     "p": "qù guo",
+     "e": "been there"
+    }
+   ]
+  },
+  {
+   "id": "s059",
+   "unit": "u6",
+   "hanzi": "我很想去",
+   "pinyin": "wǒ hěn xiǎng qù",
+   "en": "I really want to go",
+   "words": [
+    {
+     "h": "我",
+     "p": "wǒ",
+     "e": "I"
+    },
+    {
+     "h": "很",
+     "p": "hěn",
+     "e": "really"
+    },
+    {
+     "h": "想",
+     "p": "xiǎng",
+     "e": "want to"
+    },
+    {
+     "h": "去",
+     "p": "qù",
+     "e": "to go"
+    }
+   ]
+  },
+  {
+   "id": "s060",
+   "unit": "u6",
+   "hanzi": "下次一起去",
+   "pinyin": "xià cì yìqǐ qù",
+   "en": "Let us go together next time",
+   "words": [
+    {
+     "h": "下次",
+     "p": "xià cì",
+     "e": "next time"
+    },
+    {
+     "h": "一起",
+     "p": "yìqǐ",
+     "e": "together"
+    },
+    {
+     "h": "去",
+     "p": "qù",
+     "e": "to go"
+    }
+   ]
+  }
+ ]
+}

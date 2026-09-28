@@ -39,7 +39,7 @@ export default function library(root) {
       h('section', { class: 'card stack' },
         h('h1', {}, 'Library'),
         h('p', { class: 'muted small', style: 'margin:0' },
-          `${corpus.sentences.length} sentences. “Recall” is the scheduler’s estimate of your chance of remembering it right now.`),
+          `${corpus.sentences.length} sentences across ${corpus.stages.length} stages. “Recall” is the scheduler’s estimate of your chance of remembering it right now.`),
         h('input', {
           type: 'search', placeholder: 'Search Chinese, pinyin or English…',
           value: query,
@@ -72,9 +72,13 @@ export default function library(root) {
     return h('div', { class: 'stack', dataset: { list: '1' } },
       list.length === 0 ? h('p', { class: 'muted' }, 'Nothing matches.') : null,
       ...[...byUnit.entries()].map(([unitId, items]) => {
-        const unit = corpus.units.find((u) => u.id === unitId);
+        const unit = corpus.unitById[unitId];
+        const stage = unit ? corpus.stageById[unit.stage] : null;
         return h('section', { class: 'card stack' },
-          h('h2', {}, unit?.title ?? unitId),
+          h('div', { class: 'row', style: 'justify-content:space-between;gap:.5rem' },
+            h('h2', { style: 'margin:0' }, unit?.title ?? unitId),
+            stage ? h('span', { class: 'pill' }, `${stage.level} · ${stage.title}`) : null),
+          unit?.goal ? h('div', { class: 'muted small' }, unit.goal) : null,
           h('ul', { class: 'list' }, ...items.map((s) => row(s, cards[s.id]))));
       }));
   }

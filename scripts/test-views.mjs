@@ -92,9 +92,23 @@ const ok = (name, cond, extra = '') => {
   if (!cond) fails++;
 };
 
-const { loadCorpus, buildQueue, cardFor, stats } = await import('../js/deck.js');
+const { loadCorpus, buildQueue, cardFor, stats, stageProgress, availablePatterns, fillPattern } =
+  await import('../js/deck.js');
 const corpus = await loadCorpus();
-ok('corpus loads', corpus.sentences.length === 60 && corpus.units.length === 6);
+ok('corpus loads all stages', corpus.sentences.length === 250 && corpus.units.length === 25 && corpus.stages.length === 5,
+   `${corpus.sentences.length} sentences / ${corpus.units.length} units / ${corpus.stages.length} stages`);
+ok('patterns load', corpus.patterns.length === 32, `${corpus.patterns.length} patterns`);
+ok('every unit belongs to a known stage',
+   corpus.units.every((u) => corpus.stageById[u.stage]));
+ok('every sentence belongs to a known unit',
+   corpus.sentences.every((s) => corpus.unitById[s.unit]));
+
+// Patterns must compose into real sentences with no leftover placeholder.
+const composed = corpus.patterns.flatMap((p) => p.slots.map((sl) => fillPattern(p, sl)));
+ok('patterns compose cleanly', composed.every((c) => !c.hanzi.includes('{X}') && !c.pinyin.includes('{X}') && !c.en.includes('{X}')),
+   `${composed.length} generatable sentences`);
+ok('composed hanzi contains no latin filler',
+   composed.every((c) => !/[a-z]{3,}/i.test(c.hanzi.replace('Wi-Fi',''))));
 
 console.log('\nViews render');
 const views = {
@@ -102,6 +116,7 @@ const views = {
   tones: (await import('../js/views/tones.js')).default,
   review: (await import('../js/views/review.js')).default,
   speak: (await import('../js/views/speak.js')).default,
+  drill: (await import('../js/views/drill.js')).default,
   library: (await import('../js/views/library.js')).default,
   settings: (await import('../js/views/settings.js')).default,
 };
@@ -123,6 +138,13 @@ const { review: gradeCard } = await import('../js/fsrs.js');
 const { get, update, bumpDaily } = await import('../js/store.js');
 let q = buildQueue();
 ok('fresh learner gets a queue', q.queue.length === 8 && q.due === 0, `${q.queue.length} cards (daily new limit)`);
+ok('queue starts at stage 1', q.queue[0].id === 's001');
+
+const stagesBefore = stageProgress();
+ok('stage progress spans A1..C1', stagesBefore.map((s) => s.level).join(',') === 'A1,A2,B1,B2,C1');
+ok('stage totals sum to the corpus', stagesBefore.reduce((a, s) => a + s.total, 0) === 250);
+ok('only stage-1 patterns unlocked at the start',
+   availablePatterns().every((p) => p.stage === 'st1'), `${availablePatterns().length} open`);
 
 // Learn all 8 of today's new cards.
 for (const s of q.queue) {
@@ -144,6 +166,17 @@ ok('dashboard re-renders with progress', root2.textContent.includes('Today'));
 const root3 = new Node2('div');
 await views.review(root3, { navigate: () => {} });
 ok('review shows caught-up state', root3.textContent.includes('Nothing due'));
+
+const stAfter = stageProgress();
+ok('progress lands in stage 1', stAfter[0].done === 8 && stAfter[1].done === 0, `A1 ${stAfter[0].done}/${stAfter[0].total}`);
+ok('current stage is A1', stats().stage.level === 'A1');
+
+// Drill view renders and the picker lists unlocked patterns.
+const rootD = new Node2('div');
+const offD = await views.drill(rootD, { navigate: () => {} });
+ok('drill view renders patterns', rootD.textContent.includes('Pattern drills') && rootD.textContent.length > 200,
+   `${rootD.textContent.length} chars`);
+if (offD) offD();
 
 // Speak view should now draw from studied sentences.
 const root4 = new Node2('div');

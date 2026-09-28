@@ -1,0 +1,1446 @@
+{
+ "meta": {
+  "title": "Pattern drills",
+  "why": "Memorised sentences make you a phrasebook. Fluency is generating sentences you have never said before, fast. Each pattern is a frame with a slot; the drill fills the slot at random and asks you to produce the whole sentence under time pressure. 32 patterns x ~9 fillers is roughly 290 sentences you build rather than recall — and the frame transfers to any word you learn later.",
+  "license": "CC0"
+ },
+ "patterns": [
+  {
+   "id": "p01",
+   "stage": "st1",
+   "name": "我想 + verb",
+   "zh": "我想{X}",
+   "pinyin": "wǒ xiǎng {X}",
+   "en": "I want to {X}",
+   "note": "想 is the soft 'would like to'. 要 is firmer and more demanding — use 想 with strangers.",
+   "slots": [
+    {
+     "h": "喝水",
+     "p": "hē shuǐ",
+     "e": "drink water"
+    },
+    {
+     "h": "吃饭",
+     "p": "chī fàn",
+     "e": "eat"
+    },
+    {
+     "h": "回家",
+     "p": "huí jiā",
+     "e": "go home"
+    },
+    {
+     "h": "休息",
+     "p": "xiūxi",
+     "e": "rest"
+    },
+    {
+     "h": "睡觉",
+     "p": "shuì jiào",
+     "e": "sleep"
+    },
+    {
+     "h": "学中文",
+     "p": "xué Zhōngwén",
+     "e": "study Chinese"
+    },
+    {
+     "h": "去中国",
+     "p": "qù Zhōngguó",
+     "e": "go to China"
+    },
+    {
+     "h": "买东西",
+     "p": "mǎi dōngxi",
+     "e": "buy something"
+    },
+    {
+     "h": "看电影",
+     "p": "kàn diànyǐng",
+     "e": "watch a film"
+    }
+   ]
+  },
+  {
+   "id": "p02",
+   "stage": "st1",
+   "name": "我是 + noun",
+   "zh": "我是{X}",
+   "pinyin": "wǒ shì {X}",
+   "en": "I am {X}",
+   "note": "是 links two nouns. Never use it before an adjective — that takes 很 instead.",
+   "slots": [
+    {
+     "h": "美国人",
+     "p": "Měiguó rén",
+     "e": "American"
+    },
+    {
+     "h": "英国人",
+     "p": "Yīngguó rén",
+     "e": "British"
+    },
+    {
+     "h": "学生",
+     "p": "xuésheng",
+     "e": "a student"
+    },
+    {
+     "h": "老师",
+     "p": "lǎoshī",
+     "e": "a teacher"
+    },
+    {
+     "h": "医生",
+     "p": "yīshēng",
+     "e": "a doctor"
+    },
+    {
+     "h": "工程师",
+     "p": "gōngchéngshī",
+     "e": "an engineer"
+    },
+    {
+     "h": "她的朋友",
+     "p": "tā de péngyou",
+     "e": "her friend"
+    },
+    {
+     "h": "新来的",
+     "p": "xīn lái de",
+     "e": "the new one here"
+    }
+   ]
+  },
+  {
+   "id": "p03",
+   "stage": "st1",
+   "name": "…在哪儿？",
+   "zh": "{X}在哪儿？",
+   "pinyin": "{X} zài nǎr?",
+   "en": "Where is {X}?",
+   "note": "The single most useful question frame in the language.",
+   "slots": [
+    {
+     "h": "洗手间",
+     "p": "xǐshǒujiān",
+     "e": "the bathroom"
+    },
+    {
+     "h": "地铁站",
+     "p": "dìtiě zhàn",
+     "e": "the metro station"
+    },
+    {
+     "h": "出口",
+     "p": "chūkǒu",
+     "e": "the exit"
+    },
+    {
+     "h": "我的行李",
+     "p": "wǒ de xíngli",
+     "e": "my luggage"
+    },
+    {
+     "h": "你",
+     "p": "nǐ",
+     "e": "you"
+    },
+    {
+     "h": "医院",
+     "p": "yīyuàn",
+     "e": "the hospital"
+    },
+    {
+     "h": "电梯",
+     "p": "diàntī",
+     "e": "the lift"
+    },
+    {
+     "h": "最近的银行",
+     "p": "zuì jìn de yínháng",
+     "e": "the nearest bank"
+    }
+   ]
+  },
+  {
+   "id": "p04",
+   "stage": "st1",
+   "name": "我不 + verb",
+   "zh": "我不{X}",
+   "pinyin": "wǒ bù {X}",
+   "en": "I don't {X}",
+   "note": "不 negates habits and the present. For the past you need 没 instead.",
+   "slots": [
+    {
+     "h": "知道",
+     "p": "zhīdào",
+     "e": "know"
+    },
+    {
+     "h": "喜欢",
+     "p": "xǐhuan",
+     "e": "like it"
+    },
+    {
+     "h": "懂",
+     "p": "dǒng",
+     "e": "understand"
+    },
+    {
+     "h": "去",
+     "p": "qù",
+     "e": "go"
+    },
+    {
+     "h": "吃肉",
+     "p": "chī ròu",
+     "e": "eat meat"
+    },
+    {
+     "h": "喝酒",
+     "p": "hē jiǔ",
+     "e": "drink alcohol"
+    },
+    {
+     "h": "同意",
+     "p": "tóngyì",
+     "e": "agree"
+    },
+    {
+     "h": "着急",
+     "p": "zháojí",
+     "e": "feel rushed"
+    }
+   ]
+  },
+  {
+   "id": "p05",
+   "stage": "st1",
+   "name": "请 + verb",
+   "zh": "请{X}",
+   "pinyin": "qǐng {X}",
+   "en": "Please {X}",
+   "note": "请 in front of a verb is the standard polite imperative.",
+   "slots": [
+    {
+     "h": "再说一遍",
+     "p": "zài shuō yí biàn",
+     "e": "say that again"
+    },
+    {
+     "h": "说慢一点儿",
+     "p": "shuō màn yìdiǎnr",
+     "e": "speak more slowly"
+    },
+    {
+     "h": "等一下",
+     "p": "děng yíxià",
+     "e": "wait a moment"
+    },
+    {
+     "h": "进来",
+     "p": "jìnlái",
+     "e": "come in"
+    },
+    {
+     "h": "坐",
+     "p": "zuò",
+     "e": "sit down"
+    },
+    {
+     "h": "帮我",
+     "p": "bāng wǒ",
+     "e": "help me"
+    },
+    {
+     "h": "写下来",
+     "p": "xiě xiàlái",
+     "e": "write it down"
+    },
+    {
+     "h": "给我看看",
+     "p": "gěi wǒ kànkan",
+     "e": "let me have a look"
+    }
+   ]
+  },
+  {
+   "id": "p06",
+   "stage": "st1",
+   "name": "我很 + adjective",
+   "zh": "我很{X}",
+   "pinyin": "wǒ hěn {X}",
+   "en": "I'm {X}",
+   "note": "很 is usually NOT 'very' — it is the required linker between a subject and an adjective. Dropping it sounds like you are making a comparison.",
+   "slots": [
+    {
+     "h": "好",
+     "p": "hǎo",
+     "e": "fine"
+    },
+    {
+     "h": "累",
+     "p": "lèi",
+     "e": "tired"
+    },
+    {
+     "h": "忙",
+     "p": "máng",
+     "e": "busy"
+    },
+    {
+     "h": "饿",
+     "p": "è",
+     "e": "hungry"
+    },
+    {
+     "h": "高兴",
+     "p": "gāoxìng",
+     "e": "happy"
+    },
+    {
+     "h": "紧张",
+     "p": "jǐnzhāng",
+     "e": "nervous"
+    },
+    {
+     "h": "渴",
+     "p": "kě",
+     "e": "thirsty"
+    },
+    {
+     "h": "感动",
+     "p": "gǎndòng",
+     "e": "moved"
+    }
+   ]
+  },
+  {
+   "id": "p07",
+   "stage": "st2",
+   "name": "有没有 + noun？",
+   "zh": "有没有{X}？",
+   "pinyin": "yǒu méiyǒu {X}?",
+   "en": "Do you have {X}? / Is there {X}?",
+   "note": "The verb-not-verb question. Works with any verb: 是不是, 要不要, 去不去.",
+   "slots": [
+    {
+     "h": "位子",
+     "p": "wèizi",
+     "e": "a table"
+    },
+    {
+     "h": "便宜一点儿的",
+     "p": "piányi yìdiǎnr de",
+     "e": "a cheaper one"
+    },
+    {
+     "h": "别的颜色",
+     "p": "biéde yánsè",
+     "e": "another colour"
+    },
+    {
+     "h": "热水",
+     "p": "rè shuǐ",
+     "e": "hot water"
+    },
+    {
+     "h": "Wi-Fi",
+     "p": "Wi-Fi",
+     "e": "wifi"
+    },
+    {
+     "h": "充电器",
+     "p": "chōngdiànqì",
+     "e": "a charger"
+    },
+    {
+     "h": "英文菜单",
+     "p": "Yīngwén càidān",
+     "e": "an English menu"
+    },
+    {
+     "h": "人在",
+     "p": "rén zài",
+     "e": "anybody here"
+    }
+   ]
+  },
+  {
+   "id": "p08",
+   "stage": "st2",
+   "name": "可以 + verb + 吗？",
+   "zh": "可以{X}吗？",
+   "pinyin": "kěyǐ {X} ma?",
+   "en": "May I {X}?",
+   "note": "可以 asks permission. 能 asks about ability or possibility.",
+   "slots": [
+    {
+     "h": "试一下",
+     "p": "shì yíxià",
+     "e": "try it"
+    },
+    {
+     "h": "坐这儿",
+     "p": "zuò zhèr",
+     "e": "sit here"
+    },
+    {
+     "h": "拍照",
+     "p": "pāizhào",
+     "e": "take a photo"
+    },
+    {
+     "h": "打包",
+     "p": "dǎbāo",
+     "e": "take this away"
+    },
+    {
+     "h": "刷卡",
+     "p": "shuā kǎ",
+     "e": "pay by card"
+    },
+    {
+     "h": "晚一点儿来",
+     "p": "wǎn yìdiǎnr lái",
+     "e": "come a bit later"
+    },
+    {
+     "h": "问你一个问题",
+     "p": "wèn nǐ yí ge wèntí",
+     "e": "ask you a question"
+    },
+    {
+     "h": "用一下",
+     "p": "yòng yíxià",
+     "e": "borrow this"
+    }
+   ]
+  },
+  {
+   "id": "p09",
+   "stage": "st2",
+   "name": "请给我 + noun",
+   "zh": "请给我{X}",
+   "pinyin": "qǐng gěi wǒ {X}",
+   "en": "Please give me {X}",
+   "note": "给 takes two objects: give [someone] [something].",
+   "slots": [
+    {
+     "h": "菜单",
+     "p": "càidān",
+     "e": "the menu"
+    },
+    {
+     "h": "发票",
+     "p": "fāpiào",
+     "e": "a receipt"
+    },
+    {
+     "h": "一杯水",
+     "p": "yì bēi shuǐ",
+     "e": "a glass of water"
+    },
+    {
+     "h": "你的电话",
+     "p": "nǐ de diànhuà",
+     "e": "your phone number"
+    },
+    {
+     "h": "一点儿时间",
+     "p": "yìdiǎnr shíjiān",
+     "e": "a little time"
+    },
+    {
+     "h": "两个",
+     "p": "liǎng ge",
+     "e": "two of them"
+    },
+    {
+     "h": "一个袋子",
+     "p": "yí ge dàizi",
+     "e": "a bag"
+    }
+   ]
+  },
+  {
+   "id": "p10",
+   "stage": "st2",
+   "name": "我需要 + noun/verb",
+   "zh": "我需要{X}",
+   "pinyin": "wǒ xūyào {X}",
+   "en": "I need {X}",
+   "note": "需要 is a genuine need. 要 is closer to 'I'll have'.",
+   "slots": [
+    {
+     "h": "帮助",
+     "p": "bāngzhù",
+     "e": "help"
+    },
+    {
+     "h": "看医生",
+     "p": "kàn yīshēng",
+     "e": "to see a doctor"
+    },
+    {
+     "h": "更多时间",
+     "p": "gèng duō shíjiān",
+     "e": "more time"
+    },
+    {
+     "h": "休息一下",
+     "p": "xiūxi yíxià",
+     "e": "to rest a bit"
+    },
+    {
+     "h": "一个房间",
+     "p": "yí ge fángjiān",
+     "e": "a room"
+    },
+    {
+     "h": "你的意见",
+     "p": "nǐ de yìjiàn",
+     "e": "your opinion"
+    },
+    {
+     "h": "考虑一下",
+     "p": "kǎolǜ yíxià",
+     "e": "to think it over"
+    }
+   ]
+  },
+  {
+   "id": "p11",
+   "stage": "st2",
+   "name": "…怎么走？",
+   "zh": "{X}怎么走？",
+   "pinyin": "{X} zěnme zǒu?",
+   "en": "How do I get to {X}?",
+   "note": "走 is on foot. For transport ask 怎么去.",
+   "slots": [
+    {
+     "h": "地铁站",
+     "p": "dìtiě zhàn",
+     "e": "the metro station"
+    },
+    {
+     "h": "机场",
+     "p": "jīchǎng",
+     "e": "the airport"
+    },
+    {
+     "h": "火车站",
+     "p": "huǒchē zhàn",
+     "e": "the train station"
+    },
+    {
+     "h": "这个地址",
+     "p": "zhège dìzhǐ",
+     "e": "this address"
+    },
+    {
+     "h": "市中心",
+     "p": "shì zhōngxīn",
+     "e": "the city centre"
+    },
+    {
+     "h": "你家",
+     "p": "nǐ jiā",
+     "e": "your place"
+    }
+   ]
+  },
+  {
+   "id": "p12",
+   "stage": "st2",
+   "name": "我 + 身体部位 + 疼",
+   "zh": "我{X}疼",
+   "pinyin": "wǒ {X} téng",
+   "en": "My {X} hurts",
+   "note": "No possessive needed — 我头疼, not 我的头疼.",
+   "slots": [
+    {
+     "h": "头",
+     "p": "tóu",
+     "e": "head"
+    },
+    {
+     "h": "肚子",
+     "p": "dùzi",
+     "e": "stomach"
+    },
+    {
+     "h": "嗓子",
+     "p": "sǎngzi",
+     "e": "throat"
+    },
+    {
+     "h": "牙",
+     "p": "yá",
+     "e": "tooth"
+    },
+    {
+     "h": "背",
+     "p": "bèi",
+     "e": "back"
+    },
+    {
+     "h": "腿",
+     "p": "tuǐ",
+     "e": "leg"
+    },
+    {
+     "h": "眼睛",
+     "p": "yǎnjing",
+     "e": "eyes"
+    }
+   ]
+  },
+  {
+   "id": "p13",
+   "stage": "st3",
+   "name": "我昨天 + verb + 了",
+   "zh": "我昨天{X}了",
+   "pinyin": "wǒ zuótiān {X} le",
+   "en": "I {X} yesterday",
+   "note": "了 marks completion, not past tense. The time word does the tense work.",
+   "slots": [
+    {
+     "h": "去上海",
+     "p": "qù Shànghǎi",
+     "e": "went to Shanghai"
+    },
+    {
+     "h": "看医生",
+     "p": "kàn yīshēng",
+     "e": "saw a doctor"
+    },
+    {
+     "h": "买一台电脑",
+     "p": "mǎi yì tái diànnǎo",
+     "e": "bought a computer"
+    },
+    {
+     "h": "给他打电话",
+     "p": "gěi tā dǎ diànhuà",
+     "e": "called him"
+    },
+    {
+     "h": "睡得很晚",
+     "p": "shuì de hěn wǎn",
+     "e": "went to bed late"
+    },
+    {
+     "h": "见到她",
+     "p": "jiàn dào tā",
+     "e": "met her"
+    },
+    {
+     "h": "喝太多",
+     "p": "hē tài duō",
+     "e": "drank too much"
+    }
+   ]
+  },
+  {
+   "id": "p14",
+   "stage": "st3",
+   "name": "我打算 + verb",
+   "zh": "我打算{X}",
+   "pinyin": "wǒ dǎsuàn {X}",
+   "en": "I plan to {X}",
+   "note": "打算 is a settled intention — stronger than 想, softer than 要.",
+   "slots": [
+    {
+     "h": "下个月去旅行",
+     "p": "xià ge yuè qù lǚxíng",
+     "e": "travel next month"
+    },
+    {
+     "h": "换工作",
+     "p": "huàn gōngzuò",
+     "e": "change jobs"
+    },
+    {
+     "h": "学开车",
+     "p": "xué kāichē",
+     "e": "learn to drive"
+    },
+    {
+     "h": "搬家",
+     "p": "bānjiā",
+     "e": "move house"
+    },
+    {
+     "h": "周末休息",
+     "p": "zhōumò xiūxi",
+     "e": "rest this weekend"
+    },
+    {
+     "h": "在这儿住一年",
+     "p": "zài zhèr zhù yì nián",
+     "e": "live here a year"
+    },
+    {
+     "h": "早点儿走",
+     "p": "zǎo diǎnr zǒu",
+     "e": "leave early"
+    }
+   ]
+  },
+  {
+   "id": "p15",
+   "stage": "st3",
+   "name": "我觉得 + clause",
+   "zh": "我觉得{X}",
+   "pinyin": "wǒ juéde {X}",
+   "en": "I think {X}",
+   "note": "觉得 takes a whole clause. This is your main opinion frame.",
+   "slots": [
+    {
+     "h": "很好",
+     "p": "hěn hǎo",
+     "e": "it's good"
+    },
+    {
+     "h": "太贵了",
+     "p": "tài guì le",
+     "e": "it's too expensive"
+    },
+    {
+     "h": "没问题",
+     "p": "méi wèntí",
+     "e": "it's fine"
+    },
+    {
+     "h": "他说得对",
+     "p": "tā shuō de duì",
+     "e": "he's right"
+    },
+    {
+     "h": "这样不太好",
+     "p": "zhèyàng bú tài hǎo",
+     "e": "this isn't great"
+    },
+    {
+     "h": "值得试试",
+     "p": "zhídé shìshi",
+     "e": "it's worth a try"
+    },
+    {
+     "h": "我们应该等等",
+     "p": "wǒmen yīnggāi děngdeng",
+     "e": "we should wait"
+    }
+   ]
+  },
+  {
+   "id": "p16",
+   "stage": "st3",
+   "name": "A 比 B + adjective",
+   "zh": "这个比那个{X}",
+   "pinyin": "zhège bǐ nàge {X}",
+   "en": "This one is {X} than that one",
+   "note": "比 comparisons never take 很 — 这个比那个很好 is wrong. Just the bare adjective.",
+   "slots": [
+    {
+     "h": "好",
+     "p": "hǎo",
+     "e": "better"
+    },
+    {
+     "h": "贵",
+     "p": "guì",
+     "e": "more expensive"
+    },
+    {
+     "h": "便宜",
+     "p": "piányi",
+     "e": "cheaper"
+    },
+    {
+     "h": "大",
+     "p": "dà",
+     "e": "bigger"
+    },
+    {
+     "h": "快",
+     "p": "kuài",
+     "e": "faster"
+    },
+    {
+     "h": "方便",
+     "p": "fāngbiàn",
+     "e": "more convenient"
+    },
+    {
+     "h": "难",
+     "p": "nán",
+     "e": "harder"
+    },
+    {
+     "h": "有意思",
+     "p": "yǒu yìsi",
+     "e": "more interesting"
+    }
+   ]
+  },
+  {
+   "id": "p17",
+   "stage": "st3",
+   "name": "我 + verb + 过",
+   "zh": "我{X}过",
+   "pinyin": "wǒ {X} guo",
+   "en": "I've {X} before",
+   "note": "过 marks lived experience — 'I have ever done this', not 'I did it'.",
+   "slots": [
+    {
+     "h": "去",
+     "p": "qù",
+     "e": "been there"
+    },
+    {
+     "h": "吃",
+     "p": "chī",
+     "e": "eaten that"
+    },
+    {
+     "h": "听说",
+     "p": "tīngshuō",
+     "e": "heard of it"
+    },
+    {
+     "h": "见",
+     "p": "jiàn",
+     "e": "met them"
+    },
+    {
+     "h": "学",
+     "p": "xué",
+     "e": "studied it"
+    },
+    {
+     "h": "试",
+     "p": "shì",
+     "e": "tried it"
+    },
+    {
+     "h": "住",
+     "p": "zhù",
+     "e": "lived there"
+    }
+   ]
+  },
+  {
+   "id": "p18",
+   "stage": "st3",
+   "name": "…什么时候…？",
+   "zh": "你什么时候{X}？",
+   "pinyin": "nǐ shénme shíhou {X}?",
+   "en": "When do you {X}?",
+   "note": "Time questions sit before the verb in Chinese, never at the end.",
+   "slots": [
+    {
+     "h": "有空",
+     "p": "yǒu kòng",
+     "e": "have free time"
+    },
+    {
+     "h": "来",
+     "p": "lái",
+     "e": "come"
+    },
+    {
+     "h": "回家",
+     "p": "huí jiā",
+     "e": "go home"
+    },
+    {
+     "h": "下班",
+     "p": "xiàbān",
+     "e": "finish work"
+    },
+    {
+     "h": "出发",
+     "p": "chūfā",
+     "e": "set off"
+    },
+    {
+     "h": "开始",
+     "p": "kāishǐ",
+     "e": "start"
+    },
+    {
+     "h": "到",
+     "p": "dào",
+     "e": "arrive"
+    }
+   ]
+  },
+  {
+   "id": "p19",
+   "stage": "st3",
+   "name": "我在 + place + verb",
+   "zh": "我在{X}",
+   "pinyin": "wǒ zài {X}",
+   "en": "I'm {X}",
+   "note": "在 marks both location and 'in the middle of doing'.",
+   "slots": [
+    {
+     "h": "家",
+     "p": "jiā",
+     "e": "at home"
+    },
+    {
+     "h": "上班",
+     "p": "shàngbān",
+     "e": "at work"
+    },
+    {
+     "h": "路上",
+     "p": "lù shàng",
+     "e": "on my way"
+    },
+    {
+     "h": "学中文",
+     "p": "xué Zhōngwén",
+     "e": "studying Chinese"
+    },
+    {
+     "h": "开会",
+     "p": "kāihuì",
+     "e": "in a meeting"
+    },
+    {
+     "h": "等你",
+     "p": "děng nǐ",
+     "e": "waiting for you"
+    },
+    {
+     "h": "外面",
+     "p": "wàimiàn",
+     "e": "outside"
+    }
+   ]
+  },
+  {
+   "id": "p20",
+   "stage": "st4",
+   "name": "如果…就…",
+   "zh": "如果{X}，我就不去了",
+   "pinyin": "rúguǒ {X}, wǒ jiù bú qù le",
+   "en": "If {X}, I won't go",
+   "note": "就 in the second clause is near-obligatory. Leaving it out sounds incomplete.",
+   "slots": [
+    {
+     "h": "下雨",
+     "p": "xiàyǔ",
+     "e": "it rains"
+    },
+    {
+     "h": "太晚",
+     "p": "tài wǎn",
+     "e": "it's too late"
+    },
+    {
+     "h": "他不来",
+     "p": "tā bù lái",
+     "e": "he doesn't come"
+    },
+    {
+     "h": "你很忙",
+     "p": "nǐ hěn máng",
+     "e": "you're busy"
+    },
+    {
+     "h": "太贵",
+     "p": "tài guì",
+     "e": "it's too expensive"
+    },
+    {
+     "h": "没有时间",
+     "p": "méiyǒu shíjiān",
+     "e": "there's no time"
+    }
+   ]
+  },
+  {
+   "id": "p21",
+   "stage": "st4",
+   "name": "虽然…但是…",
+   "zh": "虽然{X}，但是值得",
+   "pinyin": "suīrán {X}, dànshì zhídé",
+   "en": "Although {X}, it's worth it",
+   "note": "Chinese keeps BOTH halves of the pair. Unlike English, you cannot drop 但是.",
+   "slots": [
+    {
+     "h": "很难",
+     "p": "hěn nán",
+     "e": "it's hard"
+    },
+    {
+     "h": "很贵",
+     "p": "hěn guì",
+     "e": "it's expensive"
+    },
+    {
+     "h": "很累",
+     "p": "hěn lèi",
+     "e": "it's tiring"
+    },
+    {
+     "h": "要等很久",
+     "p": "yào děng hěn jiǔ",
+     "e": "you wait a long time"
+    },
+    {
+     "h": "我不太喜欢",
+     "p": "wǒ bú tài xǐhuan",
+     "e": "I don't love it"
+    },
+    {
+     "h": "有点儿远",
+     "p": "yǒudiǎnr yuǎn",
+     "e": "it's a bit far"
+    }
+   ]
+  },
+  {
+   "id": "p22",
+   "stage": "st4",
+   "name": "因为…所以…",
+   "zh": "因为{X}，所以我没去",
+   "pinyin": "yīnwèi {X}, suǒyǐ wǒ méi qù",
+   "en": "Because {X}, I didn't go",
+   "note": "Again both halves stay. The reason always comes first in Chinese.",
+   "slots": [
+    {
+     "h": "我很累",
+     "p": "wǒ hěn lèi",
+     "e": "I was tired"
+    },
+    {
+     "h": "下大雨",
+     "p": "xià dà yǔ",
+     "e": "it rained hard"
+    },
+    {
+     "h": "我病了",
+     "p": "wǒ bìng le",
+     "e": "I was ill"
+    },
+    {
+     "h": "太远了",
+     "p": "tài yuǎn le",
+     "e": "it was too far"
+    },
+    {
+     "h": "我要加班",
+     "p": "wǒ yào jiābān",
+     "e": "I had to work late"
+    },
+    {
+     "h": "没人告诉我",
+     "p": "méi rén gàosu wǒ",
+     "e": "nobody told me"
+    }
+   ]
+  },
+  {
+   "id": "p23",
+   "stage": "st4",
+   "name": "我有点儿 + adjective",
+   "zh": "我有点儿{X}",
+   "pinyin": "wǒ yǒudiǎnr {X}",
+   "en": "I'm a bit {X}",
+   "note": "有点儿 is for things you'd rather not feel. For positives use 有点儿's opposite: 挺…的.",
+   "slots": [
+    {
+     "h": "累",
+     "p": "lèi",
+     "e": "tired"
+    },
+    {
+     "h": "担心",
+     "p": "dānxīn",
+     "e": "worried"
+    },
+    {
+     "h": "失望",
+     "p": "shīwàng",
+     "e": "disappointed"
+    },
+    {
+     "h": "紧张",
+     "p": "jǐnzhāng",
+     "e": "nervous"
+    },
+    {
+     "h": "不舒服",
+     "p": "bù shūfu",
+     "e": "unwell"
+    },
+    {
+     "h": "生气",
+     "p": "shēngqì",
+     "e": "annoyed"
+    },
+    {
+     "h": "难过",
+     "p": "nánguò",
+     "e": "sad"
+    }
+   ]
+  },
+  {
+   "id": "p24",
+   "stage": "st4",
+   "name": "你应该 + verb",
+   "zh": "你应该{X}",
+   "pinyin": "nǐ yīnggāi {X}",
+   "en": "You should {X}",
+   "note": "应该 is advice. Add 早点儿 for the 'should have' sense.",
+   "slots": [
+    {
+     "h": "早点儿休息",
+     "p": "zǎo diǎnr xiūxi",
+     "e": "rest earlier"
+    },
+    {
+     "h": "告诉他",
+     "p": "gàosu tā",
+     "e": "tell him"
+    },
+    {
+     "h": "再试一次",
+     "p": "zài shì yí cì",
+     "e": "try again"
+    },
+    {
+     "h": "看医生",
+     "p": "kàn yīshēng",
+     "e": "see a doctor"
+    },
+    {
+     "h": "先问一下",
+     "p": "xiān wèn yíxià",
+     "e": "ask first"
+    },
+    {
+     "h": "考虑清楚",
+     "p": "kǎolǜ qīngchu",
+     "e": "think it through"
+    }
+   ]
+  },
+  {
+   "id": "p25",
+   "stage": "st4",
+   "name": "越来越 + adjective",
+   "zh": "越来越{X}了",
+   "pinyin": "yuè lái yuè {X} le",
+   "en": "It's getting more and more {X}",
+   "note": "The 了 at the end signals the change is ongoing.",
+   "slots": [
+    {
+     "h": "难",
+     "p": "nán",
+     "e": "difficult"
+    },
+    {
+     "h": "好",
+     "p": "hǎo",
+     "e": "better"
+    },
+    {
+     "h": "贵",
+     "p": "guì",
+     "e": "expensive"
+    },
+    {
+     "h": "忙",
+     "p": "máng",
+     "e": "busy"
+    },
+    {
+     "h": "冷",
+     "p": "lěng",
+     "e": "cold"
+    },
+    {
+     "h": "有意思",
+     "p": "yǒu yìsi",
+     "e": "interesting"
+    },
+    {
+     "h": "厉害",
+     "p": "lìhai",
+     "e": "impressive"
+    }
+   ]
+  },
+  {
+   "id": "p26",
+   "stage": "st4",
+   "name": "…的时候",
+   "zh": "{X}的时候，我不在",
+   "pinyin": "{X} de shíhou, wǒ bú zài",
+   "en": "When {X}, I wasn't there",
+   "note": "的时候 always follows the event. English puts 'when' first; Chinese puts it last.",
+   "slots": [
+    {
+     "h": "他来",
+     "p": "tā lái",
+     "e": "he came"
+    },
+    {
+     "h": "开始",
+     "p": "kāishǐ",
+     "e": "it started"
+    },
+    {
+     "h": "打电话",
+     "p": "dǎ diànhuà",
+     "e": "you called"
+    },
+    {
+     "h": "出事",
+     "p": "chū shì",
+     "e": "it happened"
+    },
+    {
+     "h": "你找我",
+     "p": "nǐ zhǎo wǒ",
+     "e": "you looked for me"
+    }
+   ]
+  },
+  {
+   "id": "p27",
+   "stage": "st4",
+   "name": "我 + verb + 不了",
+   "zh": "我{X}不了",
+   "pinyin": "wǒ {X} bu liǎo",
+   "en": "I can't {X} (it's not possible)",
+   "note": "不了 = unable due to circumstances. 不会 = don't know how. Different failures.",
+   "slots": [
+    {
+     "h": "吃",
+     "p": "chī",
+     "e": "eat all this"
+    },
+    {
+     "h": "去",
+     "p": "qù",
+     "e": "make it"
+    },
+    {
+     "h": "忘",
+     "p": "wàng",
+     "e": "forget it"
+    },
+    {
+     "h": "等",
+     "p": "děng",
+     "e": "wait"
+    },
+    {
+     "h": "受",
+     "p": "shòu",
+     "e": "stand it"
+    },
+    {
+     "h": "做",
+     "p": "zuò",
+     "e": "manage it"
+    }
+   ]
+  },
+  {
+   "id": "p28",
+   "stage": "st5",
+   "name": "我个人觉得 + clause",
+   "zh": "我个人觉得{X}",
+   "pinyin": "wǒ gèrén juéde {X}",
+   "en": "Personally, I feel {X}",
+   "note": "Marks the view as yours alone — the standard way to disagree without confrontation.",
+   "slots": [
+    {
+     "h": "可能不太合适",
+     "p": "kěnéng bú tài héshì",
+     "e": "it might not be suitable"
+    },
+    {
+     "h": "还有改进的空间",
+     "p": "hái yǒu gǎijìn de kōngjiān",
+     "e": "there's room to improve"
+    },
+    {
+     "h": "这样比较好",
+     "p": "zhèyàng bǐjiào hǎo",
+     "e": "this way is better"
+    },
+    {
+     "h": "值得考虑",
+     "p": "zhídé kǎolǜ",
+     "e": "it's worth considering"
+    },
+    {
+     "h": "风险有点儿大",
+     "p": "fēngxiǎn yǒudiǎnr dà",
+     "e": "the risk is a bit high"
+    }
+   ]
+  },
+  {
+   "id": "p29",
+   "stage": "st5",
+   "name": "恐怕 + clause",
+   "zh": "恐怕{X}",
+   "pinyin": "kǒngpà {X}",
+   "en": "I'm afraid {X}",
+   "note": "The polite way to deliver bad news. Softer than a flat 不.",
+   "slots": [
+    {
+     "h": "没那么简单",
+     "p": "méi nàme jiǎndān",
+     "e": "it's not that simple"
+    },
+    {
+     "h": "来不及了",
+     "p": "lái bu jí le",
+     "e": "there isn't time"
+    },
+    {
+     "h": "不行",
+     "p": "bù xíng",
+     "e": "that won't work"
+    },
+    {
+     "h": "我帮不上忙",
+     "p": "wǒ bāng bu shàng máng",
+     "e": "I can't help"
+    },
+    {
+     "h": "有点儿困难",
+     "p": "yǒudiǎnr kùnnan",
+     "e": "it's rather difficult"
+    }
+   ]
+  },
+  {
+   "id": "p30",
+   "stage": "st5",
+   "name": "关于…，我想…",
+   "zh": "关于{X}，我想补充一点",
+   "pinyin": "guānyú {X}, wǒ xiǎng bǔchōng yì diǎn",
+   "en": "Regarding {X}, I'd like to add something",
+   "note": "关于 fronts the topic. Essential for meetings and any structured argument.",
+   "slots": [
+    {
+     "h": "这个问题",
+     "p": "zhège wèntí",
+     "e": "this question"
+    },
+    {
+     "h": "价格",
+     "p": "jiàgé",
+     "e": "the price"
+    },
+    {
+     "h": "时间安排",
+     "p": "shíjiān ānpái",
+     "e": "the schedule"
+    },
+    {
+     "h": "刚才的讨论",
+     "p": "gāngcái de tǎolùn",
+     "e": "the earlier discussion"
+    },
+    {
+     "h": "下一步",
+     "p": "xià yí bù",
+     "e": "the next step"
+    }
+   ]
+  },
+  {
+   "id": "p31",
+   "stage": "st5",
+   "name": "…来说",
+   "zh": "{X}来说，这很重要",
+   "pinyin": "{X} lái shuō, zhè hěn zhòngyào",
+   "en": "{X}, this is important",
+   "note": "A family of framing phrases. Learn them as one set — natives use them constantly.",
+   "slots": [
+    {
+     "h": "对我",
+     "p": "duì wǒ",
+     "e": "for me"
+    },
+    {
+     "h": "总的",
+     "p": "zǒng de",
+     "e": "generally speaking"
+    },
+    {
+     "h": "一般",
+     "p": "yìbān",
+     "e": "generally"
+    },
+    {
+     "h": "严格",
+     "p": "yángé",
+     "e": "strictly speaking"
+    },
+    {
+     "h": "相对",
+     "p": "xiāngduì",
+     "e": "relatively speaking"
+    },
+    {
+     "h": "从长远",
+     "p": "cóng chángyuǎn",
+     "e": "in the long run"
+    }
+   ]
+  },
+  {
+   "id": "p32",
+   "stage": "st5",
+   "name": "确实…，但…",
+   "zh": "确实{X}，但问题在于时间",
+   "pinyin": "quèshí {X}, dàn wèntí zàiyú shíjiān",
+   "en": "It's true that {X}, but the problem is time",
+   "note": "Concede first, then counter. This structure is how disagreement stays polite in Chinese.",
+   "slots": [
+    {
+     "h": "有道理",
+     "p": "yǒu dàolǐ",
+     "e": "that makes sense"
+    },
+    {
+     "h": "是个好主意",
+     "p": "shì ge hǎo zhǔyi",
+     "e": "it's a good idea"
+    },
+    {
+     "h": "便宜",
+     "p": "piányi",
+     "e": "it's cheap"
+    },
+    {
+     "h": "更安全",
+     "p": "gèng ānquán",
+     "e": "it's safer"
+    },
+    {
+     "h": "大家都同意",
+     "p": "dàjiā dōu tóngyì",
+     "e": "everyone agrees"
+    }
+   ]
+  }
+ ]
+}

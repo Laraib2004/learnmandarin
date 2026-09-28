@@ -5,8 +5,8 @@ changing anything; several decisions here look arbitrary and are not.
 
 ## What this is
 
-**Shuō Ba (说吧)** — a free, zero-backend Mandarin course whose goal is *spoken
-fluency*, not vocabulary recall. Static files, no build step, no dependencies.
+**Shuō Ba (说吧)** — a free, zero-backend Mandarin course that runs from absolute
+beginner to conversational fluency. Static files, no build step, no dependencies.
 
 ## Hard constraints
 
@@ -16,23 +16,34 @@ convenience.
 1. **Free forever, for anyone.** No paid API may become a hard dependency. Audio
    uses the browser's built-in speech synthesis; scoring uses the browser's
    built-in recogniser. Both are free and unlimited. If a feature needs a paid
-   service, it must be optional and the app must be fully usable without it.
+   service, it must be optional and the app fully usable without it.
 2. **No backend.** Everything runs client-side against `localStorage`. This is
    what makes it free to host and impossible to monetise via user data.
 3. **No build step.** Plain ES modules, served as-is. Anyone can fork it, edit a
-   file, and host it on GitHub Pages. Introducing a bundler breaks that promise —
-   don't, without a very good reason.
+   file, and host it on GitHub Pages. Introducing a bundler breaks that promise.
 4. **No account, no telemetry, no network calls after load.**
-5. **Speaking is the goal.** Any feature should be judged by: *does this get the
-   learner closer to producing Mandarin out loud?* Streaks, badges, and cosmetic
-   gamification fail that test.
+5. **Speaking is the goal.** Judge any feature by: *does this get the learner
+   closer to producing Mandarin out loud?* Streaks and badges fail that test.
+
+## The pedagogical thesis
+
+**Recall ≠ fluency.** Memorising sentences makes a phrasebook; fluency is
+generating novel sentences fast. The app therefore has two distinct engines:
+
+- **Review** (`views/review.js`) trains recall over the fixed corpus, on FSRS.
+- **Drill** (`views/drill.js`) trains *production* — grammar frames with slots
+  filled at random, so the learner assembles sentences never seen before.
+
+If you are adding a feature, know which engine it serves. The timer in Drill is
+load-bearing, not decoration: correct-but-slow plateaus, so `TARGET_MS = 4000`
+(roughly conversational latency) is the bar.
 
 ## Architecture
 
 ```
 index.html → js/main.js (hash router) → js/views/<route>.js
                     ↓
-      deck.js (what to study) → store.js (persistence)
+      deck.js (corpus + what to study) → store.js (persistence)
                     ↓
       fsrs.js (scheduling) · tts.js (audio) · asr.js (scoring)
 ```
@@ -57,6 +68,70 @@ index.html → js/main.js (hash router) → js/views/<route>.js
   directly, or the write won't be scheduled.
 - Card state shape is FSRS's, not SM-2's: `{stability, difficulty, due,
   lastReview, reps, lapses, state}`. There is no "ease factor."
+- `deck.availablePatterns()` gates drills to stages the learner has entered.
+  Drilling a frame never heard in context is just translation homework.
+
+## Content model
+
+`data/course.json` lists the five stages and points at one corpus file each.
+**Content grows without code changes** — add sentences to a stage file, or a new
+stage to `course.json` with its own file. `deck.loadCorpus()` fetches them all in
+parallel and flattens.
+
+```
+data/course.json           stages: {id, level, title, goal, canDo[], file}
+data/corpus/st1..st5.json  {stage, units[], sentences[]}
+data/patterns.json         generative frames
+data/tones.json            minimal pairs + sandhi rules
+```
+
+Current size: **250 sentences · 25 units · 500 glossed words · 32 patterns ·
+217 drillable variations.** C1 (`st5`) is the thinnest stage and the best place
+to add.
+
+### Sentence schema
+
+```jsonc
+{
+  "id": "s001", "unit": "u1",
+  "hanzi": "你好", "pinyin": "nǐ hǎo",
+  "spoken": "ní hǎo",          // ONLY when tone sandhi changes it
+  "en": "Hello",
+  "words": [{"h":"你","p":"nǐ","e":"you"}]   // gloss every word, in order
+}
+```
+
+Rules when adding sentences:
+- Pinyin **must** carry tone marks (`nǐ`, not `ni3`). `ui.js → toneOf()` colours
+  syllables by reading the diacritic; without it everything renders as neutral.
+- Set `spoken` whenever 3-3 sandhi, 不 bù→bú, or 一 yī→yì/yí applies.
+- Gloss every word in `words[]`, in sentence order — the review view renders them
+  as the grammar explanation.
+- `id` must be globally unique across **all** stage files; `unit` must exist in
+  the same file's `units[]`. The test harness enforces both.
+- Ask "would a learner at this stage actually say this?" If no, it doesn't belong.
+
+### Pattern schema
+
+```jsonc
+{
+  "id": "p01", "stage": "st1",
+  "name": "我想 + verb",
+  "zh": "我想{X}", "pinyin": "wǒ xiǎng {X}", "en": "I want to {X}",
+  "note": "why this frame works / what to watch for",
+  "slots": [{"h":"喝水","p":"hē shuǐ","e":"drink water"}]
+}
+```
+
+- `{X}` must appear in **all three** of `zh`, `pinyin`, `en`.
+- `fillPattern()` uses **`replaceAll`**, deliberately: a frame may carry the
+  placeholder twice (`"Do you have {X}? / Is there {X}?"`). A plain `.replace()`
+  leaves a raw `{X}` in the learner's prompt — this was a real shipped bug.
+  Note Python's `str.replace` replaces all by default, so a Python-side check
+  will *not* catch the JS bug. Validate through the JS path.
+- Never put Latin text in an `h` field (it goes to the Mandarin TTS). `Wi-Fi` is
+  the one sanctioned exception; the test harness whitelists it.
+- One good pattern is worth dozens of sentences, because it generates.
 
 ## The scheduler (js/fsrs.js)
 
@@ -76,54 +151,28 @@ Sanity check when touching it — `npm run test:engine` asserts all of these:
 - `intervalFor(S=10, 0.9) ≈ 10` days (the definition of stability)
 
 Do not "simplify" the weights or the damping/mean-reversion terms in
-`nextDifficulty()`. They're trained parameters, not magic numbers someone
-guessed.
+`nextDifficulty()`. They're trained parameters, not magic numbers someone guessed.
 
 ## Speech scoring (js/asr.js)
 
 `score(target, result)` checks **every alternative** the recogniser returned and
-keeps the best match. This matters: ASR is noisy, and marking a learner wrong
-because the engine's *first* guess was off — when its second was exact — teaches
-them the wrong lesson.
+keeps the best match. ASR is noisy, and marking a learner wrong because the
+engine's *first* guess was off — when its second was exact — teaches the wrong
+lesson.
 
 `align()` does a Levenshtein backtrace to produce one mark per target character
 (`{char, ok, heard}`), so the UI can point at the exact syllable that missed.
 Marks always align 1:1 with the target string; there's a test for that.
 
 Firefox has no `SpeechRecognition`. Every path that uses it must degrade, never
-throw — `views/speak.js` shows the fallback pattern.
-
-## Content (data/sentences.json)
-
-60 sentences across 6 units, ordered by **spoken frequency and utility**, not by
-grammatical tidiness. Schema:
-
-```jsonc
-{
-  "id": "s001", "unit": "u1",
-  "hanzi": "你好", "pinyin": "nǐ hǎo",
-  "spoken": "ní hǎo",          // ONLY when tone sandhi changes it
-  "en": "Hello",
-  "words": [{"h":"你","p":"nǐ","e":"you"}]   // gloss every word, in order
-}
-```
-
-Rules when adding content:
-- Pinyin **must** carry tone marks (`nǐ`, not `ni3`). `ui.js → toneOf()` colours
-  syllables by reading the diacritic; without it everything renders as neutral.
-- Set `spoken` whenever 3-3 sandhi, 不 bù→bú, or 一 yī→yì/yí applies.
-- Gloss every word in `words[]`, in sentence order — the review view renders them
-  as the grammar explanation.
-- Ask "would a learner actually say this in week one?" If no, it doesn't belong
-  in the core units.
-- Run `npm test` after editing: the harness validates unique ids and unit refs.
+throw — `views/speak.js` and `views/drill.js` show the fallback pattern.
 
 ## Testing
 
 ```bash
-npm test            # both suites
+npm test            # both suites, 46 checks
 npm run test:engine # FSRS maths + alignment scoring (pure logic)
-npm run test:views  # renders every view against a DOM shim in scripts/test-views.mjs
+npm run test:views  # renders every view against a DOM shim
 ```
 
 `scripts/test-views.mjs` contains a ~60-line fake DOM. It is deliberately *not* a
@@ -131,6 +180,9 @@ browser — it catches runtime errors and missing-branch bugs in view code, whic
 is most of what actually breaks here. It runs with **no `speechSynthesis` and no
 `SpeechRecognition` defined**, so it also exercises the graceful-degradation
 paths. If you add a view, add it to the `views` map there.
+
+The harness also validates corpus integrity: unique ids, unit/stage references,
+stage totals, and that every pattern composes with no leftover placeholder.
 
 Note the shim needs `globalThis.Node` defined, since `ui.js → h()` does
 `instanceof Node`.
@@ -149,22 +201,25 @@ Note the shim needs `globalThis.Node` defined, since `ui.js → h()` does
 - Don't use CSS nesting — it was removed once already for browser reach.
 - `settings.js`'s `paint()` is async (it awaits `initVoices()`); tests must flush
   a tick before asserting on its output.
+- Heredocs choke on this corpus in Git Bash — use the Write tool for large
+  JSON/JS files rather than `cat <<'EOF'`.
 
 ## Roadmap priorities
 
 In rough order of learner value:
 
-1. **More sentences.** The engine is done; the course is thin. ~600 sentences
-   would carry someone to genuine basic conversation. This is the bottleneck.
-2. **Pitch-contour feedback** from the mic — show the learner's actual tone curve
-   against the target. This is the single biggest possible upgrade to Speak.
-3. **Recording playback** — hear yourself next to the native audio.
-4. Service worker for offline use (it's already a static app; this is cheap).
-5. Optional character track — stroke order, radical decomposition.
+1. **More sentences, especially B2/C1.** The engines are done; C1 has 40
+   sentences and should have several hundred. This is the bottleneck to fluency.
+2. **More patterns.** Cheapest fluency-per-edit in the whole repo — each frame
+   generates ~8 sentences and transfers to future vocabulary.
+3. **Pitch-contour feedback** from the mic — show the learner's actual tone curve
+   against the target. The single biggest possible upgrade to Speak.
+4. **Multi-turn dialogue** — the gap between "says sentences" and "converses".
+5. Recording playback; service worker for offline; optional character track.
 
 ## Style
 
-- Comments explain **why**, not what. The FSRS and ASR modules carry the
+- Comments explain **why**, not what. The FSRS, ASR, and drill modules carry the
   pedagogical reasoning; keep that when editing.
 - Learner-facing copy is plain, direct, and never condescending. No exclamation
   marks, no fake encouragement, no "Great job!" — tell the learner what's true

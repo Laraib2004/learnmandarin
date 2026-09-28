@@ -20,10 +20,11 @@ export async function loadCorpus() {
   if (corpus) return corpus;
 
   const course = await fetch('data/course.json').then((r) => r.json());
-  const [stageFiles, tones, patterns] = await Promise.all([
+  const [stageFiles, tones, patterns, dialogues] = await Promise.all([
     Promise.all(course.stages.map((s) => fetch(s.file).then((r) => r.json()))),
     fetch('data/tones.json').then((r) => r.json()),
     fetch('data/patterns.json').then((r) => r.json()),
+    fetch('data/dialogues.json').then((r) => r.json()),
   ]);
 
   const units = stageFiles.flatMap((f) => f.units);
@@ -37,6 +38,8 @@ export async function loadCorpus() {
     tones,
     patterns: patterns.patterns,
     patternsMeta: patterns.meta,
+    dialogues: dialogues.dialogues,
+    dialoguesMeta: dialogues.meta,
     byId: Object.fromEntries(sentences.map((s) => [s.id, s])),
     unitById: Object.fromEntries(units.map((u) => [u.id, u])),
     stageById: Object.fromEntries(course.stages.map((s) => [s.id, s])),
@@ -114,6 +117,18 @@ export function availablePatterns() {
 }
 
 /**
+ * Dialogues unlocked for the learner. Same gate as patterns: a conversation
+ * built on a stage you have not reached is a wall, not practice. Stage 1 is
+ * always open so a brand-new learner has something to try immediately.
+ */
+export function availableDialogues() {
+  const reached = new Set(studied().map((s) => corpus.unitById[s.unit]?.stage));
+  reached.add('st1');
+  const open = corpus.dialogues.filter((d) => reached.has(d.stage));
+  return open.length ? open : corpus.dialogues.filter((d) => d.stage === 'st1');
+}
+
+/**
  * Compose one concrete sentence from a pattern frame and a slot filler.
  * replaceAll, not replace: a frame may carry the placeholder more than once
  * (e.g. "Do you have {X}? / Is there {X}?"), and a single replace would leave
@@ -140,6 +155,7 @@ export function stats() {
   for (const sen of studied()) for (const w of sen.words) words.add(w.h);
   const spoken = Object.values(s.speech).filter((x) => (x.best ?? 0) >= 80).length;
   const drills = Object.values(s.drills || {});
+  const convos = Object.values(s.dialogues || {});
   return {
     known: cards.length,
     total: corpus.sentences.length,
@@ -149,6 +165,7 @@ export function stats() {
     spoken,
     drilled: drills.filter((d) => (d.best ?? 0) >= 80).length,
     drillAttempts: drills.reduce((a, d) => a + (d.attempts || 0), 0),
+    conversations: convos.reduce((a, d) => a + (d.runs || 0), 0),
     toneAccuracy: toneAccuracy(),
     streak: streak(),
     stage: currentStage(),

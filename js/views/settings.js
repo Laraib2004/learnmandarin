@@ -2,6 +2,7 @@ import { h } from '../ui.js';
 import { get, update, exportJSON, importJSON, reset } from '../store.js';
 import { chineseVoices, setVoice, speak, initVoices } from '../tts.js';
 import { primeMicrophone, isSupported as asrOk } from '../asr.js';
+import { signal, unlockAudio, hapticsSupported } from '../feedback.js';
 
 export default function settings(root) {
   const pane = h('div', { class: 'stack' });
@@ -62,6 +63,25 @@ export default function settings(root) {
             themeBtn('', 'Match system'), themeBtn('light', 'Light'), themeBtn('dark', 'Dark')))),
 
       h('section', { class: 'card stack' },
+        h('h2', {}, 'Feedback'),
+        h('label', { class: 'field' }, 'Sound cues',
+          h('small', {}, 'Short tones on correct, close, and missed answers. Synthesised in the browser — no audio files, no downloads.'),
+          h('div', { class: 'row' },
+            boolToggle('sounds', true, 'On'),
+            boolToggle('sounds', false, 'Off'))),
+        h('label', { class: 'field' }, 'Vibration',
+          h('small', {},
+            hapticsSupported()
+              ? 'Short buzz alongside each result.'
+              : 'Not available in this browser. iOS Safari does not implement the Vibration API, so iPhone gets no haptics — including in an installed app. Sound and on-screen feedback carry it instead.'),
+          h('div', { class: 'row' },
+            boolToggle('haptics', true, 'On'),
+            boolToggle('haptics', false, 'Off'))),
+        h('button', {
+          class: 'btn tappable', onclick: () => { unlockAudio(); signal('correct', 'This is what a correct answer feels like'); },
+        }, 'Test feedback')),
+
+      h('section', { class: 'card stack' },
         h('h2', {}, 'Microphone'),
         h('p', { class: 'muted small', style: 'margin:0' },
           asrOk()
@@ -109,6 +129,15 @@ export default function settings(root) {
     const on = get().settings[key] === value;
     return h('button', {
       class: `btn ${on ? 'btn-primary' : ''}`,
+      onclick: () => { update((st) => { st.settings[key] = value; }); paint(); },
+    }, label);
+  }
+
+  /** Toggle for a plain boolean setting (the existing `toggle` compares values). */
+  function boolToggle(key, value, label) {
+    const on = Boolean(get().settings[key]) === value;
+    return h('button', {
+      class: `btn tappable ${on ? 'btn-primary' : ''}`,
       onclick: () => { update((st) => { st.settings[key] = value; }); paint(); },
     }, label);
   }

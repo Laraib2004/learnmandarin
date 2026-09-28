@@ -3,6 +3,7 @@ import { availablePatterns, fillPattern, getCorpus } from '../deck.js';
 import { speak } from '../tts.js';
 import * as asr from '../asr.js';
 import { get, update, bumpDaily } from '../store.js';
+import { signal, cue, unlockAudio } from '../feedback.js';
 
 /**
  * Pattern drills — the step from "knows Chinese" to "speaks Chinese".
@@ -103,7 +104,9 @@ export default function drill(root) {
 
   async function attempt() {
     if (listening || !asr.isSupported()) return;
+    unlockAudio();
     listening = true;
+    cue('listening');
     paint();
     try {
       const result = await asr.listen({ timeoutMs: 8000 });
@@ -123,6 +126,11 @@ export default function drill(root) {
       });
       bumpDaily('drill');
       streak = scored.score >= 80 ? streak + 1 : 0;
+      const quick = scored.score >= 80 && elapsed <= TARGET_MS;
+      signal(scored.score >= 90 ? 'correct' : scored.score >= 60 ? 'partial' : 'wrong',
+        quick ? `Built it in ${(elapsed / 1000).toFixed(1)}s — conversational speed`
+          : scored.score >= 80 ? 'Right, but slow down the gap, not the speech'
+          : null);
     } catch (err) {
       last = { error: err.message };
       revealed = true;

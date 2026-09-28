@@ -4,6 +4,7 @@ import { review as grade, previewIntervals, formatInterval } from '../fsrs.js';
 import { get, update, bumpDaily } from '../store.js';
 import { speak, speakTwice } from '../tts.js';
 import { refreshBadge } from '../main.js';
+import { signal, cue } from '../feedback.js';
 
 /**
  * The review session.
@@ -24,8 +25,9 @@ export default function review(root, { navigate }) {
           'You are caught up. Adding more new cards now would only inflate tomorrow’s workload — ' +
           'the schedule is doing its job.'),
         h('div', { class: 'row', style: 'justify-content:center' },
-          h('button', { class: 'btn btn-primary', onclick: () => navigate('speak') }, 'Practise speaking instead'),
-          h('button', { class: 'btn', onclick: () => navigate('settings') }, 'Raise my daily new limit'))));
+          h('button', { class: 'btn btn-primary tappable', onclick: () => navigate('dialogue') }, 'Have a conversation'),
+          h('button', { class: 'btn tappable', onclick: () => navigate('drill') }, 'Pattern drills'),
+          h('button', { class: 'btn btn-ghost tappable', onclick: () => navigate('settings') }, 'Raise my daily limit'))));
     return null;
   }
 
@@ -74,11 +76,15 @@ export default function review(root, { navigate }) {
     if (g === 1) queue.push(s);
 
     done++;
+    // Grading is self-reported, so the cue confirms the tap landed rather than
+    // judging the answer: "Again" gets a warn, everything else a soft success.
+    signal(g === 1 ? 'partial' : 'correct');
     refreshBadge();
     advance();
   }
 
   function finish() {
+    cue('done');
     pane.replaceChildren(
       h('section', { class: 'card stack center' },
         h('h1', {}, '完成 — session done'),
@@ -87,8 +93,9 @@ export default function review(root, { navigate }) {
         h('p', { class: 'muted small' },
           'The best thing you can do right now is say today’s sentences out loud. Recognition is not production.'),
         h('div', { class: 'row', style: 'justify-content:center' },
-          h('button', { class: 'btn btn-primary', onclick: () => navigate('speak') }, 'Say them out loud →'),
-          h('button', { class: 'btn', onclick: () => navigate('') }, 'Back to today'))));
+          h('button', { class: 'btn btn-primary tappable', onclick: () => navigate('dialogue') }, 'Use them in a conversation →'),
+          h('button', { class: 'btn tappable', onclick: () => navigate('speak') }, 'Say them out loud'),
+          h('button', { class: 'btn btn-ghost tappable', onclick: () => navigate('') }, 'Home'))));
   }
 
   function paint() {

@@ -2,6 +2,7 @@ import { h, pinyinEl, shuffle, sample, TONE_LEGEND } from '../ui.js';
 import { getCorpus } from '../deck.js';
 import { speak, isSupported as ttsOk } from '../tts.js';
 import { update, get, bumpDaily } from '../store.js';
+import { signal, unlockAudio } from '../feedback.js';
 
 /**
  * Tone Lab — ear training before mouth training.
@@ -125,6 +126,7 @@ function drillPane(data) {
       else if (b === btn) b.classList.add('wrong');
       b.disabled = true;
     }
+    signal(correct ? 'correct' : 'wrong');
     scoreEl.replaceChildren(
       document.createTextNode(correct
         ? `Correct — ${current.target.pinyin} (${current.target.gloss}). Streak ${run}.`
@@ -146,7 +148,7 @@ function drillPane(data) {
           ? h('div', { class: 'stack center', style: 'padding:1.5rem 0' },
               h('p', { class: 'muted' },
                 'You will hear one syllable. Pick the tone you heard. Guessing is fine — the point is to train your ear, and it works even when it feels random at first.'),
-              h('button', { class: 'btn btn-primary btn-lg', onclick: nextQuestion }, 'Start drilling'))
+              h('button', { class: 'btn btn-primary btn-lg tappable', onclick: () => { unlockAudio(); nextQuestion(); } }, 'Start drilling'))
           : h('div', { class: 'stack' },
               h('div', { class: 'center' },
                 h('button', { class: 'btn btn-lg', onclick: () => speak(current.target.hanzi, { rate: 0.7 }) }, '🔊  Play again'),

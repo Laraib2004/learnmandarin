@@ -25,9 +25,12 @@ export default function dashboard(root, { navigate }) {
   } else if (fresh > 0) {
     next = { label: `Learn ${fresh} new sentence${fresh === 1 ? '' : 's'}`, to: 'review',
       why: 'Nothing is due. Time to add to the pile.' };
-  } else {
+  } else if (s.drilled === 0) {
     next = { label: 'Run pattern drills', to: 'drill',
       why: 'Caught up on recall. Now build sentences you have never said before — that is the part that turns into fluency.' };
+  } else {
+    next = { label: 'Have a conversation', to: 'dialogue',
+      why: 'Recall and production are both current. A conversation is the only exercise that makes you switch between understanding and speaking, which is what real talking demands.' };
   }
 
   root.append(
@@ -40,9 +43,11 @@ export default function dashboard(root, { navigate }) {
         h('div', { class: 'row' },
           h('button', { class: 'btn btn-primary btn-lg', onclick: () => navigate(next.to) }, next.label),
           !firstTime && next.to !== 'drill'
-            ? h('button', { class: 'btn', onclick: () => navigate('drill') }, 'Drills')
+            ? h('button', { class: 'btn tappable', onclick: () => navigate('drill') }, 'Drills')
             : null,
-          !firstTime ? h('button', { class: 'btn', onclick: () => navigate('speak') }, 'Speak') : null)),
+          !firstTime && next.to !== 'dialogue'
+            ? h('button', { class: 'btn tappable', onclick: () => navigate('dialogue') }, 'Talk')
+            : null)),
 
       h('div', { class: 'stats' },
         stat(s.known, 'sentences known'),
@@ -58,6 +63,7 @@ export default function dashboard(root, { navigate }) {
         step('Sentences, not words', 'Every card is a whole usable phrase. You learn 很 by using it, not by memorising "very".', s.known > 0),
         step('Say it, get scored', 'Speech recognition checks whether a Mandarin engine actually understood you.', s.spoken > 0),
         step('Build, don\'t recite', 'Pattern drills fill a frame at random so you produce sentences you have never said — under time pressure.', s.drilled > 0),
+        step('Both directions at once', 'Conversations alternate: understand their Chinese, then produce your own. Drilling one direction only is why people freeze mid-chat.', s.conversations > 0),
         step('Return at the right moment', 'The scheduler brings each sentence back just before you would forget it.', s.mature > 0)),
     ),
   );

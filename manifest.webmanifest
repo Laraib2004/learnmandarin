@@ -1,0 +1,23 @@
+{
+  "name": "Shuo Ba — Learn to Speak Mandarin",
+  "short_name": "Shuo Ba",
+  "description": "A free, speaking-first Mandarin course. Tone drills, spaced repetition, pattern drills and real pronunciation feedback — entirely in your browser.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f1115",
+  "theme_color": "#c1272d",
+  "lang": "en",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Review",  "url": "./index.html#/review",  "description": "Study what is due now" },
+    { "name": "Drills",  "url": "./index.html#/drill",   "description": "Build sentences against the clock" },
+    { "name": "Talk",    "url": "./index.html#/dialogue","description": "Two-way conversation practice" }
+  ]
+}

@@ -18,11 +18,14 @@ const defaultState = () => ({
     showHanzi: true,       // characters are an optional track
     speechRate: 0.85,      // native speech is fast; learners need it slower
     voiceURI: null,
+    haptics: true,         // no-op on iOS: Safari does not implement navigator.vibrate
+    sounds: true,          // synthesised cues; the main feedback channel on iPhone
   },
   cards: {},               // sentenceId -> FSRS card
   tones: {},               // toneDrillKey -> { seen, correct }
   speech: {},              // sentenceId -> { attempts, best }
   drills: {},              // patternId  -> { attempts, best, fast }
+  dialogues: {},           // dialogueId -> { runs, best, turns }
   log: [],                 // { t, id, grade } review history
   daily: {},               // 'YYYY-MM-DD' -> { new, reviews, speak, drill }
 });

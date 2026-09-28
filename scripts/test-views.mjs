@@ -62,7 +62,10 @@ globalThis.localStorage = {
 };
 const docEl = new Node2('html');
 const byId = { main: new Node2('main'), nav: new Node2('nav'), 'due-badge': new Node2('span') };
+const bodyEl = new Node2('body');
+bodyEl.contains = (n) => bodyEl.all.includes(n);
 globalThis.document = {
+  body: bodyEl,
   documentElement: docEl,
   createElement: (t) => new Node2(t),
   createTextNode: textNode,
@@ -79,6 +82,8 @@ globalThis.window = {
 globalThis.location = window.location;
 globalThis.navigator = { mediaDevices: null };
 globalThis.alert = () => {}; globalThis.confirm = () => false;
+globalThis.requestAnimationFrame = (fn) => setTimeout(fn, 0);
+// No AudioContext and no navigator.vibrate: feedback.js must degrade silently.
 globalThis.fetch = async (p) => {
   const txt = await readFile(join(ROOT, p), 'utf8');
   return { json: async () => JSON.parse(txt), ok: true };
@@ -98,6 +103,25 @@ const corpus = await loadCorpus();
 ok('corpus loads all stages', corpus.sentences.length === 250 && corpus.units.length === 25 && corpus.stages.length === 5,
    `${corpus.sentences.length} sentences / ${corpus.units.length} units / ${corpus.stages.length} stages`);
 ok('patterns load', corpus.patterns.length === 32, `${corpus.patterns.length} patterns`);
+ok('dialogues load', corpus.dialogues.length === 10, `${corpus.dialogues.length} dialogues`);
+
+// The bidirectional requirement: turns must alternate, and both directions
+// must be represented, or a "conversation" is really a one-way drill.
+let alternates = true, youTurns = 0, partnerTurns = 0;
+for (const d of corpus.dialogues) {
+  let prev = null;
+  for (const t of d.turns) {
+    if (t.who === prev) alternates = false;
+    prev = t.who;
+    if (t.who === 'you') youTurns++; else partnerTurns++;
+    if (!t.hanzi || !t.pinyin || !t.en) alternates = false;
+  }
+}
+ok('dialogue turns strictly alternate', alternates);
+ok('both directions present (ZH->EN and EN->ZH)', youTurns > 0 && partnerTurns > 0,
+   `${partnerTurns} comprehension / ${youTurns} production`);
+ok('directions are balanced', Math.abs(youTurns - partnerTurns) <= 2,
+   `diff ${Math.abs(youTurns - partnerTurns)}`);
 ok('every unit belongs to a known stage',
    corpus.units.every((u) => corpus.stageById[u.stage]));
 ok('every sentence belongs to a known unit',
@@ -117,6 +141,7 @@ const views = {
   review: (await import('../js/views/review.js')).default,
   speak: (await import('../js/views/speak.js')).default,
   drill: (await import('../js/views/drill.js')).default,
+  dialogue: (await import('../js/views/dialogue.js')).default,
   library: (await import('../js/views/library.js')).default,
   settings: (await import('../js/views/settings.js')).default,
 };
@@ -183,6 +208,63 @@ const root4 = new Node2('div');
 const off = await views.speak(root4, { navigate: () => {} });
 ok('speak warns when recognition is unavailable', root4.textContent.includes('Chrome, Edge, or Safari'));
 if (off) off();
+
+console.log('\nFeedback degradation');
+const fb = await import('../js/feedback.js');
+ok('haptics reported unsupported without navigator.vibrate', fb.hapticsSupported() === false);
+ok('haptic() returns false instead of throwing', fb.haptic('success') === false);
+let threwFb = null;
+try { fb.cue('correct'); fb.unlockAudio(); fb.signal('correct', 'hello'); }
+catch (e) { threwFb = e; }
+ok('cue/signal survive a missing AudioContext', threwFb === null, threwFb ? threwFb.message : '');
+
+console.log('\nPWA assets');
+const { readFile: rf, stat } = await import('node:fs/promises');
+const manifest = JSON.parse(await rf(join(ROOT, 'manifest.webmanifest'), 'utf8'));
+ok('manifest is standalone', manifest.display === 'standalone');
+ok('manifest has start_url + scope', Boolean(manifest.start_url && manifest.scope));
+ok('manifest declares a maskable icon',
+   manifest.icons.some((i) => (i.purpose || '').includes('maskable')));
+for (const i of manifest.icons) {
+  const st2 = await stat(join(ROOT, i.src)).catch(() => null);
+  ok(`icon exists: ${i.src}`, Boolean(st2 && st2.size > 500), st2 ? `${st2.size} bytes` : 'MISSING');
+}
+ok('apple-touch-icon exists', Boolean(await stat(join(ROOT, 'icons/apple-touch-icon.png')).catch(() => null)));
+
+const html = await rf(join(ROOT, 'index.html'), 'utf8');
+ok('viewport uses viewport-fit=cover (safe areas)', html.includes('viewport-fit=cover'));
+ok('links the manifest', html.includes('manifest.webmanifest'));
+ok('declares apple-mobile-web-app-capable', html.includes('apple-mobile-web-app-capable'));
+ok('has apple-touch-icon link', html.includes('apple-touch-icon'));
+ok('theme-color responds to colour scheme', (html.match(/name="theme-color"/g) || []).length >= 2);
+
+const swSrc = await rf(join(ROOT, 'sw.js'), 'utf8');
+const css = await rf(join(ROOT, 'css/app.css'), 'utf8');
+// Every precached path must actually exist, or offline mode silently degrades.
+const precache = [...swSrc.matchAll(/'(\.\/[^']+)'/g)].map((m) => m[1]).filter((p) => p !== './');
+const missing = [];
+for (const rel of precache) {
+  if (!(await stat(join(ROOT, rel.slice(2))).catch(() => null))) missing.push(rel);
+}
+ok('every precached asset exists', missing.length === 0, missing.join(', ') || `${precache.length} files verified`);
+
+ok('css honours safe-area insets', css.includes('env(safe-area-inset-bottom'));
+ok('css uses dvh not bare vh for full height', css.includes('100dvh') && !/min-height:\s*100vh/.test(css));
+ok('inputs are >=16px so iOS will not zoom on focus', css.includes('font-size: 16px'));
+ok('tab bar clears the home indicator', css.includes('padding-bottom: var(--sab)'));
+ok('touch targets meet the 44px HIG minimum', css.includes('--tap: 44px'));
+ok('reduced-motion is respected', css.includes('prefers-reduced-motion'));
+ok('tap highlight suppressed for native feel', css.includes('-webkit-tap-highlight-color'));
+
+// Regressions caught by real-browser testing, cheap to re-check here.
+const mainSrc = await rf(join(ROOT, 'js/main.js'), 'utf8');
+ok('service worker registers even if load already fired',
+   mainSrc.includes("document.readyState === 'complete'"),
+   'registerServiceWorker must not rely on a window load listener alone');
+ok('wide layout reorders nav above content',
+   css.includes('.tabbar { order: 2; }') && css.includes('.main   { order: 3; }'),
+   'sticky does not reorder the DOM; the bar is after <main> in source');
+
 
 console.log(fails ? `\n${fails} FAILING\n` : '\nAll view tests passed.\n');
 process.exit(fails ? 1 : 0);

@@ -7,6 +7,7 @@ changing anything; several decisions here look arbitrary and are not.
 
 **Shuō Ba (说吧)** — a free, zero-backend Mandarin course that runs from absolute
 beginner to conversational fluency. Static files, no build step, no dependencies.
+Installable PWA, offline-capable, built mobile-first for iPhone 16.
 
 ## Hard constraints
 
@@ -33,10 +34,26 @@ generating novel sentences fast. The app therefore has two distinct engines:
 - **Review** (`views/review.js`) trains recall over the fixed corpus, on FSRS.
 - **Drill** (`views/drill.js`) trains *production* — grammar frames with slots
   filled at random, so the learner assembles sentences never seen before.
+- **Dialogue** (`views/dialogue.js`) trains *both, alternating*.
 
 If you are adding a feature, know which engine it serves. The timer in Drill is
 load-bearing, not decoration: correct-but-slow plateaus, so `TARGET_MS = 4000`
 (roughly conversational latency) is the bar.
+
+### Bidirectionality is a hard requirement
+
+Dialogues must alternate `partner` (ZH -> EN comprehension) and `you`
+(EN -> ZH production) turns. Practising one direction only produces the two
+classic failures: learners who recite but cannot reply, and learners who
+understand but freeze. The test harness enforces strict alternation and
+near-balance between directions — **do not add a dialogue with consecutive
+same-role turns**, it will fail the build.
+
+Partner turns are audio-first: the Chinese is hidden until the learner commits
+to an answer. Do not "helpfully" reveal it early — a real conversation has no
+subtitles, and that is the whole point of the exercise. Comprehension
+distractors are drawn from other turns at the same stage so wrong answers are
+plausible Chinese rather than obvious filler.
 
 ## Architecture
 
@@ -46,6 +63,10 @@ index.html → js/main.js (hash router) → js/views/<route>.js
       deck.js (corpus + what to study) → store.js (persistence)
                     ↓
       fsrs.js (scheduling) · tts.js (audio) · asr.js (scoring)
+                    ↓
+      feedback.js (toasts · audio cues · haptics)
+
+sw.js + manifest.webmanifest + icons/   →  installable, offline PWA
 ```
 
 - **Views** are `(rootEl, { navigate }) => cleanupFn | null`. They own their own
@@ -68,8 +89,12 @@ index.html → js/main.js (hash router) → js/views/<route>.js
   directly, or the write won't be scheduled.
 - Card state shape is FSRS's, not SM-2's: `{stability, difficulty, due,
   lastReview, reps, lapses, state}`. There is no "ease factor."
-- `deck.availablePatterns()` gates drills to stages the learner has entered.
-  Drilling a frame never heard in context is just translation homework.
+- `deck.availablePatterns()` and `deck.availableDialogues()` gate content to
+  stages the learner has entered. Drilling a frame never heard in context is
+  just translation homework. Stage 1 is always open.
+- `feedback.signal(kind, message)` is the single call for "tell the learner what
+  just happened" — it fires audio, haptics, and a toast together. Prefer it over
+  calling `cue`/`haptic`/`toast` separately, so channels never drift apart.
 
 ## Content model
 
@@ -82,12 +107,30 @@ parallel and flattens.
 data/course.json           stages: {id, level, title, goal, canDo[], file}
 data/corpus/st1..st5.json  {stage, units[], sentences[]}
 data/patterns.json         generative frames
+data/dialogues.json        two-way conversations
 data/tones.json            minimal pairs + sandhi rules
 ```
 
 Current size: **250 sentences · 25 units · 500 glossed words · 32 patterns ·
-217 drillable variations.** C1 (`st5`) is the thinnest stage and the best place
-to add.
+217 drillable variations · 10 dialogues (81 turns).** C1 (`st5`) is the thinnest
+stage and the best place to add.
+
+### Dialogue schema
+
+```jsonc
+{
+  "id": "d01", "stage": "st1", "title": "Meeting someone new",
+  "setting": "A friend introduces you to someone at dinner.",
+  "partner": "陈伟 Chén Wěi",
+  "turns": [
+    { "who": "partner", "hanzi": "...", "pinyin": "...", "en": "...",
+      "note": "optional cultural/usage note shown after answering" }
+  ]
+}
+```
+
+`who` is `partner` or `you`, and the two **must** strictly alternate (see
+"Bidirectionality is a hard requirement" above).
 
 ### Sentence schema
 
@@ -167,10 +210,46 @@ Marks always align 1:1 with the target string; there's a test for that.
 Firefox has no `SpeechRecognition`. Every path that uses it must degrade, never
 throw — `views/speak.js` and `views/drill.js` show the fallback pattern.
 
+## Mobile and PWA
+
+Built mobile-first against **iPhone 16 (393 x 852pt)**. Rules that are load-bearing:
+
+- `viewport-fit=cover` in the meta tag + `env(safe-area-inset-*)` in CSS. Both
+  halves are required; the meta tag alone paints under the Dynamic Island with
+  no compensation.
+- **`100dvh`, never `100vh`.** iOS Safari's URL bar resizes the viewport and
+  `vh` measures the wrong thing. There is a test asserting no bare `100vh`.
+- Inputs must be **>= 16px** or iOS zooms the page on focus. Also tested.
+- `--tap: 44px` is the HIG minimum touch target; every button uses it. The test
+  harness measures rendered heights and fails on anything smaller.
+- The tab bar sits **after `<main>` in the DOM** so content and screen readers
+  come first. On wide screens it is pulled above the content with flex `order`.
+  `position: sticky` does NOT reorder anything — this shipped broken once, with
+  the nav rendering at the bottom of the document at desktop width.
+- `sw.js` precaches the shell and the whole course. **Bump `CACHE` when assets
+  change**, or returning users keep the old files. Each file is added
+  individually rather than via `addAll`, so one renamed asset cannot fail the
+  entire install.
+- `registerServiceWorker()` must check `document.readyState === 'complete'`
+  before falling back to a `load` listener. It runs after `await loadCorpus()`,
+  by which point `load` has usually already fired — the listener-only version
+  silently never registered the worker. Both regressions have guard tests.
+
+### Platform limits you cannot code around
+
+- **iOS Safari has no `navigator.vibrate`.** No haptics on iPhone, installed or
+  not. Audio + visual feedback carry it; never signal anything by vibration
+  alone.
+- **iOS Safari has no `beforeinstallprompt`.** There is no API to trigger
+  installation. The Install button detects iOS and explains
+  Share -> Add to Home Screen rather than pretending to work.
+- Audio is blocked until a user gesture. `feedback.unlockAudio()` is called from
+  the first `pointerdown`/`keydown` in `main.js`, and again from explicit taps.
+
 ## Testing
 
 ```bash
-npm test            # both suites, 46 checks
+npm test            # both suites, 78 checks
 npm run test:engine # FSRS maths + alignment scoring (pure logic)
 npm run test:views  # renders every view against a DOM shim
 ```
@@ -181,8 +260,11 @@ is most of what actually breaks here. It runs with **no `speechSynthesis` and no
 `SpeechRecognition` defined**, so it also exercises the graceful-degradation
 paths. If you add a view, add it to the `views` map there.
 
-The harness also validates corpus integrity: unique ids, unit/stage references,
-stage totals, and that every pattern composes with no leftover placeholder.
+The harness also validates corpus integrity (unique ids, unit/stage references,
+stage totals, pattern composition), dialogue alternation and direction balance,
+graceful degradation of `feedback.js` with no AudioContext and no vibrate, the
+PWA asset set (manifest fields, every icon present, every precached path
+resolving), and the mobile-layout CSS rules listed above.
 
 Note the shim needs `globalThis.Node` defined, since `ui.js → h()` does
 `instanceof Node`.
@@ -203,6 +285,9 @@ Note the shim needs `globalThis.Node` defined, since `ui.js → h()` does
   a tick before asserting on its output.
 - Heredocs choke on this corpus in Git Bash — use the Write tool for large
   JSON/JS files rather than `cat <<'EOF'`.
+- When testing layout in a browser, the dev server sends no cache headers but
+  Chrome still serves a stale `app.css`; bust it with a query string. A stale
+  stylesheet reads exactly like "my CSS fix did nothing".
 
 ## Roadmap priorities
 
@@ -214,8 +299,8 @@ In rough order of learner value:
    generates ~8 sentences and transfers to future vocabulary.
 3. **Pitch-contour feedback** from the mic — show the learner's actual tone curve
    against the target. The single biggest possible upgrade to Speak.
-4. **Multi-turn dialogue** — the gap between "says sentences" and "converses".
-5. Recording playback; service worker for offline; optional character track.
+4. **More dialogues**, and branching replies instead of a fixed script.
+5. Recording playback; optional character track; pitch-contour visualisation.
 
 ## Style
 

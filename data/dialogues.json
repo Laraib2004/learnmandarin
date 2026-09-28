@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "title": "Two-way conversations",
+    "why": "A conversation is two skills alternating. When the other person speaks you must understand Chinese and recover the meaning (ZH -> EN). When it is your turn you must produce Chinese from an intention (EN -> ZH). Practising only one direction produces learners who can recite but not reply, or understand but freeze. Every dialogue here alternates both.",
+    "license": "CC0"
+  },
+  "dialogues": [
+    { "id": "d01", "stage": "st1", "title": "Meeting someone new",
+      "setting": "A friend introduces you to someone at dinner.",
+      "partner": "陈伟 Chén Wěi",
+      "turns": [
+        { "who": "partner", "hanzi": "你好，我叫陈伟", "pinyin": "nǐ hǎo, wǒ jiào Chén Wěi", "en": "Hello, I'm Chen Wei" },
+        { "who": "you", "hanzi": "你好，我叫李明", "pinyin": "nǐ hǎo, wǒ jiào Lǐ Míng", "en": "Hello, my name is Li Ming" },
+        { "who": "partner", "hanzi": "你是哪国人？", "pinyin": "nǐ shì nǎ guó rén?", "en": "What country are you from?" },
+        { "who": "you", "hanzi": "我是美国人", "pinyin": "wǒ shì Měiguó rén", "en": "I'm American" },
+        { "who": "partner", "hanzi": "你的中文很好！", "pinyin": "nǐ de Zhōngwén hěn hǎo!", "en": "Your Chinese is very good!" },
+        { "who": "you", "hanzi": "哪里哪里，我会说一点儿", "pinyin": "nǎli nǎli, wǒ huì shuō yìdiǎnr", "en": "Not at all — I can only speak a little", "note": "哪里哪里 is the standard modest deflection of a compliment. Accepting praise flatly sounds odd in Chinese." },
+        { "who": "partner", "hanzi": "学了多久了？", "pinyin": "xué le duō jiǔ le?", "en": "How long have you been studying?" },
+        { "who": "you", "hanzi": "学了三个月", "pinyin": "xué le sān ge yuè", "en": "Three months" }
+      ] },
+
+    { "id": "d02", "stage": "st1", "title": "Ordering a coffee",
+      "setting": "A café counter. There is a queue behind you.",
+      "partner": "服务员 the server",
+      "turns": [
+        { "who": "partner", "hanzi": "您好，要喝什么？", "pinyin": "nín hǎo, yào hē shénme?", "en": "Hello, what would you like to drink?" },
+        { "who": "you", "hanzi": "我要一杯咖啡", "pinyin": "wǒ yào yì bēi kāfēi", "en": "I'd like a cup of coffee" },
+        { "who": "partner", "hanzi": "大杯还是小杯？", "pinyin": "dà bēi háishi xiǎo bēi?", "en": "Large or small?" },
+        { "who": "you", "hanzi": "大杯，谢谢", "pinyin": "dà bēi, xièxie", "en": "Large, thanks" },
+        { "who": "partner", "hanzi": "一共三十五块", "pinyin": "yígòng sānshíwǔ kuài", "en": "That's thirty-five yuan altogether" },
+        { "who": "you", "hanzi": "可以用微信支付吗？", "pinyin": "kěyǐ yòng Wēixìn zhīfù ma?", "en": "Can I pay with WeChat?" },
+        { "who": "partner", "hanzi": "可以，扫这里", "pinyin": "kěyǐ, sǎo zhèlǐ", "en": "Yes, scan here" },
+        { "who": "you", "hanzi": "好的，谢谢", "pinyin": "hǎo de, xièxie", "en": "OK, thank you" }
+      ] },
+
+    { "id": "d03", "stage": "st2", "title": "Taking a taxi",
+      "setting": "You get into a taxi with an address on your phone.",
+      "partner": "司机 the driver",
+      "turns": [
+        { "who": "partner", "hanzi": "去哪儿？", "pinyin": "qù nǎr?", "en": "Where to?" },
+        { "who": "you", "hanzi": "请带我去这个地址", "pinyin": "qǐng dài wǒ qù zhège dìzhǐ", "en": "Please take me to this address" },
+        { "who": "partner", "hanzi": "好，大概要半个小时", "pinyin": "hǎo, dàgài yào bàn ge xiǎoshí", "en": "OK, it'll take about half an hour" },
+        { "who": "you", "hanzi": "有点儿急，能快一点儿吗？", "pinyin": "yǒudiǎnr jí, néng kuài yìdiǎnr ma?", "en": "I'm in a bit of a hurry — could you go a little faster?" },
+        { "who": "partner", "hanzi": "现在堵车，尽量吧", "pinyin": "xiànzài dǔchē, jǐnliàng ba", "en": "There's traffic now, I'll do what I can" },
+        { "who": "you", "hanzi": "没关系，谢谢", "pinyin": "méi guānxi, xièxie", "en": "It's fine, thank you" },
+        { "who": "partner", "hanzi": "到了，前面路口停可以吗？", "pinyin": "dào le, qiánmiàn lùkǒu tíng kěyǐ ma?", "en": "We're here — can I stop at the intersection ahead?" },
+        { "who": "you", "hanzi": "可以，请给我发票", "pinyin": "kěyǐ, qǐng gěi wǒ fāpiào", "en": "Yes — please give me a receipt" }
+      ] },
+
+    { "id": "d04", "stage": "st2", "title": "Dinner for two",
+      "setting": "A busy restaurant. You have a dietary restriction.",
+      "partner": "服务员 the server",
+      "turns": [
+        { "who": "partner", "hanzi": "几位？", "pinyin": "jǐ wèi?", "en": "How many people?" },
+        { "who": "you", "hanzi": "两位，有位子吗？", "pinyin": "liǎng wèi, yǒu wèizi ma?", "en": "Two — do you have a table?" },
+        { "who": "partner", "hanzi": "有，这边请", "pinyin": "yǒu, zhèbiān qǐng", "en": "Yes, this way please" },
+        { "who": "you", "hanzi": "请给我看一下菜单", "pinyin": "qǐng gěi wǒ kàn yíxià càidān", "en": "Could I see the menu, please" },
+        { "who": "partner", "hanzi": "我们的招牌菜是水煮鱼，很辣", "pinyin": "wǒmen de zhāopái cài shì shuǐzhǔyú, hěn là", "en": "Our signature dish is boiled fish — it's very spicy" },
+        { "who": "you", "hanzi": "我不吃辣，请不要放辣", "pinyin": "wǒ bù chī là, qǐng búyào fàng là", "en": "I don't eat spicy food — please don't make it spicy" },
+        { "who": "partner", "hanzi": "没问题，还要别的吗？", "pinyin": "méi wèntí, hái yào biéde ma?", "en": "No problem. Anything else?" },
+        { "who": "you", "hanzi": "再来一瓶啤酒，谢谢", "pinyin": "zài lái yì píng píjiǔ, xièxie", "en": "One more bottle of beer, thanks" },
+        { "who": "partner", "hanzi": "好的，请稍等", "pinyin": "hǎo de, qǐng shāo děng", "en": "Certainly, one moment please" }
+      ] },
+
+    { "id": "d05", "stage": "st2", "title": "Haggling at a market",
+      "setting": "A street market. The first price is never the real price.",
+      "partner": "老板 the stallholder",
+      "turns": [
+        { "who": "partner", "hanzi": "看看吧，喜欢什么？", "pinyin": "kànkan ba, xǐhuan shénme?", "en": "Have a look — what do you like?" },
+        { "who": "you", "hanzi": "这个多少钱？", "pinyin": "zhège duōshao qián?", "en": "How much is this?" },
+        { "who": "partner", "hanzi": "三百块", "pinyin": "sānbǎi kuài", "en": "Three hundred yuan" },
+        { "who": "you", "hanzi": "太贵了，能便宜点儿吗？", "pinyin": "tài guì le, néng piányi diǎnr ma?", "en": "That's too expensive — can you go cheaper?" },
+        { "who": "partner", "hanzi": "两百八，不能再少了", "pinyin": "liǎngbǎi bā, bù néng zài shǎo le", "en": "Two hundred eighty, I can't go lower" },
+        { "who": "you", "hanzi": "一百五怎么样？", "pinyin": "yìbǎi wǔ zěnmeyàng?", "en": "How about one hundred fifty?" },
+        { "who": "partner", "hanzi": "太低了，两百吧", "pinyin": "tài dī le, liǎngbǎi ba", "en": "Too low — let's say two hundred" },
+        { "who": "you", "hanzi": "好吧，我要了", "pinyin": "hǎo ba, wǒ yào le", "en": "Alright, I'll take it" }
+      ] },
+
+    { "id": "d06", "stage": "st3", "title": "Catching up with a friend",
+      "setting": "You run into someone you haven't seen in months.",
+      "partner": "小李 Xiǎo Lǐ",
+      "turns": [
+        { "who": "partner", "hanzi": "好久不见！最近怎么样？", "pinyin": "hǎo jiǔ bú jiàn! zuìjìn zěnmeyàng?", "en": "Long time no see! How have you been lately?" },
+        { "who": "you", "hanzi": "还行，最近工作很累", "pinyin": "hái xíng, zuìjìn gōngzuò hěn lèi", "en": "Not bad — work has been exhausting lately" },
+        { "who": "partner", "hanzi": "你还在那家公司吗？", "pinyin": "nǐ hái zài nà jiā gōngsī ma?", "en": "Are you still at that company?" },
+        { "who": "you", "hanzi": "还在，但是我想换个工作", "pinyin": "hái zài, dànshì wǒ xiǎng huàn ge gōngzuò", "en": "Still there, but I'm thinking of changing jobs" },
+        { "who": "partner", "hanzi": "为什么？压力太大吗？", "pinyin": "wèishénme? yālì tài dà ma?", "en": "Why? Is the pressure too much?" },
+        { "who": "you", "hanzi": "因为我经常加班，所以很累", "pinyin": "yīnwèi wǒ jīngcháng jiābān, suǒyǐ hěn lèi", "en": "Because I often work overtime, so I'm tired" },
+        { "who": "partner", "hanzi": "那你应该早点儿休息", "pinyin": "nà nǐ yīnggāi zǎo diǎnr xiūxi", "en": "Then you should rest earlier" },
+        { "who": "you", "hanzi": "你说得对，我会注意的", "pinyin": "nǐ shuō de duì, wǒ huì zhùyì de", "en": "You're right, I'll be careful" }
+      ] },
+
+    { "id": "d07", "stage": "st3", "title": "Making plans",
+      "setting": "Arranging to meet, and then having to move it.",
+      "partner": "小王 Xiǎo Wáng",
+      "turns": [
+        { "who": "partner", "hanzi": "这个周末有空吗？", "pinyin": "zhège zhōumò yǒu kòng ma?", "en": "Are you free this weekend?" },
+        { "who": "you", "hanzi": "星期六有空，你想做什么？", "pinyin": "xīngqīliù yǒu kòng, nǐ xiǎng zuò shénme?", "en": "I'm free Saturday — what do you want to do?" },
+        { "who": "partner", "hanzi": "我们去看电影吧", "pinyin": "wǒmen qù kàn diànyǐng ba", "en": "Let's go see a film" },
+        { "who": "you", "hanzi": "好啊，我们几点见？", "pinyin": "hǎo a, wǒmen jǐ diǎn jiàn?", "en": "Sure — what time shall we meet?" },
+        { "who": "partner", "hanzi": "七点半在地铁站怎么样？", "pinyin": "qī diǎn bàn zài dìtiě zhàn zěnmeyàng?", "en": "How about seven thirty at the metro station?" },
+        { "who": "you", "hanzi": "我可能会晚一点儿到", "pinyin": "wǒ kěnéng huì wǎn yìdiǎnr dào", "en": "I might arrive a bit late" },
+        { "who": "partner", "hanzi": "没关系，我等你", "pinyin": "méi guānxi, wǒ děng nǐ", "en": "No problem, I'll wait for you" },
+        { "who": "you", "hanzi": "我一到就给你打电话", "pinyin": "wǒ yí dào jiù gěi nǐ dǎ diànhuà", "en": "I'll call you as soon as I arrive" }
+      ] },
+
+    { "id": "d08", "stage": "st4", "title": "A problem at the hotel",
+      "setting": "Your room has issues and you need them fixed tonight.",
+      "partner": "前台 the front desk",
+      "turns": [
+        { "who": "partner", "hanzi": "您好，有什么可以帮您？", "pinyin": "nín hǎo, yǒu shénme kěyǐ bāng nín?", "en": "Hello, how can I help you?" },
+        { "who": "you", "hanzi": "我房间的空调坏了", "pinyin": "wǒ fángjiān de kōngtiáo huài le", "en": "The air conditioning in my room is broken" },
+        { "who": "partner", "hanzi": "不好意思，我马上安排人去看", "pinyin": "bù hǎoyìsi, wǒ mǎshàng ānpái rén qù kàn", "en": "I'm sorry — I'll send someone to look right away" },
+        { "who": "you", "hanzi": "能不能帮我换一个房间？", "pinyin": "néng bu néng bāng wǒ huàn yí ge fángjiān?", "en": "Could you move me to another room?" },
+        { "who": "partner", "hanzi": "今天满房了，恐怕有点儿困难", "pinyin": "jīntiān mǎn fáng le, kǒngpà yǒudiǎnr kùnnan", "en": "We're fully booked today — I'm afraid that's rather difficult" },
+        { "who": "you", "hanzi": "这跟说好的不一样，我有点儿失望", "pinyin": "zhè gēn shuō hǎo de bù yíyàng, wǒ yǒudiǎnr shīwàng", "en": "This isn't what was agreed — I'm a little disappointed" },
+        { "who": "partner", "hanzi": "实在抱歉，我们给您免一晚房费", "pinyin": "shízài bàoqiàn, wǒmen gěi nín miǎn yì wǎn fángfèi", "en": "I'm truly sorry — we'll waive one night's charge" },
+        { "who": "you", "hanzi": "那这样吧，希望今晚能修好", "pinyin": "nà zhèyàng ba, xīwàng jīnwǎn néng xiū hǎo", "en": "Let's do that then — I hope it can be fixed tonight" }
+      ] },
+
+    { "id": "d09", "stage": "st4", "title": "Disagreeing politely",
+      "setting": "A colleague proposes something you think is a mistake.",
+      "partner": "同事 a colleague",
+      "turns": [
+        { "who": "partner", "hanzi": "我觉得我们应该下周就开始", "pinyin": "wǒ juéde wǒmen yīnggāi xià zhōu jiù kāishǐ", "en": "I think we should start as early as next week" },
+        { "who": "you", "hanzi": "我理解你的意思，不过时间太紧了", "pinyin": "wǒ lǐjiě nǐ de yìsi, búguò shíjiān tài jǐn le", "en": "I take your point, but the timing is too tight" },
+        { "who": "partner", "hanzi": "可是客户一直在催我们", "pinyin": "kěshì kèhù yìzhí zài cuī wǒmen", "en": "But the client keeps pushing us" },
+        { "who": "you", "hanzi": "确实有道理，但问题在于质量", "pinyin": "quèshí yǒu dàolǐ, dàn wèntí zàiyú zhìliàng", "en": "That's fair, but the problem is quality" },
+        { "who": "partner", "hanzi": "那你有什么建议？", "pinyin": "nà nǐ yǒu shénme jiànyì?", "en": "So what do you suggest?" },
+        { "who": "you", "hanzi": "我建议我们先做一部分", "pinyin": "wǒ jiànyì wǒmen xiān zuò yí bùfen", "en": "I suggest we do one part first" },
+        { "who": "partner", "hanzi": "这个想法不错，我们再讨论一下", "pinyin": "zhège xiǎngfǎ búcuò, wǒmen zài tǎolùn yíxià", "en": "That's a good idea — let's discuss it further" },
+        { "who": "you", "hanzi": "好，那我们各让一步吧", "pinyin": "hǎo, nà wǒmen gè ràng yí bù ba", "en": "Good — let's each give a little then" }
+      ] },
+
+    { "id": "d10", "stage": "st5", "title": "Speaking up in a meeting",
+      "setting": "A formal meeting where you need to raise a concern without causing loss of face.",
+      "partner": "王总 Director Wang",
+      "turns": [
+        { "who": "partner", "hanzi": "关于这个方案，大家有什么看法？", "pinyin": "guānyú zhège fāng'àn, dàjiā yǒu shénme kànfǎ?", "en": "Regarding this proposal, does anyone have views?" },
+        { "who": "you", "hanzi": "关于这个问题，我想补充一点", "pinyin": "guānyú zhège wèntí, wǒ xiǎng bǔchōng yì diǎn", "en": "On this question, I'd like to add something" },
+        { "who": "partner", "hanzi": "请说", "pinyin": "qǐng shuō", "en": "Please go ahead" },
+        { "who": "you", "hanzi": "我个人觉得风险有点儿大", "pinyin": "wǒ gèrén juéde fēngxiǎn yǒudiǎnr dà", "en": "Personally I feel the risk is somewhat high" },
+        { "who": "partner", "hanzi": "具体是指哪方面？", "pinyin": "jùtǐ shì zhǐ nǎ fāngmiàn?", "en": "Which aspect specifically?" },
+        { "who": "you", "hanzi": "从长远来看，成本可能会上升", "pinyin": "cóng chángyuǎn lái kàn, chéngběn kěnéng huì shàngshēng", "en": "In the long run, costs may rise" },
+        { "who": "partner", "hanzi": "你说得有道理，我们需要再评估", "pinyin": "nǐ shuō de yǒu dàolǐ, wǒmen xūyào zài pínggū", "en": "You make a fair point — we need to reassess" },
+        { "who": "you", "hanzi": "感谢您的支持，我会准备详细资料", "pinyin": "gǎnxiè nín de zhīchí, wǒ huì zhǔnbèi xiángxì zīliào", "en": "Thank you for your support — I'll prepare detailed materials" }
+      ] }
+  ]
+}

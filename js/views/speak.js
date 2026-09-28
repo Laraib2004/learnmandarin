@@ -3,6 +3,7 @@ import { speakableSentences } from '../deck.js';
 import { speak, speakTwice } from '../tts.js';
 import * as asr from '../asr.js';
 import { get, update, bumpDaily } from '../store.js';
+import { signal, cue, unlockAudio } from '../feedback.js';
 
 /**
  * Speak — production practice with objective feedback.
@@ -35,7 +36,9 @@ export default function speakView(root) {
     const s = current();
 
     if (!asr.isSupported()) return;
+    unlockAudio();
     listening = true;
+    cue('listening');
     paint();
     try {
       const result = await asr.listen({ timeoutMs: 8000 });
@@ -50,6 +53,10 @@ export default function speakView(root) {
         st.speech[s.id] = rec;
       });
       bumpDaily('speak');
+      signal(scored.score >= 90 ? 'correct' : scored.score >= 60 ? 'partial' : 'wrong',
+        scored.score >= 90 ? 'Clear — they would understand you'
+          : scored.score >= 60 ? 'Close — check the marked syllables'
+          : 'Not understood — copy the audio again');
     } catch (err) {
       last = { error: err.message };
     } finally {

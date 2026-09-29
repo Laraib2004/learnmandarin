@@ -20,13 +20,14 @@ export async function loadCorpus() {
   if (corpus) return corpus;
 
   const course = await fetch('data/course.json').then((r) => r.json());
-  const [stageFiles, tones, patterns, dialogues, pinyin, characters] = await Promise.all([
+  const [stageFiles, tones, patterns, dialogues, pinyin, characters, lessons] = await Promise.all([
     Promise.all(course.stages.map((s) => fetch(s.file).then((r) => r.json()))),
     fetch('data/tones.json').then((r) => r.json()),
     fetch('data/patterns.json').then((r) => r.json()),
     fetch('data/dialogues.json').then((r) => r.json()),
     fetch('data/pinyin.json').then((r) => r.json()),
     fetch('data/characters.json').then((r) => r.json()),
+    fetch('data/lessons.json').then((r) => r.json()),
   ]);
 
   const units = stageFiles.flatMap((f) => f.units);
@@ -44,6 +45,7 @@ export async function loadCorpus() {
     dialoguesMeta: dialogues.meta,
     pinyin,
     characters,
+    lessons,
     byId: Object.fromEntries(sentences.map((s) => [s.id, s])),
     unitById: Object.fromEntries(units.map((u) => [u.id, u])),
     stageById: Object.fromEntries(course.stages.map((s) => [s.id, s])),
@@ -148,6 +150,48 @@ export function fillPattern(pattern, slot) {
     note: pattern.note,
     name: pattern.name,
   };
+}
+
+/* ---------------- the guided path ---------------- */
+
+const stripPunct = (t) => String(t || '').replace(/[\s，。？！、；：,.?!;:]/g, '');
+
+/**
+ * Seed review cards from a lesson the learner just finished.
+ *
+ * Without this the path and the scheduler are two disconnected apps: you would
+ * finish eighteen lessons and still have an empty Review queue. Any sentence
+ * the lesson actually taught — via a `speak` target or a `word` glyph — becomes
+ * a live FSRS card, so the words start coming back on schedule immediately.
+ *
+ * Matching is by stripped hanzi, because lesson text carries punctuation the
+ * corpus entry may not.
+ */
+export function seedFromLesson(lesson) {
+  if (!lesson || !corpus) return [];
+  const wanted = new Set();
+  for (const st of lesson.steps || []) {
+    for (const key of ['target', 'speak', 'hanzi', 'big']) {
+      if (st[key]) wanted.add(stripPunct(st[key]));
+    }
+  }
+  const seeded = [];
+  for (const sen of corpus.sentences) {
+    if (!wanted.has(stripPunct(sen.hanzi))) continue;
+    const existing = get().cards[sen.id];
+    if (existing?.reps > 0) continue;
+    // Grade 3 ("Good"): the learner has just been taught and drilled it, so
+    // treating it as brand new would waste a review.
+    update((st) => { st.cards[sen.id] = { ...newCard(sen.id), reps: 1, state: 'review', stability: 1.5, difficulty: 5.2, lastReview: Date.now(), due: Date.now() + 86400000 }; });
+    seeded.push(sen.id);
+  }
+  return seeded;
+}
+
+export function lessonProgress() {
+  const p = get().lessons || { done: [], current: null, step: 0 };
+  const all = corpus?.lessons?.lessons || [];
+  return { done: p.done.length, total: all.length, current: p.current, step: p.step, all };
 }
 
 /* ---------------- character track (separate SRS from sentences) ---------------- */

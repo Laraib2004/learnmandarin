@@ -92,6 +92,7 @@ function resumeCard(navigate) {
   const s = getSession();
   if (!s) return null;
   const labels = {
+    learn: s.detail?.title ? `Lesson: ${s.detail.title}` : 'a lesson',
     dialogue: s.detail?.title ? `Conversation: ${s.detail.title}` : 'a conversation',
     review: 'your review session',
     drill: 'pattern drills',

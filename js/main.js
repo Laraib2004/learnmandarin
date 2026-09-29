@@ -13,10 +13,12 @@ import speak from './views/speak.js';
 import drill from './views/drill.js';
 import dialogue from './views/dialogue.js';
 import script from './views/script.js';
+import learn from './views/learn.js';
 import library from './views/library.js';
 import settings from './views/settings.js';
 
-const routes = { '': dashboard, tones, script, review, speak, drill, dialogue, library, settings };
+// '' is the guided path: a beginner who lands on a menu does not start.
+const routes = { '': learn, learn, home: dashboard, tones, script, review, speak, drill, dialogue, library, settings };
 
 const main = document.getElementById('main');
 let cleanup = null;
@@ -37,6 +39,7 @@ async function render() {
     if (a.dataset.route === name) a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
   }
+  applyNavVisibility();
 
   main.replaceChildren();
   try {
@@ -168,6 +171,33 @@ function primeAudioOnFirstTap() {
   };
   document.addEventListener('pointerdown', once, { once: true });
   document.addEventListener('keydown', once, { once: true });
+}
+
+/**
+ * Progressive disclosure.
+ *
+ * A complete beginner sees ONE tab. Everything else is noise that makes the
+ * app look like a menu to get lost in — which was the actual complaint. Tabs
+ * unlock as the lessons that justify them are finished, so what is on screen
+ * is always something the learner can already use.
+ */
+function applyNavVisibility() {
+  let done = 0;
+  let cards = 0;
+  try {
+    const st = load();
+    done = (st.lessons?.done || []).length;
+    cards = Object.values(st.cards || {}).filter((c) => c.reps > 0).length;
+  } catch { /* first run */ }
+
+  for (const a of document.querySelectorAll('.tabbar a[data-needs]')) {
+    const need = a.dataset.needs;
+    const ok =
+      need === 'cards' ? cards > 0 :
+      need === 'always' ? true :
+      done >= Number(need);
+    a.hidden = !ok;
+  }
 }
 
 function applyTheme() {

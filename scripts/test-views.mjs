@@ -68,6 +68,7 @@ globalThis.document = {
   body: bodyEl,
   documentElement: docEl,
   createElement: (t) => new Node2(t),
+  createElementNS: (_ns, t) => new Node2(t),   // pitch.js draws contour SVGs
   createTextNode: textNode,
   getElementById: (id) => byId[id] ?? null,
   querySelectorAll: () => [],
@@ -145,6 +146,7 @@ const views = {
   drill: (await import('../js/views/drill.js')).default,
   dialogue: (await import('../js/views/dialogue.js')).default,
   script: (await import('../js/views/script.js')).default,
+  learn: (await import('../js/views/learn.js')).default,
   library: (await import('../js/views/library.js')).default,
   settings: (await import('../js/views/settings.js')).default,
 };
@@ -258,6 +260,9 @@ ok('tab bar clears the home indicator', css.includes('padding-bottom: var(--sab)
 ok('touch targets meet the 44px HIG minimum', css.includes('--tap: 44px'));
 ok('reduced-motion is respected', css.includes('prefers-reduced-motion'));
 ok('tap highlight suppressed for native feel', css.includes('-webkit-tap-highlight-color'));
+ok('[hidden] beats our own display rules',
+   /\[hidden\]\s*\{\s*display:\s*none\s*!important/.test(css),
+   'without this, el.hidden silently does nothing on .tabbar a');
 
 // Regressions caught by real-browser testing, cheap to re-check here.
 const mainSrc = await rf(join(ROOT, 'js/main.js'), 'utf8');
@@ -340,6 +345,54 @@ ok('ICS uses floating local time (fires at 15:00 wherever you are)',
 ok('ICS honours a custom time', /DTSTART:\d{8}T073000$/m.test(rem.buildICS('07:30')));
 ok('ICS uses CRLF line endings as the spec requires', ics.includes('\r\n'));
 storeMod.update((st) => { st.settings.reminderOn = false; st.lastReminded = null; });
+
+
+const storeMod2 = await import('../js/store.js');
+console.log('\nGuided path');
+const L = corpus.lessons;
+ok('lessons load', L.lessons.length === 18 && L.units.length === 3,
+   `${L.lessons.length} lessons across ${L.units.length} units`);
+ok('the path starts with pinyin', L.lessons[0].unit === 'A' && L.units[0].title.startsWith('Pinyin'));
+ok('lesson ids are unique', new Set(L.lessons.map((l) => l.id)).size === L.lessons.length);
+ok('every lesson has steps and a duration',
+   L.lessons.every((l) => l.steps.length > 0 && l.minutes > 0));
+ok('every unit ref is real',
+   L.lessons.every((l) => L.units.some((u) => u.id === l.unit)));
+
+// A quiz step with no correct answer, or two, silently breaks the lesson.
+const quiz = L.lessons.flatMap((l) => l.steps.filter((s) => s.type === 'pick' || s.type === 'read'));
+ok('every quiz has exactly one correct option',
+   quiz.every((s) => s.options.filter((o) => o.correct).length === 1), `${quiz.length} quizzes`);
+ok('every option explains itself', quiz.every((s) => s.options.every((o) => o.why)));
+const toneQs = L.lessons.flatMap((l) => l.steps.filter((s) => s.type === 'pickTone'));
+ok('tone questions have a valid answer', toneQs.every((s) => s.answer >= 1 && s.answer <= 4),
+   `${toneQs.length} tone questions`);
+ok('units are ordered pinyin -> words -> sentences',
+   L.units.map((u) => u.id).join('') === 'ABC');
+
+// The whole point: lessons must feed the scheduler, or Review stays empty.
+const deckMod = await import('../js/deck.js');
+storeMod2.update((st) => { st.cards = {}; });
+let totalSeeded = 0;
+for (const l of L.lessons) totalSeeded += deckMod.seedFromLesson(l).length;
+ok('finishing the path seeds review cards', totalSeeded > 0,
+   `${totalSeeded} sentences handed to the scheduler`);
+ok('seeded cards are due later, not instantly',
+   Object.values(storeMod2.get().cards).every((c) => c.due > Date.now()));
+storeMod2.update((st) => { st.cards = {}; });
+
+console.log('\nTone synthesis (works with no Mandarin voice installed)');
+const pitchMod = await import('../js/pitch.js');
+ok('all five tones have contours', [1, 2, 3, 4, 5].every((t) => pitchMod.CONTOURS[t]?.levels?.length >= 2));
+ok('tone 1 is flat', new Set(pitchMod.CONTOURS[1].levels).size === 1);
+ok('tone 2 rises', pitchMod.CONTOURS[2].levels.at(-1) > pitchMod.CONTOURS[2].levels[0]);
+ok('tone 4 falls', pitchMod.CONTOURS[4].levels.at(-1) < pitchMod.CONTOURS[4].levels[0]);
+ok('tone 3 dips to the bottom', Math.min(...pitchMod.CONTOURS[3].levels) === 1);
+ok('contour SVG renders without a real DOM', Boolean(pitchMod.contourSVG(2)));
+let pitchThrew = null;
+try { await pitchMod.playTone(3); pitchMod.unlock(); } catch (e) { pitchThrew = e; }
+ok('playTone degrades silently with no AudioContext', pitchThrew === null,
+   pitchThrew ? pitchThrew.message : '');
 
 
 console.log(fails ? `\n${fails} FAILING\n` : '\nAll view tests passed.\n');

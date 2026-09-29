@@ -1,0 +1,405 @@
+{
+  "meta": {
+    "title": "The path",
+    "why": "One lesson at a time, in order, with one button. No choosing what to study and no menus to get lost in. Pinyin first, because you cannot learn a word whose sound you cannot hear or say. Then common words, then phrases, with reading mixed in once the sounds are solid.",
+    "license": "CC0"
+  },
+  "units": [
+    { "id": "A", "title": "Pinyin — reading the sounds", "goal": "Look at any pinyin syllable and know exactly how it sounds." },
+    { "id": "B", "title": "Your first words", "goal": "Twenty words you will use in every conversation." },
+    { "id": "C", "title": "Your first sentences", "goal": "Say and understand real sentences built from those words." }
+  ],
+  "lessons": [
+    {
+      "id": "L01", "unit": "A", "title": "What you are actually learning", "minutes": 3,
+      "steps": [
+        { "type": "teach", "title": "Chinese has no alphabet",
+          "body": "This trips up everyone. There is no A-B-C. Instead there are two completely separate systems, and you only need the first one to speak." },
+        { "type": "teach", "title": "1. Pinyin — the sounds",
+          "big": "nǐ hǎo",
+          "body": "Every Chinese syllable written in Latin letters. This is what you will learn first, and it is the closest thing to an alphabet. It is also a trap: the letters do NOT say what an English speaker expects." },
+        { "type": "teach", "title": "2. Characters — the writing",
+          "big": "你好",
+          "body": "Not letters at all. A separate system you do not need in order to speak. We come back to these much later, and they stay optional." },
+        { "type": "teach", "title": "Every syllable has three parts",
+          "big": "h + ao + ˇ",
+          "body": "An initial (the starting consonant), a final (the rest), and a tone (the pitch). That is the whole system — about 400 possible syllables, and you are about to learn all the pieces." },
+        { "type": "pick", "question": "Which one do you need in order to SPEAK Chinese?",
+          "options": [
+            { "label": "Pinyin — the sounds", "correct": true, "why": "Right. Speaking is sound. Characters are a reading skill you can add later, or never." },
+            { "label": "Characters", "correct": false, "why": "Not yet. Characters are for reading and writing. You can hold a conversation without knowing a single one." }
+          ] },
+        { "type": "teach", "title": "That is lesson one",
+          "body": "Next: the one thing that makes Chinese genuinely different from English — tones. Take it slowly; this is the part worth getting right." }
+      ]
+    },
+
+    {
+      "id": "L02", "unit": "A", "title": "Why pitch changes the word", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "In English, pitch carries mood",
+          "body": "\"Really.\" and \"Really?\" are the same word. Your voice going up only signals a question — it does not make it a different word." },
+        { "type": "teach", "title": "In Chinese, pitch IS the word",
+          "body": "The syllable \"ma\" said at four different pitches is four unrelated words: mother, hemp, horse, to scold. Get the pitch wrong and you have said something else entirely." },
+        { "type": "tones", "title": "Listen to the four shapes",
+          "body": "These are pure tones, not speech — just the pitch shape, so nothing can get in the way. Play each one. You are listening for the SHAPE, not the sound.",
+          "items": [1, 2, 3, 4] },
+        { "type": "teach", "title": "Tone 1 — high and flat", "tone": 1, "big": "mā 妈",
+          "body": "Hold one high note, steady, like singing. It does not move. Think of a doctor saying \"say ahhh\"." },
+        { "type": "teach", "title": "Tone 2 — rising", "tone": 2, "big": "má 麻",
+          "body": "Starts mid, goes up. Exactly like the English \"huh?\" when you did not catch something." },
+        { "type": "teach", "title": "Tone 3 — low", "tone": 3, "big": "mǎ 马",
+          "body": "The textbook says it dips down then rises. In real speech it mostly just stays LOW. Think of a disappointed \"hmm...\". Going low is what matters." },
+        { "type": "teach", "title": "Tone 4 — falling", "tone": 4, "big": "mà 骂",
+          "body": "Starts high, drops hard and fast. Like a sharp \"No!\" or \"Stop!\". It is short and it is angry-sounding." },
+        { "type": "pickTone", "question": "Which tone shape did you hear?", "answer": 1 },
+        { "type": "pickTone", "question": "Which tone shape did you hear?", "answer": 4 },
+        { "type": "teach", "title": "Good",
+          "body": "You do not need to produce these yet. Recognising them comes first — the mouth follows the ear, never the other way round." }
+      ]
+    },
+
+    {
+      "id": "L03", "unit": "A", "title": "Hearing the four tones", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "Just listening today",
+          "body": "Eight questions. Guessing is completely fine — this is ear training, and it works even while it still feels random. That feeling goes away." },
+        { "type": "pickTone", "question": "Which tone?", "answer": 2 },
+        { "type": "pickTone", "question": "Which tone?", "answer": 3 },
+        { "type": "pickTone", "question": "Which tone?", "answer": 1 },
+        { "type": "pickTone", "question": "Which tone?", "answer": 4 },
+        { "type": "pickTone", "question": "Which tone?", "answer": 3 },
+        { "type": "pickTone", "question": "Which tone?", "answer": 2 },
+        { "type": "pickTone", "question": "Which tone?", "answer": 4 },
+        { "type": "pickTone", "question": "Which tone?", "answer": 1 },
+        { "type": "teach", "title": "That is the hardest part of Chinese",
+          "body": "Genuinely. Everything after this is vocabulary and practice. Come back to this lesson any time it feels shaky." }
+      ]
+    },
+
+    {
+      "id": "L04", "unit": "A", "title": "Tone 2 against tone 3", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "This is the pair everyone confuses",
+          "body": "Tone 2 rises. Tone 3 goes low. Both can end up sounding \"not flat\", which is why beginners mix them. The difference is where they START." },
+        { "type": "tones", "title": "Hear them back to back",
+          "body": "Tone 2 starts in the middle and climbs. Tone 3 drops to the bottom first. Play them until the difference is obvious.",
+          "items": [2, 3] },
+        { "type": "teach", "title": "The trick",
+          "body": "Do not listen for the rise. Listen for the LOW. If the voice dips to the bottom of its range, it is tone 3. If it sets off upward from the middle, it is tone 2." },
+        { "type": "pickTone", "question": "Tone 2 or tone 3?", "answer": 2, "only": [2, 3] },
+        { "type": "pickTone", "question": "Tone 2 or tone 3?", "answer": 3, "only": [2, 3] },
+        { "type": "pickTone", "question": "Tone 2 or tone 3?", "answer": 3, "only": [2, 3] },
+        { "type": "pickTone", "question": "Tone 2 or tone 3?", "answer": 2, "only": [2, 3] },
+        { "type": "teach", "title": "One rule you will need constantly",
+          "big": "nǐ + hǎo → ní hǎo",
+          "body": "When two tone-3 syllables meet, the FIRST becomes tone 2. 你好 is written nǐ hǎo but said ní hǎo. This happens everywhere, and doing it makes you sound dramatically more natural." }
+      ]
+    },
+
+    {
+      "id": "L05", "unit": "A", "title": "The letters that lie: q, x, j", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "Now the letters themselves",
+          "body": "Pinyin uses Latin letters for sounds English does not have. Three of them cause more confusion than everything else combined." },
+        { "type": "teach", "title": "q is NOT \"kw\"", "big": "q = ch",
+          "body": "Like the ch in \"cheap\". 去 qù is said roughly \"chü\" — never \"koo\". This one word appears constantly, so it is worth fixing now." },
+        { "type": "teach", "title": "x is NOT \"ks\" or \"z\"", "big": "x = sh",
+          "body": "Like the sh in \"sheep\", but lighter and further forward. 谢谢 xièxie is \"shyeh-shyeh\" — this is how you say thank you, so you will use it every day." },
+        { "type": "teach", "title": "j is the easy one", "big": "j = j",
+          "body": "Like the j in \"jeep\". All three — j, q, x — are made with the tongue flat and the lips spread as if smiling. Smile and they come out right." },
+        { "type": "pick", "question": "How is 去 qù pronounced?",
+          "options": [
+            { "label": "\"chü\"", "correct": true, "why": "Correct. q is always a ch sound." },
+            { "label": "\"koo\"", "correct": false, "why": "That is the English reflex, and it is the single most common pinyin mistake. q is ch." },
+            { "label": "\"kwoo\"", "correct": false, "why": "No — q is never a k or kw sound in pinyin. It is ch." }
+          ] },
+        { "type": "pick", "question": "How does 谢谢 xièxie start?",
+          "options": [
+            { "label": "\"sh\" as in sheep", "correct": true, "why": "Right. x is a light sh." },
+            { "label": "\"ks\" as in box", "correct": false, "why": "No. Pinyin x is never ks — it is a light sh." },
+            { "label": "\"z\" as in zoo", "correct": false, "why": "No. That is the Spanish/Portuguese habit. Pinyin x is sh." }
+          ] }
+      ]
+    },
+
+    {
+      "id": "L06", "unit": "A", "title": "The letters that lie: c, z, and curled tongues", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "c is \"ts\"", "big": "c = ts",
+          "body": "Like the ts at the end of \"cats\". Never a k, never an s. 从 cóng is \"tsong\"." },
+        { "type": "teach", "title": "z is \"ds\"", "big": "z = ds",
+          "body": "Like the ds at the end of \"kids\" — not an English z. 在 zài is \"dsigh\"." },
+        { "type": "teach", "title": "zh, ch, sh — tongue curled back", "big": "zh ch sh",
+          "body": "Same as j, q, x but with the tongue curled up and back instead of flat. zh ≈ j in \"jar\", ch ≈ ch in \"char\", sh ≈ sh in \"shine\". Flat versus curled is the whole distinction." },
+        { "type": "teach", "title": "The silent i", "big": "shì = \"shrr\"",
+          "body": "After zi ci si zhi chi shi ri, the letter i is NOT \"ee\". It is just a buzz — hold the consonant and add voice. Saying \"shee\" for 是 shì is one of the loudest beginner giveaways." },
+        { "type": "pick", "question": "How is 是 shì pronounced?",
+          "options": [
+            { "label": "\"shrr\" — a buzz, no ee", "correct": true, "why": "Correct. The i after sh is a buzz, not a vowel." },
+            { "label": "\"shee\"", "correct": false, "why": "This is the common mistake. After sh, the i is not \"ee\" — it is a held buzz." }
+          ] },
+        { "type": "pick", "question": "What sound is pinyin c?",
+          "options": [
+            { "label": "ts, as in cats", "correct": true, "why": "Right." },
+            { "label": "k, as in cat", "correct": false, "why": "No — pinyin c is never a k sound." },
+            { "label": "s, as in city", "correct": false, "why": "Close but no: it needs the t in front. ts." }
+          ] }
+      ]
+    },
+
+    {
+      "id": "L07", "unit": "A", "title": "Vowels, and the hidden ü", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "The five basic vowels", "big": "a o e i u",
+          "body": "a = \"ah\". o = \"aw\". i = \"ee\". u = \"oo\". And e on its own = \"uh\", as in \"the\" — NOT \"eh\". 喝 hē is \"huh\", not \"hay\"." },
+        { "type": "teach", "title": "The sixth vowel: ü", "big": "ü",
+          "body": "English does not have it. Say \"ee\" — then, without moving your tongue at all, round your lips into a whistle. That is ü. 女 nǚ (woman) uses it." },
+        { "type": "teach", "title": "ü hides after j, q, x and y", "big": "qù = qü",
+          "body": "After those letters the two dots get dropped, but the sound stays ü. So ju qu xu yu are really jü qü xü yü. This is why 去 is \"chü\" and not \"choo\"." },
+        { "type": "pick", "question": "In 去 qù, what is the vowel really?",
+          "options": [
+            { "label": "ü — the dots are just dropped after q", "correct": true, "why": "Exactly. After j, q, x, y the dots vanish but the sound does not." },
+            { "label": "u as in \"soon\"", "correct": false, "why": "It looks that way, but no. After q the u is always ü." }
+          ] },
+        { "type": "teach", "title": "Where the dots stay", "big": "nǚ vs nǔ",
+          "body": "Only after n and l are the dots written, because there both sounds genuinely exist: 女 nǚ (woman) and 努 nǔ (to strive) are different words." }
+      ]
+    },
+
+    {
+      "id": "L08", "unit": "A", "title": "The last few traps", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "-ian is \"yen\"", "big": "tiān = tyen",
+          "body": "Despite the spelling it does not rhyme with \"ahn\". 天 tiān (sky) is \"tyen\". 钱 qián (money) is \"chyen\"." },
+        { "type": "teach", "title": "iu, ui and un hide a vowel", "big": "duì = dway",
+          "body": "iu is really i-o-u, so 六 liù is \"lyoh\". ui is really u-e-i, so 对 duì is \"dway\". un is really u-e-n. The missing vowel always sits in the middle." },
+        { "type": "teach", "title": "b d g are not really b d g",
+          "big": "b = p in \"spy\"",
+          "body": "Mandarin does not contrast voiced and voiceless. It contrasts puff of air. b d g have NO puff; p t k have a big one. Hold your hand in front of your mouth: b should not move it, p should." },
+        { "type": "pick", "question": "How does 天 tiān sound?",
+          "options": [
+            { "label": "\"tyen\"", "correct": true, "why": "Right — -ian rhymes with English \"yen\"." },
+            { "label": "\"tyahn\"", "correct": false, "why": "The spelling suggests it, but no. -ian is \"yen\"." }
+          ] },
+        { "type": "teach", "title": "You can now read pinyin",
+          "body": "That is the whole sound system. From here on, every new word comes with pinyin you can actually decode — which is exactly why we did this first. Now let's use it on real words." }
+      ]
+    },
+
+    {
+      "id": "L09", "unit": "B", "title": "你好 — hello", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "Your first word", "big": "你好", "pinyin": "nǐ hǎo", "speak": "你好",
+          "body": "Literally \"you good\". Two syllables, both written tone 3 — which means the sandhi rule from lesson 4 applies: it is actually said ní hǎo." },
+        { "type": "word", "hanzi": "你", "pinyin": "nǐ", "en": "you", "tone": 3,
+          "note": "The person radical 亻 on the left tells you this word is about a person." },
+        { "type": "word", "hanzi": "好", "pinyin": "hǎo", "en": "good", "tone": 3,
+          "note": "A woman 女 next to a child 子 — the old image of 'good'." },
+        { "type": "pick", "question": "你好 is written nǐ hǎo. How is it actually said?",
+          "options": [
+            { "label": "ní hǎo — the first tone 3 becomes tone 2", "correct": true, "why": "Correct. Two tone 3s in a row: the first changes. This happens every time." },
+            { "label": "nǐ hǎo — both stay low", "correct": false, "why": "That is what is written, but not what is said. Two tone 3s never sit side by side in speech." }
+          ] },
+        { "type": "speak", "prompt": "Say hello", "target": "你好", "pinyin": "ní hǎo" },
+        { "type": "teach", "title": "That is a real Chinese word",
+          "body": "You can now greet someone. Next: the words for I, you and he." }
+      ]
+    },
+
+    {
+      "id": "L10", "unit": "B", "title": "我 你 他 — I, you, he", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "Three pronouns, no changes",
+          "body": "Good news: Chinese pronouns never change form. No I/me/my/mine. 我 is all four." },
+        { "type": "word", "hanzi": "我", "pinyin": "wǒ", "en": "I, me, my", "tone": 3,
+          "note": "A hand 手 holding a weapon 戈 — the one defending myself." },
+        { "type": "word", "hanzi": "你", "pinyin": "nǐ", "en": "you", "tone": 3 },
+        { "type": "word", "hanzi": "他", "pinyin": "tā", "en": "he, him", "tone": 1,
+          "note": "Person 亻 + 也. Swap 亻 for 女 and you get 她 — she. Same sound exactly." },
+        { "type": "teach", "title": "Making them plural", "big": "我们", "pinyin": "wǒmen", "speak": "我们",
+          "body": "Add 们 men. 我们 = we. 你们 = you (plural). 他们 = they. One rule, no exceptions." },
+        { "type": "pick", "question": "What does 我们 mean?",
+          "options": [
+            { "label": "we / us", "correct": true, "why": "Right — 我 (I) + 们 (plural)." },
+            { "label": "they", "correct": false, "why": "That is 他们. 我们 starts with 我, which is 'I'." }
+          ] },
+        { "type": "speak", "prompt": "Say \"I\" in Chinese", "target": "我", "pinyin": "wǒ" }
+      ]
+    },
+
+    {
+      "id": "L11", "unit": "B", "title": "是 and 不 — is, and not", "minutes": 4,
+      "steps": [
+        { "type": "word", "hanzi": "是", "pinyin": "shì", "en": "to be (am / is / are)", "tone": 4,
+          "note": "Remember lesson 6: shì is \"shrr\", not \"shee\"." },
+        { "type": "teach", "title": "One word for am, is and are", "big": "我是", "pinyin": "wǒ shì", "speak": "我是",
+          "body": "是 never changes. 我是 = I am. 你是 = you are. 他是 = he is. No conjugation anywhere in Chinese." },
+        { "type": "word", "hanzi": "不", "pinyin": "bù", "en": "not", "tone": 4,
+          "note": "Put it directly in front of the verb: 我不是 = I am not." },
+        { "type": "teach", "title": "不 changes its own tone", "big": "bù + shì → bú shì",
+          "body": "不 is tone 4, but when the next word is ALSO tone 4 it flips to tone 2. So 不是 is said bú shì. Same idea as the tone 3 rule — Chinese avoids stacking identical tones." },
+        { "type": "pick", "question": "How do you say \"I am not\"?",
+          "options": [
+            { "label": "我不是 — wǒ bú shì", "correct": true, "why": "Correct, including the tone change on 不." },
+            { "label": "我是不 — wǒ shì bù", "correct": false, "why": "Word order is wrong. 不 always goes BEFORE the verb it negates." }
+          ] },
+        { "type": "speak", "prompt": "Say \"I am not\"", "target": "我不是", "pinyin": "wǒ bú shì" }
+      ]
+    },
+
+    {
+      "id": "L12", "unit": "B", "title": "很 — the word that is not \"very\"", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "A rule that surprises everyone",
+          "body": "You cannot say \"I good\" in Chinese by putting 我 next to 好. Adjectives need a linking word, and that word is 很." },
+        { "type": "word", "hanzi": "很", "pinyin": "hěn", "en": "(links subject to adjective)", "tone": 3,
+          "note": "Dictionaries say 'very', but most of the time it means nothing at all — it is just glue." },
+        { "type": "teach", "title": "The pattern", "big": "我很好", "pinyin": "wǒ hěn hǎo", "speak": "我很好",
+          "body": "I + 很 + good = \"I'm fine\". Note there is no 是 here. With adjectives you use 很, not 是. Mixing those up is a classic beginner error." },
+        { "type": "pick", "question": "Which is correct for \"I'm fine\"?",
+          "options": [
+            { "label": "我很好", "correct": true, "why": "Right. Adjectives take 很, never 是." },
+            { "label": "我是好", "correct": false, "why": "No. 是 links two nouns. For adjectives you need 很." }
+          ] },
+        { "type": "teach", "title": "Watch the tones", "big": "wǒ hěn hǎo → wó hén hǎo",
+          "body": "Three tone 3s in a row. The first two both shift up to tone 2. Say it out loud — it is much easier that way than it looks written down." },
+        { "type": "speak", "prompt": "Say \"I'm fine\"", "target": "我很好", "pinyin": "wó hén hǎo" }
+      ]
+    },
+
+    {
+      "id": "L13", "unit": "B", "title": "谢谢 and 请 — thanks and please", "minutes": 3,
+      "steps": [
+        { "type": "word", "hanzi": "谢谢", "pinyin": "xièxie", "en": "thank you", "tone": 4,
+          "note": "Remember: x is sh. This is \"shyeh-shyeh\". The second syllable is light and quick." },
+        { "type": "word", "hanzi": "请", "pinyin": "qǐng", "en": "please", "tone": 3,
+          "note": "q is ch, so this is \"ching\". Put it in front of any verb to make it polite." },
+        { "type": "teach", "title": "The most useful phrase you will learn",
+          "big": "请再说一遍", "pinyin": "qǐng zài shuō yí biàn", "speak": "请再说一遍",
+          "body": "\"Please say that again.\" When someone speaks too fast — which will be always, at first — this is the sentence that keeps the conversation alive instead of killing it." },
+        { "type": "word", "hanzi": "不客气", "pinyin": "bú kèqi", "en": "you're welcome", "tone": 2,
+          "note": "Literally 'don't be polite'. Note 不 flipped to bú again — 客 is tone 4." },
+        { "type": "speak", "prompt": "Say thank you", "target": "谢谢", "pinyin": "xièxie" }
+      ]
+    },
+
+    {
+      "id": "L14", "unit": "B", "title": "Reading check", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "Let's see what stuck",
+          "body": "You have met eight words. These questions show pinyin only — read it aloud before you answer, using everything from unit A." },
+        { "type": "read", "pinyin": "wǒ", "question": "What does this mean?",
+          "options": [
+            { "label": "I, me", "correct": true, "why": "Correct." },
+            { "label": "you", "correct": false, "why": "That is nǐ 你." },
+            { "label": "good", "correct": false, "why": "That is hǎo 好." }
+          ] },
+        { "type": "read", "pinyin": "nǐ hǎo", "question": "What does this mean?",
+          "options": [
+            { "label": "hello", "correct": true, "why": "Correct — and remember it is said ní hǎo." },
+            { "label": "thank you", "correct": false, "why": "That is xièxie 谢谢." },
+            { "label": "I am", "correct": false, "why": "That is wǒ shì 我是." }
+          ] },
+        { "type": "read", "pinyin": "wǒ bú shì", "question": "What does this mean?",
+          "options": [
+            { "label": "I am not", "correct": true, "why": "Correct, including the tone change on bù → bú." },
+            { "label": "I am", "correct": false, "why": "The 不 makes it negative." },
+            { "label": "you are not", "correct": false, "why": "That would start with nǐ." }
+          ] },
+        { "type": "read", "pinyin": "xièxie", "question": "How do you pronounce the first sound?",
+          "options": [
+            { "label": "sh, as in sheep", "correct": true, "why": "Right — pinyin x is a light sh." },
+            { "label": "ks, as in box", "correct": false, "why": "No. x is never ks in pinyin." }
+          ] },
+        { "type": "teach", "title": "That is unit B started",
+          "body": "Eight words, and you can already form a sentence. Next unit turns them into real exchanges." }
+      ]
+    },
+
+    {
+      "id": "L15", "unit": "C", "title": "你好吗？— asking how someone is", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "Turning any statement into a question", "big": "吗", "pinyin": "ma",
+          "body": "Add 吗 to the end of a statement and it becomes a yes/no question. No word order changes, no rising intonation needed. 吗 is neutral tone — light and quick." },
+        { "type": "teach", "title": "Try it", "big": "你好吗？", "pinyin": "nǐ hǎo ma?", "speak": "你好吗？",
+          "body": "你好 (you good) + 吗 = \"Are you good?\" — how are you." },
+        { "type": "teach", "title": "And the answer", "big": "我很好，谢谢", "pinyin": "wǒ hěn hǎo, xièxie", "speak": "我很好，谢谢",
+          "body": "\"I'm fine, thanks.\" You now have a complete two-line exchange." },
+        { "type": "pick", "question": "How would you ask \"Are you American?\" given 你是美国人 = you are American?",
+          "options": [
+            { "label": "你是美国人吗？", "correct": true, "why": "Right — just add 吗 to the end. Nothing else moves." },
+            { "label": "吗你是美国人？", "correct": false, "why": "吗 always goes at the very end, never the start." },
+            { "label": "你吗是美国人？", "correct": false, "why": "吗 belongs at the end of the whole sentence." }
+          ] },
+        { "type": "speak", "prompt": "Ask \"how are you?\"", "target": "你好吗", "pinyin": "ní hǎo ma" },
+        { "type": "speak", "prompt": "Answer: \"I'm fine, thanks\"", "target": "我很好谢谢", "pinyin": "wó hén hǎo, xièxie" }
+      ]
+    },
+
+    {
+      "id": "L16", "unit": "C", "title": "你叫什么名字？— names", "minutes": 4,
+      "steps": [
+        { "type": "word", "hanzi": "叫", "pinyin": "jiào", "en": "to be called", "tone": 4,
+          "note": "Mouth 口 on the left — it is something you say." },
+        { "type": "word", "hanzi": "什么", "pinyin": "shénme", "en": "what", "tone": 2 },
+        { "type": "teach", "title": "Question words stay put", "big": "你叫什么名字？", "pinyin": "nǐ jiào shénme míngzi?", "speak": "你叫什么名字？",
+          "body": "\"You are called what name?\" In English the question word jumps to the front. In Chinese it stays exactly where the answer would go — which makes questions much easier than you expect." },
+        { "type": "teach", "title": "Answering", "big": "我叫…", "pinyin": "wǒ jiào…", "speak": "我叫李明",
+          "body": "Just put your name where 什么 was. 我叫 + your name. That is the whole answer." },
+        { "type": "pick", "question": "Where does 什么 (what) sit in a question?",
+          "options": [
+            { "label": "Exactly where the answer would go", "correct": true, "why": "Right — this is one of the genuinely easy things about Chinese grammar." },
+            { "label": "At the front, like English", "correct": false, "why": "No. Chinese leaves the question word in place." }
+          ] },
+        { "type": "speak", "prompt": "Ask someone's name", "target": "你叫什么名字", "pinyin": "nǐ jiào shénme míngzi" }
+      ]
+    },
+
+    {
+      "id": "L17", "unit": "C", "title": "我不懂 — rescuing yourself", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "The most valuable sentences you will learn",
+          "body": "Not greetings. These. When a conversation gets away from you, these three keep it going instead of ending it in an embarrassed silence." },
+        { "type": "teach", "title": "1. I don't understand", "big": "我听不懂", "pinyin": "wǒ tīng bu dǒng", "speak": "我听不懂",
+          "body": "Literally \"I listen-not-understand\" — specifically about hearing, which is exactly your situation as a beginner." },
+        { "type": "teach", "title": "2. Please say it again", "big": "请再说一遍", "pinyin": "qǐng zài shuō yí biàn", "speak": "请再说一遍",
+          "body": "You met this in lesson 13. It is worth over-learning." },
+        { "type": "teach", "title": "3. Please speak slower", "big": "请说慢一点儿", "pinyin": "qǐng shuō màn yìdiǎnr", "speak": "请说慢一点儿",
+          "body": "People genuinely will slow down. Almost nobody minds." },
+        { "type": "speak", "prompt": "Say \"I don't understand\"", "target": "我听不懂", "pinyin": "wǒ tīng bu dǒng" },
+        { "type": "speak", "prompt": "Say \"please speak slower\"", "target": "请说慢一点儿", "pinyin": "qǐng shuō màn yìdiǎnr" },
+        { "type": "teach", "title": "You can now hold a short conversation",
+          "body": "Greet someone, exchange names, say how you are, and recover when you get lost. That is a real, usable set — and it is only lesson 17." }
+      ]
+    },
+
+    {
+      "id": "L18", "unit": "C", "title": "Putting it together", "minutes": 5,
+      "steps": [
+        { "type": "teach", "title": "A whole exchange",
+          "body": "Everything below uses only words you have met. Read each line aloud before checking." },
+        { "type": "read", "pinyin": "nǐ hǎo! nǐ jiào shénme míngzi?", "question": "What is being said?",
+          "options": [
+            { "label": "Hello! What's your name?", "correct": true, "why": "Correct." },
+            { "label": "Hello! How are you?", "correct": false, "why": "That would be 你好吗 nǐ hǎo ma." },
+            { "label": "Thank you! I'm fine.", "correct": false, "why": "No 谢谢 or 很好 in that line." }
+          ] },
+        { "type": "read", "pinyin": "wǒ jiào Lǐ Míng. nǐ ne?", "question": "What is being said?",
+          "options": [
+            { "label": "My name is Li Ming. And you?", "correct": true, "why": "Correct — 呢 ne bounces the question back." },
+            { "label": "I don't understand.", "correct": false, "why": "That is 我听不懂." },
+            { "label": "I am not Li Ming.", "correct": false, "why": "There is no 不 in that line." }
+          ] },
+        { "type": "read", "pinyin": "duìbuqǐ, wǒ tīng bu dǒng", "question": "What is being said?",
+          "options": [
+            { "label": "Sorry, I don't understand", "correct": true, "why": "Correct." },
+            { "label": "Sorry, I'm late", "correct": false, "why": "听不懂 is specifically about not understanding what you heard." }
+          ] },
+        { "type": "speak", "prompt": "Greet someone and ask their name", "target": "你好你叫什么名字", "pinyin": "ní hǎo, nǐ jiào shénme míngzi" },
+        { "type": "teach", "title": "That is the guided path, for now",
+          "body": "Eighteen lessons: you can read pinyin, hear all four tones, and hold a short exchange. From here the Review tab keeps these from fading, and Talk puts them into real conversations. More lessons are coming — this path is built to grow." }
+      ]
+    }
+  ]
+}

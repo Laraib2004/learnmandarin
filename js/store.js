@@ -27,6 +27,7 @@ const defaultState = () => ({
   cards: {},               // sentenceId -> FSRS card
   tones: {},               // toneDrillKey -> { seen, correct }
   speech: {},              // sentenceId -> { attempts, best }
+  lessons: { done: [], current: null, step: 0 },  // the guided path
   charCards: {},           // character   -> FSRS card (separate track from sentences)
   pinyinDrill: null,       // { seen, correct }
   session: null,           // where the learner was, so nothing has to restart
@@ -34,7 +35,7 @@ const defaultState = () => ({
   drills: {},              // patternId  -> { attempts, best, fast }
   dialogues: {},           // dialogueId -> { runs, best, turns }
   log: [],                 // { t, id, grade } review history
-  daily: {},               // 'YYYY-MM-DD' -> { new, reviews, speak, drill, chars }
+  daily: {},               // 'YYYY-MM-DD' -> { new, reviews, speak, drill, chars, lesson }
 });
 
 let state = null;
@@ -79,7 +80,7 @@ export const todayKey = (d = new Date()) =>
 export function bumpDaily(field, n = 1) {
   return update((s) => {
     const k = todayKey();
-    s.daily[k] = s.daily[k] || { new: 0, reviews: 0, speak: 0, drill: 0, chars: 0 };
+    s.daily[k] = s.daily[k] || { new: 0, reviews: 0, speak: 0, drill: 0, chars: 0, lesson: 0 };
     s.daily[k][field] = (s.daily[k][field] || 0) + n;
   });
 }

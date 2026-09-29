@@ -57,6 +57,10 @@
 }
 
 * { box-sizing: border-box; }
+/* Any `display` rule of ours outranks the UA's `[hidden] { display: none }`.
+   Without this, hiding a nav item with el.hidden silently does nothing — which
+   is exactly how the progressive nav shipped broken once. */
+[hidden] { display: none !important; }
 html {
   -webkit-text-size-adjust: 100%;   /* stop iOS inflating text in landscape */
   height: 100%;
@@ -424,3 +428,38 @@ input[type="range"] { height: var(--tap); accent-color: var(--accent); }
   max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .char-cell.known { border-color: var(--good); background: color-mix(in srgb, var(--good) 12%, var(--surface)); }
 .char-cell.known u { color: var(--good); }
+
+/* ---------- the guided path ---------- */
+.lesson-row {
+  display: flex; align-items: center; gap: .6rem; width: 100%;
+  text-align: left; font-weight: 550; font-size: .92rem;
+  padding: .5rem .6rem; min-height: var(--tap);
+}
+.lesson-row:disabled { opacity: .38; }
+.lesson-dot {
+  flex: none; width: 1.7rem; height: 1.7rem; border-radius: 999px;
+  display: grid; place-items: center;
+  background: var(--surface-2); color: var(--muted);
+  font-size: .78rem; font-weight: 700;
+}
+.lesson-dot.done { background: var(--good); color: #fff; }
+.lesson-dot.now  { background: var(--accent-ink); color: var(--accent); }
+
+/* Tone contours: the picture and the audio come from the same numbers, so a
+   learner with no Mandarin voice installed can still learn tones exactly. */
+.contour {
+  display: grid; place-items: center; color: var(--accent);
+  padding: .3rem; cursor: pointer;
+}
+.contour-row {
+  display: grid; gap: .5rem;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+.contour-btn {
+  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+  color: var(--accent); padding: .6rem .4rem; min-height: 96px;
+}
+.contour-btn b { color: var(--text); font-size: .9rem; }
+.contour-btn span { font-family: var(--font); }
+.choice .contour, .choice svg { color: currentColor; }
+.choice { display: flex; flex-direction: column; align-items: center; gap: .2rem; }

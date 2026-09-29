@@ -8,6 +8,39 @@ subscription, no server — nothing you do leaves your device.
 
 ---
 
+## Start here
+
+Open it and press **Begin lesson 1**. That is the whole instruction — there is
+one tab and one button, and the app decides what comes next.
+
+**18 lessons, ~70 minutes**, in this order:
+
+| Unit | Lessons | What you get |
+|---|---|---|
+| **A — Pinyin** | 1–8 | Read any Chinese syllable and know how it sounds. Tones, and the letters that lie (`q`=ch, `x`=sh, `c`=ts, `z`=ds, hidden `ü`). |
+| **B — First words** | 9–14 | 你 我 他 是 不 很 好 谢谢 — with a reading check. |
+| **C — First sentences** | 15–18 | Greet someone, swap names, and rescue yourself when lost. |
+
+Tabs beyond **Path** stay hidden until the lessons that justify them are done.
+A beginner sees one tab, not seven.
+
+### If the audio sounds wrong
+
+**Every tone sounding identical means you have no Mandarin voice installed** —
+the browser falls back to an English voice and mangles everything. The app now
+detects this and says so on the first screen.
+
+- **Windows:** Settings → Time & language → Language & region → Add a language →
+  Chinese (Simplified, China) → tick **Speech** → Install → restart the browser.
+- **Faster:** open the app in **Microsoft Edge**, which ships Microsoft's online
+  Chinese voices with nothing to install.
+
+**Tones are learnable either way.** The tone lessons use *synthesised pitch
+contours*, not speech — a pure tone that glides exactly the way each tone
+glides. It cannot be broken by a missing voice, needs no network, and the
+on-screen shape is drawn from the same numbers that generate the sound, so the
+picture and the audio can never disagree.
+
 ## Why this exists
 
 Most language apps optimise for daily engagement, not for the day you stand in
@@ -25,6 +58,8 @@ front of a Mandarin speaker and have to say something. This one inverts that.
 | Weld reading to speaking | **Characters are optional** — you can complete the course in pinyin and audio alone |
 | SM-2 or a hand-tuned interval ladder | **FSRS-5** — models memory stability and difficulty per card, schedules the review for the day you'd otherwise forget |
 | Gamified streaks in place of feedback | **Recall probability** — the Library shows your real chance of remembering each sentence right now |
+| A menu you must navigate | **One linear path** — one lesson, one step, one button; tabs unlock as you earn them |
+| Tones taught through speech you may not be able to play | **Synthesised pitch contours** — works with zero voices installed |
 
 ### The core idea
 
@@ -122,9 +157,10 @@ study app: reviews happen on the metro.
 ### Tests
 
 ```bash
-npm test          # 103 checks: scheduler, speech scoring, corpus integrity,
+npm test          # 123 checks: scheduler, speech scoring, corpus integrity,
                   # every view rendered, PWA assets, mobile-layout rules,
-                  # session resume, and reminder/ICS generation
+                  # session resume, reminder/ICS generation, lesson
+                  # integrity and tone-contour synthesis
 ```
 
 ### Deploy for free
@@ -237,13 +273,15 @@ js/
   ui.js                 DOM helpers, tone colouring
   feedback.js           toasts, audio cues, haptics
   reminder.js           daily nudge + .ics calendar alarm
-  views/                dashboard · tones · script · review · speak · drill ·
-                        dialogue · library · settings
+  pitch.js              synthesised tone contours (no voice needed)
+  views/                learn (the path) · dashboard · tones · script · review ·
+                        speak · drill · dialogue · library · settings
 data/
   course.json           the five stages and where their sentences live
   corpus/st1..st5.json  250 sentences, 25 units
   patterns.json         32 generative grammar frames
   dialogues.json        10 two-way conversations
+  lessons.json          the 18-lesson guided path
   pinyin.json           the sound system + the 8 spelling traps
   characters.json       components, stroke rules, 69 characters
   tones.json            minimal pairs + the 4 tone-change rules

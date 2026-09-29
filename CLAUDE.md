@@ -26,6 +26,48 @@ convenience.
 5. **Speaking is the goal.** Judge any feature by: *does this get the learner
    closer to producing Mandarin out loud?* Streaks and badges fail that test.
 
+## The front door is a single linear path
+
+`views/learn.js` + `data/lessons.json` is the app's entry point (route `''`).
+
+**Design rule: one thing on screen, one button.** The original app failed a real
+beginner for exactly one reason — seven tabs and no obvious start. If you are
+adding to the path, do not add choices to it.
+
+- Tabs use **progressive disclosure** via `data-needs` in `index.html`:
+  `always`, `cards` (any review card exists), or a number of finished lessons.
+  `applyNavVisibility()` in `main.js` enforces it. A fresh learner sees ONE tab.
+- **`[hidden] { display: none !important }` in app.css is load-bearing.** Our own
+  `.tabbar a { display: flex }` outranks the UA's `[hidden]` rule, so without it
+  `el.hidden = true` silently does nothing. This shipped broken once; there is a
+  guard test.
+- `seedFromLesson()` in `deck.js` hands anything a lesson taught to the FSRS
+  scheduler on completion, matched by punctuation-stripped hanzi. Without it the
+  path and Review are two disconnected apps and the queue stays empty forever.
+- Lesson position saves after **every step** (`store.lessons` + `saveSession`).
+- Step types: `teach`, `tones`, `pickTone`, `pick`, `read`, `word`, `speak`.
+  A `pick`/`read` step must have **exactly one** correct option and a `why` on
+  every option — both are asserted by tests.
+
+## Audio: assume there is no Mandarin voice
+
+This is the highest-impact failure in the whole project and it is invisible from
+the code. A learner reported "every tone sounds the same"; the cause was that
+the machine had **no Chinese voice installed at all**, so `speechSynthesis` fell
+back to an English voice. Verified: `speechSynthesis.getVoices()` returned only
+en-GB and de-DE.
+
+- `views/learn.js` shows a prominent warning when `chineseVoices()` is empty,
+  with the Windows install path and the Edge shortcut. Never let this fail
+  silently again.
+- **`js/pitch.js` is the answer to it.** Tones are taught as synthesised pitch
+  contours (Chao levels → Hz via an oscillator), not speech. This is immune to a
+  missing voice, works offline, and `contourSVG()` draws the picture from the
+  same `CONTOURS` table that generates the audio, so they cannot drift apart.
+- Do not "improve" tone teaching by making it depend on TTS again.
+- Rates below ~0.6 flatten tones badly on weak engines. Prefer repeating a
+  phrase over slowing it further.
+
 ## The pedagogical thesis
 
 **Recall ≠ fluency.** Memorising sentences makes a phrasebook; fluency is
@@ -125,6 +167,7 @@ stage to `course.json` with its own file. `deck.loadCorpus()` fetches them all i
 parallel and flattens.
 
 ```
+data/lessons.json          the guided path (the app's front door)
 data/course.json           stages: {id, level, title, goal, canDo[], file}
 data/corpus/st1..st5.json  {stage, units[], sentences[]}
 data/patterns.json         generative frames
@@ -306,7 +349,7 @@ Built mobile-first against **iPhone 16 (393 x 852pt)**. Rules that are load-bear
 ## Testing
 
 ```bash
-npm test            # both suites, 103 checks
+npm test            # both suites, 123 checks
 npm run test:engine # FSRS maths + alignment scoring (pure logic)
 npm run test:views  # renders every view against a DOM shim
 ```
@@ -356,15 +399,17 @@ Note the shim needs `globalThis.Node` defined, since `ui.js → h()` does
 
 In rough order of learner value:
 
-1. **More sentences, especially B2/C1.** The engines are done; C1 has 40
+1. **More lessons.** The path stops at 18 (end of A1 greetings). Extending it is
+   now the highest-value work in the repo — everything else is optional depth.
+2. **More sentences, especially B2/C1.** The engines are done; C1 has 40
    sentences and should have several hundred. This is the bottleneck to fluency.
-2. **More patterns.** Cheapest fluency-per-edit in the whole repo — each frame
+3. **More patterns.** Cheapest fluency-per-edit in the whole repo — each frame
    generates ~8 sentences and transfers to future vocabulary.
-3. **Pitch-contour feedback** from the mic — show the learner's actual tone curve
+4. **Pitch-contour feedback** from the mic — show the learner's actual tone curve
    against the target. The single biggest possible upgrade to Speak.
-4. **More dialogues**, and branching replies instead of a fixed script.
-5. **More characters** — 69 now; the top 100 by corpus frequency reach ~68%.
-6. Recording playback; pitch-contour visualisation; animated stroke order
+5. **More dialogues**, and branching replies instead of a fixed script.
+6. **More characters** — 69 now; the top 100 by corpus frequency reach ~68%.
+7. Recording playback; pitch-contour visualisation; animated stroke order
    (the last needs a stroke-path dataset, which is a real download).
 
 ## Style

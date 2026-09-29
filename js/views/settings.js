@@ -4,6 +4,7 @@ import { chineseVoices, setVoice, speak, initVoices } from '../tts.js';
 import { primeMicrophone, isSupported as asrOk } from '../asr.js';
 import { signal, unlockAudio, hapticsSupported, toast } from '../feedback.js';
 import * as reminder from '../reminder.js';
+import { voiceHelpCard } from '../voicehelp.js';
 
 export default function settings(root) {
   const pane = h('div', { class: 'stack' });
@@ -15,13 +16,14 @@ export default function settings(root) {
     const voices = chineseVoices();
 
     pane.replaceChildren(
+      voiceHelpCard(),
       h('section', { class: 'card stack' },
         h('h1', {}, 'Settings'),
 
         h('label', { class: 'field' }, 'Mandarin voice',
           h('small', {}, voices.length
             ? 'Installed on your device. Nothing is downloaded or streamed.'
-            : 'No Chinese voice found. On Windows: Settings → Time & language → Language → add Chinese (Simplified) → Speech. On Android, install Google Speech Services.'),
+            : 'No Chinese voice found — see the steps at the top of this page.'),
           h('select', {
             onchange: (e) => { setVoice(e.target.value || null); speak('你好，我们开始吧'); },
           },

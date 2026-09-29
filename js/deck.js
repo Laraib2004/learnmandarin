@@ -196,6 +196,39 @@ export function lessonProgress() {
 
 /* ---------------- character track (separate SRS from sentences) ---------------- */
 
+/**
+ * Find a glyph in the character data: a full character first, then a building
+ * block by either its full form (人) or its squeezed side form (亻).
+ * @returns {{kind: 'char'|'component', entry: object}|null}
+ */
+export function lookupGlyph(g) {
+  const data = corpus?.characters;
+  if (!data || !g) return null;
+  const ch = data.characters.find((c) => c.c === g);
+  if (ch) return { kind: 'char', entry: ch };
+  const comp = data.components.find((c) => c.c === g || c.alt === g);
+  return comp ? { kind: 'component', entry: comp } : null;
+}
+
+/**
+ * Characters a lesson taught (its `char` steps) go onto the Script track's
+ * schedule, due tomorrow, exactly as seedFromLesson() does for sentences.
+ */
+export function seedCharsFromLesson(lesson) {
+  if (!lesson || !corpus) return [];
+  const seeded = [];
+  for (const st of lesson.steps || []) {
+    if (st.type !== 'char' || lookupGlyph(st.c)?.kind !== 'char') continue;
+    if (get().charCards?.[st.c]?.reps > 0 || seeded.includes(st.c)) continue;
+    update((s) => {
+      s.charCards = s.charCards || {};
+      s.charCards[st.c] = { ...newCard(st.c), reps: 1, state: 'review', stability: 1.5, difficulty: 5.2, lastReview: Date.now(), due: Date.now() + 86400000 };
+    });
+    seeded.push(st.c);
+  }
+  return seeded;
+}
+
 /** The FSRS card for a single character, created lazily. */
 export function charCardFor(ch) {
   const s = get();

@@ -348,9 +348,10 @@ storeMod.update((st) => { st.settings.reminderOn = false; st.lastReminded = null
 
 
 const storeMod2 = await import('../js/store.js');
+const deckModEarly = await import('../js/deck.js');
 console.log('\nGuided path');
 const L = corpus.lessons;
-ok('lessons load', L.lessons.length === 18 && L.units.length === 3,
+ok('lessons load', L.lessons.length === 22 && L.units.length === 4,
    `${L.lessons.length} lessons across ${L.units.length} units`);
 ok('the path starts with pinyin', L.lessons[0].unit === 'A' && L.units[0].title.startsWith('Pinyin'));
 ok('lesson ids are unique', new Set(L.lessons.map((l) => l.id)).size === L.lessons.length);
@@ -367,8 +368,19 @@ ok('every option explains itself', quiz.every((s) => s.options.every((o) => o.wh
 const toneQs = L.lessons.flatMap((l) => l.steps.filter((s) => s.type === 'pickTone'));
 ok('tone questions have a valid answer', toneQs.every((s) => s.answer >= 1 && s.answer <= 4),
    `${toneQs.length} tone questions`);
-ok('units are ordered pinyin -> words -> sentences',
-   L.units.map((u) => u.id).join('') === 'ABC');
+ok('units are ordered pinyin -> words -> characters -> sentences',
+   L.units.map((u) => u.id).join('') === 'ABDC');
+
+// Character steps render from characters.json, so a typo is a blank card.
+const charSteps = L.lessons.flatMap((l) => l.steps.filter((s) => s.type === 'char'));
+ok('every character step names a known character or building block',
+   charSteps.length > 0 && charSteps.every((s) => deckModEarly.lookupGlyph(s.c)),
+   `${charSteps.length} character steps`);
+ok('squeezed forms resolve to their building block',
+   deckModEarly.lookupGlyph('亻')?.entry.c === '人' && deckModEarly.lookupGlyph('讠')?.entry.c === '言');
+ok('the character unit teaches before it tests',
+   L.lessons.filter((l) => l.unit === 'D').every((l) => l.steps.findIndex((s) => s.type === 'char') <
+     l.steps.findIndex((s) => s.type === 'pick')));
 
 // The whole point: lessons must feed the scheduler, or Review stays empty.
 const deckMod = await import('../js/deck.js');
@@ -379,6 +391,13 @@ ok('finishing the path seeds review cards', totalSeeded > 0,
    `${totalSeeded} sentences handed to the scheduler`);
 ok('seeded cards are due later, not instantly',
    Object.values(storeMod2.get().cards).every((c) => c.due > Date.now()));
+storeMod2.update((st) => { st.charCards = {}; });
+let charsSeeded = 0;
+for (const l of L.lessons) charsSeeded += deckMod.seedCharsFromLesson(l).length;
+ok('character lessons feed the Script track, not the sentence queue',
+   charsSeeded > 0 && Object.keys(storeMod2.get().charCards).every((c) => deckMod.lookupGlyph(c)?.kind === 'char'),
+   `${charsSeeded} characters scheduled`);
+storeMod2.update((st) => { st.charCards = {}; });
 storeMod2.update((st) => { st.cards = {}; });
 
 console.log('\nTone synthesis (works with no Mandarin voice installed)');
@@ -394,6 +413,21 @@ try { await pitchMod.playTone(3); pitchMod.unlock(); } catch (e) { pitchThrew = 
 ok('playTone degrades silently with no AudioContext', pitchThrew === null,
    pitchThrew ? pitchThrew.message : '');
 
+
+console.log('\nSpeech with no Mandarin voice');
+// The failure a real learner hit: no Chinese voice, so every play button was
+// silent with no explanation. speak() must settle and announce, never hang.
+const ttsMod = await import('../js/tts.js');
+const initSettled = await Promise.race([ttsMod.initVoices().then(() => true), new Promise((r) => setTimeout(() => r(false), 4000))]);
+ok('initVoices always settles, even with no voices at all', initSettled);
+let announced = null;
+const prevDispatch = window.dispatchEvent;
+window.dispatchEvent = (e) => { announced = e?.detail?.reason ?? 'event'; return true; };
+globalThis.CustomEvent = globalThis.CustomEvent || class { constructor(type, init) { this.type = type; this.detail = init?.detail; } };
+const spoke = await Promise.race([ttsMod.speak('你好').then(() => true), new Promise((r) => setTimeout(() => r(false), 2000))]);
+window.dispatchEvent = prevDispatch;
+ok('speak() resolves when it cannot speak', spoke);
+ok('speak() announces the missing voice so the app can explain', announced !== null, String(announced));
 
 console.log(fails ? `\n${fails} FAILING\n` : '\nAll view tests passed.\n');
 process.exit(fails ? 1 : 0);

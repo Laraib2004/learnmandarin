@@ -45,9 +45,18 @@ adding to the path, do not add choices to it.
   scheduler on completion, matched by punctuation-stripped hanzi. Without it the
   path and Review are two disconnected apps and the queue stays empty forever.
 - Lesson position saves after **every step** (`store.lessons` + `saveSession`).
-- Step types: `teach`, `tones`, `pickTone`, `pick`, `read`, `word`, `speak`.
+- Step types: `teach`, `tones`, `pickTone`, `pick`, `read`, `word`, `speak`, `char`.
+  `char` takes `{c}` and renders from `characters.json` via `deck.lookupGlyph()`
+  (a character, or a building block by full or squeezed form: 人 or 亻).
+  Characters taught in `char` steps are seeded onto the Script track's schedule
+  by `seedCharsFromLesson()` — never into the sentence queue.
   A `pick`/`read` step must have **exactly one** correct option and a `why` on
-  every option — both are asserted by tests.
+  every option — both are asserted by tests. A `pick` may carry a `big` glyph.
+- `word` steps and `teach` steps with a hanzi `big` show a per-character
+  breakdown (meaning + parts) automatically. A learner reported having "no clue
+  what the characters mean"; do not remove it.
+- Unit order is A (pinyin) → B (first words) → D (what the characters mean) →
+  C (sentences). Ids are stable; array order is the path order.
 
 ## Audio: assume there is no Mandarin voice
 
@@ -57,9 +66,15 @@ the machine had **no Chinese voice installed at all**, so `speechSynthesis` fell
 back to an English voice. Verified: `speechSynthesis.getVoices()` returned only
 en-GB and de-DE.
 
-- `views/learn.js` shows a prominent warning when `chineseVoices()` is empty,
-  with the Windows install path and the Edge shortcut. Never let this fail
-  silently again.
+- `tts.speak()` **refuses** to speak with a non-Chinese voice (an English voice
+  given hanzi plays silence) and dispatches `tts:novoice` instead. `main.js`
+  answers it with `voicehelp.js → showVoiceHelp()`: platform-specific install
+  steps, shown at the moment the learner tapped play. The Path and Settings
+  show the same card up front. Never let this fail silently again.
+- `initVoices()` must always settle (it resolves with `[]` after polling), and
+  `speak()` caps its wait, so nothing chained on speech can hang. Chrome also
+  drops an utterance queued in the same tick as `cancel()` and can GC one
+  mid-sentence — both are handled in `speak()`.
 - **`js/pitch.js` is the answer to it.** Tones are taught as synthesised pitch
   contours (Chao levels → Hz via an oscillator), not speech. This is immune to a
   missing voice, works offline, and `contourSVG()` draws the picture from the
@@ -349,7 +364,7 @@ Built mobile-first against **iPhone 16 (393 x 852pt)**. Rules that are load-bear
 ## Testing
 
 ```bash
-npm test            # both suites, 123 checks
+npm test            # both suites, 130 checks
 npm run test:engine # FSRS maths + alignment scoring (pure logic)
 npm run test:views  # renders every view against a DOM shim
 ```
@@ -399,7 +414,7 @@ Note the shim needs `globalThis.Node` defined, since `ui.js → h()` does
 
 In rough order of learner value:
 
-1. **More lessons.** The path stops at 18 (end of A1 greetings). Extending it is
+1. **More lessons.** The path stops at 22 (end of A1 greetings). Extending it is
    now the highest-value work in the repo — everything else is optional depth.
 2. **More sentences, especially B2/C1.** The engines are done; C1 has 40
    sentences and should have several hundred. This is the bottleneck to fluency.

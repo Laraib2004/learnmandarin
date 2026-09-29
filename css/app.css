@@ -463,3 +463,12 @@ input[type="range"] { height: var(--tap); accent-color: var(--accent); }
 .contour-btn span { font-family: var(--font); }
 .choice .contour, .choice svg { color: currentColor; }
 .choice { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+
+/* No-voice help: numbered fix steps, readable at phone width. */
+.voice-steps { margin: 0; padding-left: 1.3rem; display: grid; gap: .45rem; font-size: .9rem; text-align: left; }
+.voice-steps li { line-height: 1.45; }
+
+/* Under every new word: what each character means and what it is built from. */
+.char-breakdown { display: grid; gap: .35rem; text-align: left; padding: .6rem .8rem; border-radius: 12px; background: var(--surface-2); }
+.char-line { display: flex; gap: .7rem; align-items: baseline; }
+.char-line > .zh { font-size: 1.5rem; min-width: 1.8rem; font-weight: 600; }

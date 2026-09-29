@@ -7,6 +7,7 @@
   "units": [
     { "id": "A", "title": "Pinyin — reading the sounds", "goal": "Look at any pinyin syllable and know exactly how it sounds." },
     { "id": "B", "title": "Your first words", "goal": "Twenty words you will use in every conversation." },
+    { "id": "D", "title": "What the characters mean", "goal": "See a character and know what it means and which parts it is built from." },
     { "id": "C", "title": "Your first sentences", "goal": "Say and understand real sentences built from those words." }
   ],
   "lessons": [
@@ -20,7 +21,7 @@
           "body": "Every Chinese syllable written in Latin letters. This is what you will learn first, and it is the closest thing to an alphabet. It is also a trap: the letters do NOT say what an English speaker expects." },
         { "type": "teach", "title": "2. Characters — the writing",
           "big": "你好",
-          "body": "Not letters at all. A separate system you do not need in order to speak. We come back to these much later, and they stay optional." },
+          "body": "Not letters at all — each character is a whole meaning. You do not need them to speak, so they stay optional. But you will see them everywhere, so every new word shows what its characters mean, and a short unit right after your first words shows how they are built." },
         { "type": "teach", "title": "Every syllable has three parts",
           "big": "h + ao + ˇ",
           "body": "An initial (the starting consonant), a final (the rest), and a tone (the pitch). That is the whole system — about 400 possible syllables, and you are about to learn all the pieces." },
@@ -314,6 +315,107 @@
           ] },
         { "type": "teach", "title": "That is unit B started",
           "body": "Eight words, and you can already form a sentence. Next unit turns them into real exchanges." }
+      ]
+    },
+
+    {
+      "id": "L19", "unit": "D", "title": "A character is a meaning, not a letter", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "Why the characters look like nothing you know", "body": "A Chinese character is not a letter and you cannot sound it out. Each one is a whole syllable AND a whole meaning at once. Pinyin tells you how to say it; the character tells you what it means. That is why every word you have met comes with both." },
+        { "type": "teach", "title": "One character, one syllable, one meaning", "big": "人", "body": "This is said rén and it means person. Nothing inside it spells r-e-n. Think of it like the symbols on a road sign: you know what they mean without reading any letters." },
+        { "type": "teach", "title": "Some started as pictures", "body": "The oldest characters were drawings, simplified over three thousand years. Only a few hundred work this way, but they are the foundation for everything else. Once you see the picture you will not forget it." },
+        { "type": "char", "c": "人" },
+        { "type": "char", "c": "口", "note": "Keep an eye on this one. It turns up inside a huge number of characters, usually ones about eating or speaking." },
+        { "type": "char", "c": "日", "note": "Once drawn as a circle with a dot in the middle. Brush writing turned it square." },
+        { "type": "char", "c": "大" },
+        { "type": "pick", "big": "口", "question": "What does this character mean?",
+          "options": [
+            { "label": "mouth", "correct": true, "why": "Right — 口 kǒu, an open mouth. You will spot it inside many other characters." },
+            { "label": "sun", "correct": false, "why": "The sun is 日, which has a line across the middle. 口 is empty: an open mouth." },
+            { "label": "person", "correct": false, "why": "Person is 人, the two walking legs. 口 is a mouth." }
+          ] },
+        { "type": "pick", "big": "大", "question": "What does this character mean?",
+          "options": [
+            { "label": "big", "correct": true, "why": "Right — 大 dà: a person 人 stretching their arms out as wide as they go." },
+            { "label": "person", "correct": false, "why": "Close. 人 is a person; 大 is a person with arms spread wide, which means big." },
+            { "label": "small", "correct": false, "why": "Small is 小, three tiny specks. 大 is the wide one: big." }
+          ] }
+      ]
+    },
+
+    {
+      "id": "L20", "unit": "D", "title": "Characters are built from parts", "minutes": 5,
+      "steps": [
+        { "type": "teach", "title": "The secret that makes characters learnable", "body": "Most characters are not pictures. They are two or three smaller parts put together, and the parts carry hints: one usually points at the MEANING, another often at the SOUND. There are only about 200 common parts. Learn the parts and a new character stops being a random squiggle." },
+        { "type": "char", "c": "女" },
+        { "type": "char", "c": "子" },
+        { "type": "char", "c": "好", "note": "So the 好 in 你好 literally contains a woman and a child. That is the whole word \"good\"." },
+        { "type": "teach", "title": "Parts squeeze to fit", "big": "人 → 亻", "body": "When a part sits on the left of a character it gets squeezed thinner. Person 人 becomes 亻. It looks different but it means exactly the same thing." },
+        { "type": "char", "c": "亻" },
+        { "type": "char", "c": "你", "note": "The left half says \"this is about a person\". The right half, 尔, is only there for the sound." },
+        { "type": "char", "c": "他" },
+        { "type": "pick", "big": "你 他 们", "question": "All three have 亻 on the left. What does that tell you?",
+          "options": [
+            { "label": "They are about people", "correct": true, "why": "Exactly. 你 you, 他 he, 们 the plural of people. 亻 marks the meaning." },
+            { "label": "They sound the same", "correct": false, "why": "No — nǐ, tā and men sound nothing alike. 亻 hints at the meaning (person), not the sound." },
+            { "label": "They are all verbs", "correct": false, "why": "No. 亻 means person, and these are all words for people: you, he, and a plural marker." }
+          ] }
+      ]
+    },
+
+    {
+      "id": "L21", "unit": "D", "title": "Speech, mouth and heart", "minutes": 5,
+      "steps": [
+        { "type": "teach", "title": "Three parts that explain dozens of characters", "body": "Some parts are so common that knowing them lets you guess what a character is about before you have ever seen it. These three are worth learning first." },
+        { "type": "char", "c": "讠" },
+        { "type": "char", "c": "说" },
+        { "type": "char", "c": "谢", "note": "谢谢 xièxie, thank you, is simply this character twice." },
+        { "type": "char", "c": "请" },
+        { "type": "char", "c": "吃", "note": "Anything you do with your mouth tends to carry 口: eating 吃, drinking 喝, and even the question word 吗." },
+        { "type": "char", "c": "心" },
+        { "type": "char", "c": "想" },
+        { "type": "pick", "big": "语", "question": "You have never seen this character. What is it probably about?",
+          "options": [
+            { "label": "Language, speaking", "correct": true, "why": "Yes. 语 yǔ means language — 汉语 is \"Chinese language\". The 讠 on the left gave it away." },
+            { "label": "Food", "correct": false, "why": "Food characters usually carry 饣 or 口. The left part here is 讠, speech." },
+            { "label": "A feeling", "correct": false, "why": "Feelings carry 心 or 忄. The left part here is 讠, which means speech." }
+          ] },
+        { "type": "pick", "big": "喝", "question": "Which part gives away what this character is about?",
+          "options": [
+            { "label": "口 on the left — something done with the mouth", "correct": true, "why": "Right. 喝 hē means to drink, and the 口 told you it is a mouth thing." },
+            { "label": "讠 — something spoken", "correct": false, "why": "There is no 讠 here. The left part is 口, mouth: 喝 is to drink." },
+            { "label": "亻 — a person", "correct": false, "why": "There is no 亻 here. The left part is 口, mouth: 喝 is to drink." }
+          ] }
+      ]
+    },
+
+    {
+      "id": "L22", "unit": "D", "title": "Reading the words you already say", "minutes": 4,
+      "steps": [
+        { "type": "teach", "title": "You have been saying these for days", "body": "Here are the characters behind words you already know. Not every one breaks down neatly — a few you just learn as a shape, and that is normal." },
+        { "type": "char", "c": "我" },
+        { "type": "char", "c": "是" },
+        { "type": "char", "c": "不" },
+        { "type": "char", "c": "很", "note": "Its parts do not help much today. Learn this one as a shape: the little word that links 我 to 好 in 我很好." },
+        { "type": "pick", "big": "我是", "question": "What does this say?",
+          "options": [
+            { "label": "I am", "correct": true, "why": "Right — 我 wǒ (I) + 是 shì (to be)." },
+            { "label": "You are", "correct": false, "why": "You would be 你, with the person part 亻 on the left. 我 is I." },
+            { "label": "I am not", "correct": false, "why": "That needs 不 in the middle: 我不是." }
+          ] },
+        { "type": "pick", "big": "你好", "question": "What does this say?",
+          "options": [
+            { "label": "Hello", "correct": true, "why": "Right — 你 you + 好 good. Literally \"you good\"." },
+            { "label": "Thank you", "correct": false, "why": "Thank you is 谢谢, the speech character twice." },
+            { "label": "I am good", "correct": false, "why": "That would start with 我 (I): 我很好." }
+          ] },
+        { "type": "pick", "big": "谢谢", "question": "What does this say?",
+          "options": [
+            { "label": "Thank you", "correct": true, "why": "Right — 谢 twice. The 讠 on the left marks it as something you say." },
+            { "label": "Please", "correct": false, "why": "Please is 请. It shares the 讠 speech part, but the right side is different." },
+            { "label": "To speak", "correct": false, "why": "To speak is 说. Same 讠 on the left — both are about speech — but a different character." }
+          ] },
+        { "type": "teach", "title": "Where the characters go from here", "body": "Every new word on the path now shows what each of its characters means and what it is built from. The Script tab has all the characters in this course with a short daily practice, and the ones from these lessons are already in it. Characters stay optional: you can learn to speak without them." }
       ]
     },
 

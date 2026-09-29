@@ -1,6 +1,7 @@
 import { h, pinyinEl, shuffle } from '../ui.js';
-import { getCorpus, seedFromLesson } from '../deck.js';
-import { speak, chineseVoices } from '../tts.js';
+import { getCorpus, seedFromLesson, seedCharsFromLesson, lookupGlyph } from '../deck.js';
+import { speak, initVoices } from '../tts.js';
+import { voiceHelpCard } from '../voicehelp.js';
 import * as pitch from '../pitch.js';
 import * as asr from '../asr.js';
 import { get, update, bumpDaily, saveSession, clearSession } from '../store.js';
@@ -65,6 +66,7 @@ export default function learn(root, { navigate }) {
     else if (s.tone) setTimeout(() => pitch.playTone(s.tone), 250);
     else if (s.speak) setTimeout(() => speak(s.speak), 250);
     else if (s.type === 'word') setTimeout(() => speak(s.hanzi), 250);
+    else if (s.type === 'char' && lookupGlyph(s.c)?.kind === 'char') setTimeout(() => speak(s.c), 250);
   }
 
   function advance() {
@@ -89,6 +91,9 @@ export default function learn(root, { navigate }) {
     // Hand what was just taught to the scheduler, or the path and Review stay
     // two disconnected apps and the queue is empty after eighteen lessons.
     const seeded = seedFromLesson(lesson);
+    // Characters taught here join the Script track's own schedule, never the
+    // sentence queue — reading stays optional and separate from speaking.
+    const seededChars = seedCharsFromLesson(lesson);
     clearSession();
     cue('done');
 
@@ -106,6 +111,10 @@ export default function learn(root, { navigate }) {
         seeded.length
           ? h('div', { class: 'notice' },
               `${seeded.length} phrase${seeded.length === 1 ? '' : 's'} added to your review schedule — they will come back tomorrow so they stick.`)
+          : null,
+        seededChars.length
+          ? h('div', { class: 'notice' },
+              `${seededChars.length} character${seededChars.length === 1 ? '' : 's'} added to the Script tab's reading practice.`)
           : null,
         upcoming
           ? h('div', { class: 'stack' },
@@ -179,24 +188,11 @@ export default function learn(root, { navigate }) {
   const lessonsMeta = () => lessons.meta;
 
   /** No Mandarin voice installed is THE silent killer — say so loudly. */
+  // Voices load asynchronously; judging before they arrive flashes a false alarm.
   function audioWarning() {
-    if (chineseVoices().length > 0) return null;
-    return h('section', { class: 'card stack', style: 'border-color:var(--warn)' },
-      h('h2', {}, '⚠ No Chinese voice on this device'),
-      h('p', { class: 'muted small', style: 'margin:0' },
-        'Your browser has no Mandarin voice installed, so any Chinese it tries to read aloud ' +
-        'comes out in an English voice — which is why every tone sounds the same. ' +
-        'The tone exercises below use synthesised pitch instead and work perfectly without it, ' +
-        'but words will not sound right until you add a voice.'),
-      h('div', { class: 'notice' },
-        h('b', {}, 'Windows: '), 'Settings → Time & language → Language & region → Add a language → ',
-        h('b', {}, 'Chinese (Simplified, China)'), ' → tick ', h('b', {}, 'Speech'),
-        ' → Install, then restart your browser.'),
-      h('div', { class: 'notice' },
-        h('b', {}, 'Faster alternative: '), 'open this page in ', h('b', {}, 'Microsoft Edge'),
-        ', which ships Microsoft’s online Chinese voices with nothing to install.'),
-      h('button', { class: 'btn tappable', onclick: () => { unlockAudio(); speak('你好'); } },
-        'Test the audio again'));
+    const slot = h('div', { style: 'display:contents' });
+    initVoices().then(() => { const card = voiceHelpCard(); if (card) slot.append(card); });
+    return slot;
   }
 
   /* ---------------- rendering one step ---------------- */
@@ -230,6 +226,7 @@ export default function learn(root, { navigate }) {
       case 'read': return readStep(s);
       case 'word': return wordStep(s);
       case 'speak': return speakStep(s);
+      case 'char': return charStep(s);
       default: return [h('div', { class: 'muted' }, `Unknown step: ${s.type}`)];
     }
   }
@@ -239,6 +236,7 @@ export default function learn(root, { navigate }) {
       h('h2', { style: 'margin:0' }, s.title),
       s.big ? h('div', { class: 'zh zh-lg' }, s.big) : null,
       s.pinyin ? pinyinEl(s.pinyin) : null,
+      s.big ? charBreakdown(s.big) : null,
       s.tone
         ? h('div', { class: 'stack' },
             h('div', { class: 'contour', onclick: () => pitch.playTone(s.tone) }, pitch.contourSVG(s.tone)),
@@ -297,6 +295,7 @@ export default function learn(root, { navigate }) {
   function pickStep(s) {
     if (!s._shuffled) s._shuffled = shuffle(s.options);
     return [
+      s.big ? h('div', { class: 'zh zh-xl' }, s.big) : null,
       h('h2', { style: 'margin:0;font-size:1.05rem' }, s.question),
       h('div', { class: 'choices' },
         ...s._shuffled.map((o) =>
@@ -344,6 +343,7 @@ export default function learn(root, { navigate }) {
       h('div', { class: 'zh zh-xl' }, s.hanzi),
       pinyinEl(s.pinyin),
       h('div', { class: 'en', style: 'font-weight:600' }, s.en),
+      charBreakdown(s.hanzi),
       s.tone
         ? h('div', { class: 'contour', onclick: () => pitch.playTone(s.tone) }, pitch.contourSVG(s.tone))
         : null,
@@ -354,6 +354,95 @@ export default function learn(root, { navigate }) {
           : null),
       s.note ? h('div', { class: 'notice' }, s.note) : null,
     ];
+  }
+
+  /**
+   * One character or building block, taught as meaning + parts + story.
+   * Never as a shape to memorise: knowing 亻 is "person" is what lets a learner
+   * guess the next character instead of starting from zero.
+   */
+  function charStep(s) {
+    const g = lookupGlyph(s.c);
+    if (!g) return [h('div', { class: 'muted' }, `Unknown character: ${s.c}`)];
+    const glyph = (text) =>
+      h('div', { class: 'zh', style: 'font-size:clamp(3.4rem,20vw,5rem);font-weight:600;line-height:1.1' }, text);
+
+    if (g.kind === 'component') {
+      const c = g.entry;
+      return [
+        h('div', { class: 'muted small' }, 'Building block'),
+        glyph(s.c),
+        h('div', { class: 'en', style: 'font-weight:650' }, c.name),
+        h('div', { class: 'muted small' }, c.meaning),
+        c.alt && s.c === c.alt
+          ? h('div', { class: 'muted small' }, 'A squeezed form of ', h('span', { class: 'zh' }, c.c),
+              ' — it shrinks like this when it sits beside something else.')
+          : null,
+        c.in?.length
+          ? h('div', { class: 'stack', style: 'gap:.3rem' },
+              h('div', { class: 'muted small' }, 'You will find it inside'),
+              h('div', { class: 'row', style: 'justify-content:center;gap:.35rem' },
+                ...c.in.map((ch) => h('span', { class: 'zh pill', style: 'font-size:1.2rem' }, ch))))
+          : null,
+        s.note ? h('div', { class: 'notice' }, s.note) : null,
+      ];
+    }
+
+    const c = g.entry;
+    return [
+      h('div', { class: 'muted small' }, 'Character'),
+      glyph(c.c),
+      pinyinEl(c.p),
+      h('div', { class: 'en', style: 'font-weight:650' }, c.e),
+      partsRow(c),
+      h('div', { class: 'notice' }, c.story),
+      s.note ? h('div', { class: 'notice' }, s.note) : null,
+      h('button', { class: 'btn tappable', onclick: () => { unlockAudio(); speak(c.c); } }, '🔊 Hear it'),
+    ];
+  }
+
+  const glyphName = (p) => {
+    const g = lookupGlyph(p);
+    return g ? (g.kind === 'component' ? g.entry.name : g.entry.e) : null;
+  };
+
+  function partsRow(c) {
+    if (!c.parts?.length) return null;
+    return h('div', { class: 'row', style: 'justify-content:center;gap:.4rem;align-items:center' },
+      h('span', { class: 'muted small' }, 'built from'),
+      ...c.parts.map((p) =>
+        h('span', { class: 'pill', style: 'font-size:.85rem;display:inline-flex;gap:.3rem;align-items:center' },
+          h('span', { class: 'zh', style: 'font-size:1.15rem' }, p),
+          glyphName(p) ? h('span', {}, glyphName(p)) : null)));
+  }
+
+  /**
+   * "What do these characters mean?" answered in place, under every word.
+   * A beginner staring at 谢谢 has no way to know it is one character twice,
+   * or that the 讠 inside it means speech — so show them.
+   */
+  function charBreakdown(text) {
+    const seen = new Set();
+    const known = [];
+    for (const ch of String(text || '')) {
+      if (!/[\u4e00-\u9fff]/.test(ch) || seen.has(ch)) continue;
+      seen.add(ch);
+      const g = lookupGlyph(ch);
+      if (g?.kind === 'char') known.push(g.entry);
+    }
+    if (!known.length) return null;
+    return h('div', { class: 'char-breakdown' },
+      h('div', { class: 'muted small' }, known.length === 1 ? 'What the character means' : 'What each character means'),
+      ...known.map((c) =>
+        h('div', { class: 'char-line' },
+          h('span', { class: 'zh' }, c.c),
+          h('span', {},
+            h('b', {}, c.e),
+            h('span', { class: 'muted small' }, ` · ${c.p}`),
+            c.parts?.length
+              ? h('span', { class: 'muted small' }, ' · ',
+                  c.parts.map((p) => (glyphName(p) ? `${p} ${glyphName(p)}` : p)).join(' + '))
+              : null))));
   }
 
   function speakStep(s) {

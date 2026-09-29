@@ -5,6 +5,7 @@ import { initVoices } from './tts.js';
 import { load } from './store.js';
 import { unlockAudio, toast } from './feedback.js';
 import { startReminderLoop } from './reminder.js';
+import { showVoiceHelp } from './voicehelp.js';
 
 import dashboard from './views/dashboard.js';
 import tones from './views/tones.js';
@@ -88,6 +89,8 @@ async function boot() {
     return;
   }
   initVoices();       // warm the voice list in the background
+  // A 🔊 tap with no Mandarin voice installed would otherwise be pure silence.
+  window.addEventListener('tts:novoice', () => showVoiceHelp(main));
   registerServiceWorker();
   setupInstall();
   primeAudioOnFirstTap();

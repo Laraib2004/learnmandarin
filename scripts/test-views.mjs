@@ -414,6 +414,24 @@ ok('playTone degrades silently with no AudioContext', pitchThrew === null,
    pitchThrew ? pitchThrew.message : '');
 
 
+console.log('\nAccessibility');
+const uiMod = await import('../js/ui.js');
+ok('hanzi elements are marked lang=zh-CN', uiMod.h('div', { class: 'zh zh-lg' }, '你好').getAttribute('lang') === 'zh-CN');
+ok('non-Chinese elements are left alone', uiMod.h('div', { class: 'zhuyin-free' }).getAttribute('lang') === null);
+ok('pinyin is marked as romanised Chinese', uiMod.pinyinEl('nǐ hǎo').getAttribute('lang') === 'zh-Latn-pinyin');
+storeMod2.update((st) => { st.settings.toneNumbers = true; });
+const numbered = uiMod.pinyinEl('nǐ hǎo ma');
+ok('tone numbers mark tone without colour', numbered.all.filter((n) => n.tagName === 'SUP').map((n) => n.textContent).join('') === '33',
+   numbered.textContent);
+storeMod2.update((st) => { st.settings.toneNumbers = false; });
+ok('tone numbers are off by default', uiMod.pinyinEl('nǐ').all.every((n) => n.tagName !== 'SUP'));
+ok('"said as" appears only when sandhi changes something',
+   uiMod.spokenNote('nǐ hǎo', 'ní hǎo') !== null && uiMod.spokenNote('xièxie', 'xièxie') === null);
+const learnView = (await import('../js/views/learn.js')).default;
+const learnCleanup = learnView(new Node2('main'), { navigate: () => {} });
+ok('the path registers keyboard shortcuts and cleans them up', typeof learnCleanup === 'function');
+learnCleanup?.();
+
 console.log('\nSpeech with no Mandarin voice');
 // The failure a real learner hit: no Chinese voice, so every play button was
 // silent with no explanation. speak() must settle and announce, never hang.

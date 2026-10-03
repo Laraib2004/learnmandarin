@@ -57,6 +57,14 @@ adding to the path, do not add choices to it.
   what the characters mean"; do not remove it.
 - Unit order is A (pinyin) → B (first words) → D (what the characters mean) →
   C (sentences). Ids are stable; array order is the path order.
+- `word` and `speak` steps also show "Said as …" (`ui.spokenNote`, falling back
+  to `ui.autoSandhi` when the step has no `spoken`) and a "Spelling trap" note
+  per trap the word contains (`deck.trapsIn`). The traps are taught once in
+  L05–L08; the notes keep pointing them out afterwards.
+- The path has keyboard support (Enter continue, Space replay, 1–4 answer) and
+  a persistent `aria-live` region for answers. Focus moves to the step card on
+  each new step and to Continue after answering — read `hadFocus` *before*
+  repainting, because browsers clear focus from a removed node a frame late.
 
 ## Audio: assume there is no Mandarin voice
 
@@ -80,8 +88,11 @@ en-GB and de-DE.
   missing voice, works offline, and `contourSVG()` draws the picture from the
   same `CONTOURS` table that generates the audio, so they cannot drift apart.
 - Do not "improve" tone teaching by making it depend on TTS again.
+- `word` steps autoplay the spoken word when `hasChineseVoice()`, and fall back
+  to the step's `tone` contour only when there is no voice. Tone-teaching steps
+  (`tones`, `pickTone`, `teach` with `tone`) always use the contour.
 - Rates below ~0.6 flatten tones badly on weak engines. Prefer repeating a
-  phrase over slowing it further.
+  phrase over slowing it further. Every "Slow/Slower" button uses 0.65.
 
 ## The pedagogical thesis
 
@@ -131,6 +142,18 @@ Learners arrive believing there is one. The app must keep two things distinct:
 Characters are ordered by frequency **in this corpus**, not by textbook order or
 HSK. Regenerate that ordering if the corpus grows substantially; the payoff claim
 ("55% of course text") is asserted by a test and must stay true.
+
+## Accessibility
+
+- **Every hanzi element gets `lang="zh-CN"`, centrally in `ui.js → h()`**
+  whenever its class list contains `zh`. Without it screen readers read Chinese
+  with an English voice, and some browsers render Han text with a Japanese font.
+  Pinyin gets `lang="zh-Latn-pinyin"`. Keep using `class: 'zh'` for hanzi.
+- Tone is never signalled by colour alone: the `toneNumbers` setting adds a
+  superscript digit (nǐ³), because tone 1 (red) vs tone 3 (green) is the most
+  common colour-blind confusion.
+- `store.load()` merges `settings` one level deep, so settings added later get
+  their defaults for existing learners instead of `undefined`.
 
 ## Architecture
 
@@ -364,7 +387,7 @@ Built mobile-first against **iPhone 16 (393 x 852pt)**. Rules that are load-bear
 ## Testing
 
 ```bash
-npm test            # both suites, 130 checks
+npm test            # both suites, 152 checks
 npm run test:engine # FSRS maths + alignment scoring (pure logic)
 npm run test:views  # renders every view against a DOM shim
 ```

@@ -49,5 +49,28 @@ ok('marks align 1:1 with target', align('谢谢','写写').marks.map(m=>m.char).
 const wrong = align('你好','再见');
 ok('totally wrong scores 0', wrong.score === 0, `score=${wrong.score}`);
 
+console.log('\nTone sandhi (shown to the learner as "said as")');
+globalThis.localStorage = globalThis.localStorage || { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+const { autoSandhi } = await import('../js/ui.js');
+ok('3+3 becomes 2+3', autoSandhi('nǐ hǎo') === 'ní hǎo', autoSandhi('nǐ hǎo'));
+ok('a run of 3rd tones changes all but the last', autoSandhi('wǒ hěn hǎo') === 'wó hén hǎo', autoSandhi('wǒ hěn hǎo'));
+ok('不 becomes bú before a 4th tone', autoSandhi('bù shì') === 'bú shì', autoSandhi('bù shì'));
+ok('不 stays bù before other tones', autoSandhi('bù hǎo') === 'bù hǎo');
+ok('no change when nothing applies', autoSandhi('xièxie') === 'xièxie');
+ok('sandhi does not cross a pause', autoSandhi('hǎo， wǒ') === 'hǎo， wǒ');
+
+console.log('\nSpelling traps');
+const { trapsIn } = await import('../js/deck.js');
+const ids = (p) => [...new Set(trapsIn(p).map((t) => t.id))].sort().join(',');
+ok('xièxie: x = sh', ids('xièxie') === 'qxj', ids('xièxie'));
+ok('qù: q = ch and the hidden ü', ids('qù') === 'qxj,u-umlaut', ids('qù'));
+ok('shì: buzzing i', ids('shì') === 'buzz-i', ids('shì'));
+ok('hē: bare e is "uh"', ids('hē') === 'e-alone', ids('hē'));
+ok('tiān: -ian is "yen"', ids('tiān') === 'ian', ids('tiān'));
+ok('mā: nothing to flag', ids('mā') === '', ids('mā'));
+ok('hěn and xiè are not bare e', ids('hěn') === '' && !ids('xiè').includes('e-alone'));
+ok('a syllable boundary does not hide the buzz (shíhou)', ids('shíhou').includes('buzz-i'), ids('shíhou'));
+ok('jī is not a buzz', ids('jī') === '', ids('jī'));
+
 console.log(fails ? `\n${fails} FAILING\n` : '\nAll engine tests passed.\n');
 process.exit(fails ? 1 : 0);

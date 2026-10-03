@@ -23,6 +23,7 @@ const defaultState = () => ({
     newCharsPerDay: 5,     // characters are slower than sentences; keep this low
     reminderOn: false,
     reminderTime: '15:00', // 24h local time
+    toneNumbers: false,    // nǐ³ — tone without relying on colour (colour-blind, dyslexic)
   },
   cards: {},               // sentenceId -> FSRS card
   tones: {},               // toneDrillKey -> { seen, correct }
@@ -44,7 +45,11 @@ export function load() {
   if (state) return state;
   try {
     const raw = localStorage.getItem(KEY);
-    state = raw ? { ...defaultState(), ...JSON.parse(raw) } : defaultState();
+    const saved = raw ? JSON.parse(raw) : null;
+    const base = defaultState();
+    // Merge settings one level deeper: a shallow spread lets an old saved
+    // settings object wipe out every default added since it was written.
+    state = saved ? { ...base, ...saved, settings: { ...base.settings, ...saved.settings } } : base;
   } catch {
     state = defaultState();
   }

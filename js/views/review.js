@@ -1,4 +1,4 @@
-import { h, pinyinEl, keys } from '../ui.js';
+import { h, pinyinEl, keys, spokenNote, trapNotes } from '../ui.js';
 import { buildQueue, cardFor } from '../deck.js';
 import { review as grade, previewIntervals, formatInterval } from '../fsrs.js';
 import { get, update, bumpDaily } from '../store.js';
@@ -124,15 +124,15 @@ export default function review(root, { navigate }) {
               revealed ? pinyinEl(s.pinyin) : h('div', { class: 'muted small' }, 'What does this mean?'),
               revealed ? h('div', { class: 'en' }, s.en) : null),
 
-        revealed && s.spoken
-          ? h('div', { class: 'muted small' }, `said as: ${s.spoken} (tone change)`)
-          : null,
+        revealed ? spokenNote(s.pinyin, s.spoken) : null,
+        revealed ? trapNotes(s.pinyin) : null,
 
         revealed ? h('div', { class: 'words' }, ...s.words.map(wordChip)) : null,
 
         h('div', { class: 'row', style: 'justify-content:center;margin-top:.5rem' },
           h('button', { class: 'btn', onclick: () => speak(s.hanzi) }, '🔊 Play'),
-          h('button', { class: 'btn btn-ghost', onclick: () => speak(s.hanzi, { rate: 0.5 }) }, 'Slow'))),
+          // Not below ~0.6: weak engines flatten the tones (see CLAUDE.md).
+          h('button', { class: 'btn btn-ghost', onclick: () => speak(s.hanzi, { rate: 0.65 }) }, 'Slow'))),
 
       revealed
         ? h('div', { class: 'stack' },

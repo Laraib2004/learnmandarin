@@ -1,4 +1,4 @@
-import { h, pinyinEl, keys } from '../ui.js';
+import { h, pinyinEl, keys, spokenNote } from '../ui.js';
 import { speakableSentences } from '../deck.js';
 import { speak, speakTwice } from '../tts.js';
 import * as asr from '../asr.js';
@@ -96,7 +96,7 @@ export default function speakView(root) {
                     pinyinEl(s.pinyin))
                 : h('div', { class: 'muted small' }, 'Say it before you look.')),
 
-        s.spoken ? h('div', { class: 'muted small' }, `careful: said as ${s.spoken}`) : null,
+        spokenNote(s.pinyin, s.spoken),
 
         h('div', { class: 'row', style: 'justify-content:center' },
           h('button', { class: 'btn', onclick: () => speak(s.hanzi) }, '🔊 Native speed'),

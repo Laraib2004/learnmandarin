@@ -1,7 +1,16 @@
 /** Tiny DOM helpers. No framework: the whole app must stay forkable and buildless. */
 
+import { get } from './store.js';
+import { trapsIn } from './deck.js';
+
+const ZH_CLASS = /(^|\s)zh(\s|$)/;
+
 export function h(tag, attrs = {}, ...children) {
   const el = document.createElement(tag);
+  // Every hanzi element is marked as Chinese, centrally. Without it a screen
+  // reader reads 你好 with an English voice (or skips it), and some browsers
+  // pick a Japanese font, showing a beginner the wrong shape for 直 or 说.
+  if (attrs && ZH_CLASS.test(attrs.class || '') && attrs.lang == null) el.setAttribute('lang', 'zh-CN');
   for (const [k, v] of Object.entries(attrs)) {
     if (v === null || v === undefined || v === false) continue;
     if (k === 'class') el.className = v;
@@ -37,14 +46,74 @@ export function toneOf(syllable) {
   return 5; // no diacritic = neutral tone
 }
 
-/** Render pinyin with each syllable coloured by its tone. */
+const toneNumbersOn = () => {
+  try { return Boolean(get().settings.toneNumbers); } catch { return false; }
+};
+
+/**
+ * Render pinyin with each syllable coloured by its tone.
+ *
+ * Colour alone fails colour-blind learners — tone 1 is red and tone 3 green,
+ * the most common confusion there is — so the "tone numbers" setting adds a
+ * superscript digit that carries the same information without colour.
+ */
 export function pinyinEl(pinyin, cls = 'pinyin') {
-  const wrap = h('div', { class: cls });
+  const wrap = h('div', { class: cls, lang: 'zh-Latn-pinyin' });
+  const numbers = toneNumbersOn();
   for (const part of String(pinyin).split(/(\s+)/)) {
     if (!part.trim()) { wrap.append(part); continue; }
-    wrap.append(h('span', { class: `t${toneOf(part)}` }, part));
+    const t = toneOf(part);
+    wrap.append(h('span', { class: `t${t}` }, part,
+      numbers && t < 5 ? h('sup', { class: 'tnum', 'aria-hidden': 'true' }, String(t)) : null));
   }
   return wrap;
+}
+
+/* ---------------- tone sandhi ---------------- */
+
+const T3_TO_T2 = { 'ǎ': 'á', 'ě': 'é', 'ǐ': 'í', 'ǒ': 'ó', 'ǔ': 'ú', 'ǚ': 'ǘ' };
+
+/**
+ * The two regular tone changes, applied to space-separated pinyin:
+ * 3+3 → 2+3 (nǐ hǎo is said ní hǎo), and 不 bù → bú before a 4th tone.
+ * A learner who reads the written tones aloud gets both wrong, every time.
+ *
+ * Deliberately limited: syllables written together inside one word (kěyǐ) and
+ * 一's changes need real segmentation, so corpus sentences carry an explicit
+ * `spoken` field instead. Punctuation ends a run — sandhi does not cross a pause.
+ */
+export function autoSandhi(pinyin) {
+  const parts = String(pinyin || '').split(/(\s+)/);
+  const sylls = parts.map((p, i) => ({ p, i })).filter((x) => x.p.trim());
+  const out = [...parts];
+  for (let k = 0; k < sylls.length - 1; k++) {
+    const cur = sylls[k].p;
+    const next = sylls[k + 1].p;
+    if (/[，。？！,.?!;:；：]$/.test(cur)) continue;
+    if (toneOf(cur) === 3 && toneOf(next) === 3) {
+      out[sylls[k].i] = cur.replace(/[ǎěǐǒǔǚ]/, (m) => T3_TO_T2[m]);
+    } else if (/^bù$/i.test(cur) && toneOf(next) === 4) {
+      out[sylls[k].i] = cur.replace('ù', 'ú');
+    }
+  }
+  return out.join('');
+}
+
+/** "Said as ní hǎo" — only when speech differs from spelling, else null. */
+export function spokenNote(written, spoken) {
+  if (!spoken || spoken.trim() === String(written || '').trim()) return null;
+  return h('div', { class: 'said-as', title: 'The tones change when these syllables meet' },
+    h('span', { class: 'muted small' }, 'Said as'),
+    pinyinEl(spoken, 'pinyin said'));
+}
+
+/** Reminders of the pinyin spelling traps a word contains, as small notes. */
+export function trapNotes(pinyin) {
+  const traps = trapsIn(pinyin);
+  if (!traps.length) return null;
+  return h('div', { class: 'trap-notes' },
+    ...traps.map((t) =>
+      h('div', { class: 'trap-chip' }, h('b', {}, 'Spelling trap: '), t.hint)));
 }
 
 export const TONE_LEGEND = () =>

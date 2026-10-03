@@ -14,7 +14,7 @@
  * Bump CACHE when shipping changed assets — the old cache is dropped on activate.
  */
 
-const CACHE = 'shuoba-v6';
+const CACHE = 'shuoba-v7';
 
 const PRECACHE = [
   './',

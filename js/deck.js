@@ -194,6 +194,44 @@ export function lessonProgress() {
   return { done: p.done.length, total: all.length, current: p.current, step: p.step, all };
 }
 
+/* ---------------- pinyin spelling traps ---------------- */
+
+const plain = (p) => String(p || '').toLowerCase().normalize('NFD')
+  .replace(/ü/g, 'ü').replace(/[̀-ͯ]/g, '');
+
+/**
+ * Which of the spelling traps (data/pinyin.json → traps) a word falls into.
+ * They are taught once in L05–L08; this keeps pointing them out on every word
+ * afterwards, because a rule seen once is a rule forgotten by Thursday.
+ *
+ * Works on whole tokens rather than segmented syllables, so each check is
+ * written to be safe at a syllable boundary (shíhou, kèqi). Aspiration (b/d/g)
+ * is left out on purpose: it is in almost every word, so flagging it would
+ * drown out the traps that matter.
+ * @returns {{id: string, hint: string}[]}
+ */
+const TRAP_CHECKS = [
+  ['qxj', /q/, 'q is "ch", as in "cheap" — never "kw"'],
+  ['qxj', /x/, 'x is "sh", as in "sheep" — never "ks" or "z"'],
+  ['cz', /c(?!h)/, 'c is "ts", as in "cats" — never "k" or "s"'],
+  ['cz', /z(?!h)/, 'z is "ds", as in "kids" — not an English z'],
+  ['buzz-i', /(zh|ch|sh|[rzcs])i(?![aeiouüng])/, 'i after zh ch sh r z c s is a buzz, not "ee"'],
+  ['u-umlaut', /[jqxy]u/, 'u after j q x y is really ü — lips rounded, tongue forward'],
+  ['hidden-vowels', /iu|ui|(?<![jqxy])un/, 'iu, ui and un hide a vowel: iu ≈ "yoh", ui ≈ "way", un ≈ "wun"'],
+  ['e-alone', /(?:^|[^aeiouü])(?:zh|ch|sh|[bpmfdtnlgkhzcsr])?e(?![inrgio])/, 'e on its own is "uh", not "ay"'],
+  ['ian', /[iy]an(?!g)/, '-ian and yan are said "yen", not "yahn"'],
+];
+
+export function trapsIn(pinyin) {
+  const found = [];
+  for (const token of plain(pinyin).split(/[^a-zü]+/).filter(Boolean)) {
+    for (const [id, re, hint] of TRAP_CHECKS) {
+      if (re.test(token) && !found.some((f) => f.hint === hint)) found.push({ id, hint });
+    }
+  }
+  return found;
+}
+
 /* ---------------- character track (separate SRS from sentences) ---------------- */
 
 /**

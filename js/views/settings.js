@@ -45,6 +45,12 @@ export default function settings(root) {
             toggle('showHanzi', true, 'Show 汉字'),
             toggle('showHanzi', false, 'Pinyin only'))),
 
+        h('label', { class: 'field' }, 'Tone numbers',
+          h('small', {}, 'Tones are colour-coded, but red and green are hard to tell apart for many people. Numbers show the same thing without colour: nǐ³ hǎo³.'),
+          h('div', { class: 'row' },
+            toggle('toneNumbers', false, 'Marks and colour'),
+            toggle('toneNumbers', true, 'Add numbers'))),
+
         h('label', { class: 'field' }, `New sentences per day — ${s.settings.newPerDay}`,
           h('small', {}, 'Every new card becomes ~8 future reviews. 8 a day is sustainable; 30 a day builds a backlog you will abandon.'),
           h('input', {

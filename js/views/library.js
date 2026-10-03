@@ -1,4 +1,4 @@
-import { h, pinyinEl } from '../ui.js';
+import { h, pinyinEl, spokenNote } from '../ui.js';
 import { getCorpus } from '../deck.js';
 import { speak } from '../tts.js';
 import { get } from '../store.js';
@@ -101,6 +101,7 @@ export default function library(root) {
       h('div', { style: 'flex:1;min-width:0' },
         showHanzi ? h('div', { class: 'zh', style: 'font-size:1.3rem' }, s.hanzi) : null,
         pinyinEl(s.pinyin, 'pinyin small'),
+        spokenNote(s.pinyin, s.spoken),
         h('div', { class: 'small' }, s.en)),
       h('div', { style: 'text-align:right;flex:none' },
         h('span', { class: `pill ${state}` }, label),

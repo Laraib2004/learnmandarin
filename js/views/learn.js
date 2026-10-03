@@ -1,6 +1,6 @@
-import { h, pinyinEl, shuffle } from '../ui.js';
+import { h, pinyinEl, shuffle, autoSandhi, spokenNote, trapNotes } from '../ui.js';
 import { getCorpus, seedFromLesson, seedCharsFromLesson, lookupGlyph } from '../deck.js';
-import { speak, initVoices } from '../tts.js';
+import { speak, initVoices, hasChineseVoice } from '../tts.js';
 import { voiceHelpCard } from '../voicehelp.js';
 import * as pitch from '../pitch.js';
 import * as asr from '../asr.js';
@@ -33,7 +33,12 @@ export default function learn(root, { navigate }) {
   let spoken = null;       // ASR result
 
   const pane = h('div', { class: 'stack' });
-  root.append(pane);
+  // Persistent live region: content inserted by paint() is brand new each
+  // time, and screen readers do not reliably announce a region that was just
+  // created. This one outlives every repaint, so "Correct — …" is heard.
+  const live = h('div', { class: 'sr-only', 'aria-live': 'polite' });
+  root.append(pane, live);
+  let focusedStep = null;
 
   /* ---------------- choosing what is next (there is only one answer) ------ */
 
@@ -63,6 +68,10 @@ export default function learn(root, { navigate }) {
     const s = step();
     if (!s) return;
     if (s.type === 'pickTone') setTimeout(() => pitch.playTone(s.answer), 250);
+    // A new word is a word: with a real Mandarin voice, play the word itself.
+    // The bare tone contour is the fallback for a device with no voice — tone
+    // *teaching* steps still always use the contour (see CLAUDE.md, Audio).
+    else if (s.type === 'word' && hasChineseVoice()) setTimeout(() => speak(s.hanzi), 250);
     else if (s.tone) setTimeout(() => pitch.playTone(s.tone), 250);
     else if (s.speak) setTimeout(() => speak(s.speak), 250);
     else if (s.type === 'word') setTimeout(() => speak(s.hanzi), 250);
@@ -204,6 +213,12 @@ export default function learn(root, { navigate }) {
     const n = lesson.steps.length;
     const pct = Math.round((stepIndex / n) * 100);
 
+    // Read before repainting: browsers only move focus off a removed element on
+    // the next frame, so afterwards activeElement still points at the old node.
+    const hadFocus = Boolean(pane.contains?.(globalThis.document?.activeElement));
+    const card = h('section', { class: 'card study', tabindex: '-1', 'aria-label': `Step ${stepIndex + 1} of ${n}` },
+      ...renderStep(s));
+
     pane.replaceChildren(
       h('div', { class: 'row', style: 'justify-content:space-between;align-items:center' },
         h('button', { class: 'btn btn-ghost tappable', onclick: () => { lesson = null; paint(); } }, '← Path'),
@@ -211,11 +226,45 @@ export default function learn(root, { navigate }) {
       h('div', { class: 'bar' }, h('i', { style: `width:${pct}%` })),
       h('div', { class: 'muted small center' }, lesson.title),
 
-      h('section', { class: 'card study' }, ...renderStep(s)),
+      card,
 
       footer(s),
     );
+
+    // A repaint destroys the focused button, dropping keyboard and screen-reader
+    // users back at the top of the document. Land them on the new step instead —
+    // once per step, so answering a question does not yank focus away.
+    const key = `${lesson.id}:${stepIndex}`;
+    if (focusedStep !== key) {
+      focusedStep = key;
+      card.focus({ preventScroll: true });
+    } else if (hadFocus) {
+      // Answering destroyed the chosen button; the next thing to do is continue.
+      pane.querySelector('.btn-primary')?.focus({ preventScroll: true });
+    }
+    announce(s);
   }
+
+  /** Say the result out loud to screen readers, exactly once per answer. */
+  function announce(s) {
+    if (answered && !answered.announced) {
+      answered.announced = true;
+      const why = answered.chosen.why;
+      // Most explanations already open with the verdict ("Right — …").
+      const verdict = /^(correct|right|exactly|yes|no|not|close)\b/i.test(why) ? ''
+        : answered.correct ? 'Correct. ' : 'Not quite. ';
+      live.textContent = s.type === 'pickTone'
+        ? (answered.correct ? `Correct — tone ${s.answer}.` : `Not quite. That was tone ${s.answer}.`)
+        : verdict + why;
+    } else if (spoken && spoken.score != null && !spoken.announced) {
+      spoken.announced = true;
+      live.textContent = `${spoken.score}% — ${spoken.score >= 70 ? 'understood' : 'not quite, try once more'}.`;
+    }
+  }
+
+  /** Same playback at a slower rate — but never below ~0.6, which flattens tones. */
+  const slower = (text) =>
+    h('button', { class: 'btn btn-ghost tappable', onclick: () => { unlockAudio(); speak(text, { rate: 0.65 }); } }, 'Slower');
 
   function renderStep(s) {
     switch (s.type) {
@@ -267,7 +316,7 @@ export default function learn(root, { navigate }) {
     const opts = s.only || [1, 2, 3, 4];
     return [
       h('h2', { style: 'margin:0' }, s.question),
-      h('button', { class: 'mic tappable', onclick: () => pitch.playTone(s.answer) }, '🔊'),
+      h('button', { class: 'mic tappable', 'aria-label': 'Play the tone again', onclick: () => pitch.playTone(s.answer) }, '🔊'),
       h('div', { class: 'muted small' }, 'Tap to hear it again'),
       h('div', { class: 'choices' },
         ...opts.map((t) =>
@@ -342,13 +391,16 @@ export default function learn(root, { navigate }) {
       h('div', { class: 'muted small' }, 'New word'),
       h('div', { class: 'zh zh-xl' }, s.hanzi),
       pinyinEl(s.pinyin),
+      spokenNote(s.pinyin, s.spoken || autoSandhi(s.pinyin)),
       h('div', { class: 'en', style: 'font-weight:600' }, s.en),
       charBreakdown(s.hanzi),
+      trapNotes(s.pinyin),
       s.tone
         ? h('div', { class: 'contour', onclick: () => pitch.playTone(s.tone) }, pitch.contourSVG(s.tone))
         : null,
       h('div', { class: 'row', style: 'justify-content:center' },
         h('button', { class: 'btn tappable', onclick: () => { unlockAudio(); speak(s.hanzi); } }, '🔊 Hear it'),
+        slower(s.hanzi),
         s.tone
           ? h('button', { class: 'btn btn-ghost tappable', onclick: () => pitch.playTone(s.tone) }, 'Tone shape')
           : null),
@@ -450,11 +502,15 @@ export default function learn(root, { navigate }) {
       h('div', { class: 'muted small' }, s.prompt),
       h('div', { class: 'zh zh-lg' }, s.target),
       pinyinEl(s.pinyin),
-      h('button', { class: 'btn tappable', onclick: () => { unlockAudio(); speak(s.target); } }, '🔊 Hear it'),
+      spokenNote(s.pinyin, s.spoken || autoSandhi(s.pinyin)),
+      h('div', { class: 'row', style: 'justify-content:center' },
+        h('button', { class: 'btn tappable', onclick: () => { unlockAudio(); speak(s.target); } }, '🔊 Hear it'),
+        slower(s.target)),
       asr.isSupported()
         ? h('div', { class: 'stack' },
             h('button', {
               class: `mic tappable ${spoken === 'listening' ? 'live' : ''}`,
+              'aria-label': spoken === 'listening' ? 'Listening' : 'Record yourself saying it',
               disabled: spoken === 'listening',
               onclick: async () => {
                 unlockAudio();
@@ -513,6 +569,34 @@ export default function learn(root, { navigate }) {
         : null);
   }
 
+  /**
+   * Keyboard: the front door was the one view without it. Enter continues,
+   * Space replays, 1-4 answer. A focused button keeps its native Enter/Space,
+   * so tabbing to "Hear it" and pressing Enter still plays it.
+   */
+  function onKey(e) {
+    if (!lesson || e.metaKey || e.ctrlKey || e.altKey) return;
+    const t = e.target;
+    if (t?.matches?.('input, textarea, select')) return;
+    const onControl = t?.matches?.('button, a');
+    const s = step();
+    if (e.key === 'Enter' && !onControl) {
+      const needsAnswer = ['pick', 'pickTone', 'read'].includes(s.type);
+      if (needsAnswer && !answered) return;
+      e.preventDefault();
+      advance();
+    } else if (e.key === ' ' && !onControl) {
+      e.preventDefault();
+      unlockAudio();
+      pitch.unlock();
+      autoplay();
+    } else if (/^[1-4]$/.test(e.key) && !answered) {
+      const choice = pane.querySelectorAll('.choice')[Number(e.key) - 1];
+      if (choice && !choice.disabled) { e.preventDefault(); choice.click(); }
+    }
+  }
+  document.addEventListener('keydown', onKey);
+
   paint();
-  return null;
+  return () => document.removeEventListener('keydown', onKey);
 }

@@ -14,6 +14,7 @@
  */
 
 import { get } from './store.js';
+import { preferPlaybackSession } from './pitch.js';
 
 /* ---------------- haptics ---------------- */
 
@@ -51,7 +52,9 @@ function audio() {
 /** iOS suspends audio until a user gesture; call this from a real tap. */
 export function unlockAudio() {
   const a = audio();
-  if (a && a.state === 'suspended') a.resume().catch(() => {});
+  preferPlaybackSession();
+  // Not just 'suspended': Safari reports 'interrupted' after speech has played.
+  if (a && a.state !== 'running') a.resume().catch(() => {});
 }
 
 function tone(freq, durationMs, { type = 'sine', gain = 0.06, delayMs = 0 } = {}) {

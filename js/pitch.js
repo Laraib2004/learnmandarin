@@ -27,9 +27,30 @@ function audio() {
   return ctx;
 }
 
+/**
+ * Get the audio context running. Call from inside a real tap.
+ *
+ * Two iPhone traps, both of which made every tone silent while the speech
+ * voice kept working:
+ *   - When speech synthesis plays, Safari takes the audio session and puts
+ *     this context into 'interrupted' — not 'suspended'. Checking only for
+ *     'suspended' left it dead after the first spoken word.
+ *   - Web Audio obeys the ring/silent switch; speech does not. Declaring a
+ *     'playback' audio session (Safari 17+) makes the tones behave like the
+ *     voice — this is a learning tool the learner asked to hear.
+ */
 export function unlock() {
   const a = audio();
-  if (a && a.state === 'suspended') a.resume().catch(() => {});
+  if (!a) return Promise.resolve();
+  preferPlaybackSession();
+  return a.state === 'running' ? Promise.resolve() : a.resume().catch(() => {});
+}
+
+export function preferPlaybackSession() {
+  try {
+    const s = globalThis.navigator?.audioSession;
+    if (s && s.type !== 'playback') s.type = 'playback';
+  } catch { /* not supported — nothing to do */ }
 }
 
 export const isSupported = () => Boolean(window.AudioContext || window.webkitAudioContext);
@@ -51,10 +72,12 @@ export const CONTOURS = {
  * @param {number} tone 1..5
  * @param {object} opts { rate: speed multiplier, gain }
  */
-export function playTone(tone, opts = {}) {
+export async function playTone(tone, opts = {}) {
   const a = audio();
-  if (!a) return Promise.resolve();
-  unlock();
+  if (!a) return;
+  // Schedule only once the context is actually running: notes scheduled on a
+  // stalled clock either never sound or fire all at once when it wakes.
+  await unlock();
 
   const c = CONTOURS[tone] || CONTOURS[1];
   const dur = (c.ms / 1000) / (opts.rate || 1);

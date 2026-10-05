@@ -79,6 +79,10 @@ export default function learn(root, { navigate }) {
   }
 
   function advance() {
+    // Wake audio inside the tap itself: autoplay() fires 250ms later, and iOS
+    // only lets a tap resume audio synchronously.
+    unlockAudio();
+    pitch.unlock();
     answered = null;
     spoken = null;
     if (stepIndex >= lesson.steps.length - 1) return finishLesson();

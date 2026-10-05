@@ -414,6 +414,32 @@ ok('playTone degrades silently with no AudioContext', pitchThrew === null,
    pitchThrew ? pitchThrew.message : '');
 
 
+// The iPhone failure: after speech plays, Safari leaves the tone context
+// 'interrupted' (not 'suspended'), and every tone went silent.
+{
+  const events = [];
+  const param = () => ({ setValueAtTime() {}, exponentialRampToValueAtTime() {} });
+  class FakeCtx {
+    constructor() { this.state = 'interrupted'; this.currentTime = 0; this.destination = {}; }
+    resume() { events.push('resume'); this.state = 'running'; return Promise.resolve(); }
+    createOscillator() {
+      const ctx = this;
+      return { frequency: param(), connect: (n) => n, start() { events.push('start:' + ctx.state); }, stop() {} };
+    }
+    createGain() { return { gain: param(), connect: (n) => n }; }
+  }
+  window.AudioContext = FakeCtx;
+  const session = { type: 'auto' };
+  const prevNav = globalThis.navigator;
+  globalThis.navigator = { ...prevNav, audioSession: session };
+  await pitchMod.playTone(2, { rate: 50 });
+  globalThis.navigator = prevNav;
+  delete window.AudioContext;
+  ok('an interrupted tone context is resumed before playing', events[0] === 'resume' && events.includes('start:running'),
+     events.join(' → '));
+  ok('tones ask for a playback audio session (not muted by the silent switch)', session.type === 'playback');
+}
+
 console.log('\nAccessibility');
 const uiMod = await import('../js/ui.js');
 ok('hanzi elements are marked lang=zh-CN', uiMod.h('div', { class: 'zh zh-lg' }, '你好').getAttribute('lang') === 'zh-CN');

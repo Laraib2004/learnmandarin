@@ -101,6 +101,12 @@ en-GB and de-DE.
   notes, `renderCue()` mixes them to a WAV, played on a **separate** `<audio>`
   element so a chime never cuts off a tone. Audio is the main feedback channel
   on iPhone (no haptics), so it must not be the one that goes silent.
+- **Never create an `AudioContext` while `<audio>` works.** On iPhone a live
+  context classes the page as "ambient" sound, and the silent switch then mutes
+  the whole page — the `<audio>` tones and cues included. `pitch.unlock()` and
+  `feedback.unlockAudio()` only touch Web Audio in the fallback path; a guard
+  test counts constructions (it loads a fresh `pitch.js` instance, since an
+  earlier test leaves a context cached).
 - `word` steps autoplay the spoken word when `hasChineseVoice()`, and fall back
   to the step's `tone` contour only when there is no voice. Tone-teaching steps
   (`tones`, `pickTone`, `teach` with `tone`) always use the contour.
@@ -414,7 +420,7 @@ Built mobile-first against **iPhone 16 (393 x 852pt)**. Rules that are load-bear
 ## Testing
 
 ```bash
-npm test            # both suites, 172 checks
+npm test            # both suites, 173 checks
 npm run test:engine # FSRS maths + alignment scoring (pure logic)
 npm run test:views  # renders every view against a DOM shim
 ```

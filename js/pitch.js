@@ -63,10 +63,19 @@ function wavUrl(key, render) {
 
 const silenceUrl = () => wavUrl('silence', () => encodeWav(new Int16Array(Math.round(SAMPLE_RATE * 0.05))));
 
-/** Call from inside a real tap. Wakes both the media element and Web Audio. */
+/**
+ * Call from inside a real tap.
+ *
+ * Deliberately does NOT create a Web Audio context when <audio> is available.
+ * On iPhone, a page with a live AudioContext is classed as "ambient" sound, and
+ * the silent switch then mutes the whole page — the <audio> tones included.
+ * That is what kept tones silent in silent mode after they moved to <audio>.
+ */
 export function unlock() {
+  preferPlaybackSession();
   const p = player();
-  if (p && !elUnlocked) {
+  if (!p) return wakeContext();
+  if (!elUnlocked) {
     const silent = silenceUrl();
     p.src = silent;
     const played = p.play();
@@ -76,10 +85,13 @@ export function unlock() {
       // Interrupted by a real tone is fine; only a refusal means still locked.
       .catch((err) => { if (err?.name !== 'AbortError') elUnlocked = false; });
   }
+  return Promise.resolve();
+}
+
+/** Web Audio fallback only. 'interrupted', not just 'suspended': Safari's state after speech. */
+function wakeContext() {
   const a = audio();
   if (!a) return Promise.resolve();
-  preferPlaybackSession();
-  // 'interrupted', not just 'suspended': Safari's state after speech plays.
   return a.state === 'running' ? Promise.resolve() : a.resume().catch(() => {});
 }
 
@@ -156,6 +168,7 @@ export function playTone(tone, opts = {}) {
   const rate = opts.rate || 1;
   const c = CONTOURS[tone] || CONTOURS[1];
   const durMs = c.ms / rate;
+  preferPlaybackSession();
   const p = player();
   if (!p) return playToneWebAudio(tone, opts);
 
@@ -185,7 +198,7 @@ async function playToneWebAudio(tone, opts = {}) {
   if (!a) return;
   // Schedule only once the context is actually running: notes scheduled on a
   // stalled clock either never sound or fire all at once when it wakes.
-  await unlock();
+  await wakeContext();
 
   const c = CONTOURS[tone] || CONTOURS[1];
   const dur = (c.ms / 1000) / (opts.rate || 1);

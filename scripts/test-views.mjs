@@ -591,6 +591,27 @@ ok('playTone degrades silently with no AudioContext', pitchThrew === null,
   delete globalThis.Audio;
 }
 
+// The silent-switch regression: on iPhone a live AudioContext makes the page
+// "ambient", and the silent switch then mutes the <audio> tones and cues too.
+// When <audio> exists, nothing may construct an AudioContext.
+{
+  const fb2 = await import('../js/feedback.js');
+  let contexts = 0;
+  window.AudioContext = class { constructor() { contexts++; this.state = 'running'; } resume() { return Promise.resolve(); } };
+  globalThis.Audio = class { constructor() { this.src = ''; } play() { return Promise.resolve(); } pause() {} };
+  storeMod2.update((st) => { st.settings.sounds = true; });
+  // A fresh module instance: earlier tests left a context cached in pitchMod.
+  const freshPitch = await import('../js/pitch.js?no-ambient');
+  freshPitch.unlock();
+  fb2.unlockAudio();
+  await freshPitch.playTone(1, { rate: 50 });
+  fb2.cue('correct');
+  ok('no Web Audio context is created while <audio> works (keeps silent mode audible)', contexts === 0,
+     `${contexts} AudioContext(s) created`);
+  delete window.AudioContext;
+  delete globalThis.Audio;
+}
+
 console.log('\nAccessibility');
 const uiMod = await import('../js/ui.js');
 ok('hanzi elements are marked lang=zh-CN', uiMod.h('div', { class: 'zh zh-lg' }, '你好').getAttribute('lang') === 'zh-CN');

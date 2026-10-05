@@ -121,8 +121,12 @@ function audio() {
  * answer is scored, outside the tap) are allowed.
  */
 export function unlockAudio() {
+  preferPlaybackSession();
   const p = player();
-  if (p && !elUnlocked) {
+  // No AudioContext unless we need the fallback: on iPhone a live one makes the
+  // page "ambient" sound, and the silent switch then mutes the <audio> cues too.
+  if (!p) return wakeContext();
+  if (!elUnlocked) {
     const silent = cueUrl('silence');
     p.src = silent;
     const played = p.play();
@@ -130,15 +134,18 @@ export function unlockAudio() {
     played?.then?.(() => { if (p.src === silent) p.pause(); })
       .catch((err) => { if (err?.name !== 'AbortError') elUnlocked = false; });
   }
+}
+
+/** Fallback only. Not just 'suspended': Safari reports 'interrupted' after speech. */
+function wakeContext() {
   const a = audio();
-  preferPlaybackSession();
-  // Not just 'suspended': Safari reports 'interrupted' after speech has played.
   if (a && a.state !== 'running') a.resume().catch(() => {});
+  return a;
 }
 
 /** Fallback: the same notes scheduled live on Web Audio. */
 function tone(freq, durationMs, { type = 'sine', gain = 0.06, delayMs = 0 } = {}) {
-  const a = audio();
+  const a = wakeContext();
   if (!a) return;
   const t0 = a.currentTime + delayMs / 1000;
   const osc = a.createOscillator();

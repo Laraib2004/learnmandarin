@@ -97,6 +97,10 @@ en-GB and de-DE.
   replaced this one) as normal, never as a reason to fall back — that played
   two sounds at once. Chrome will not load media in a hidden tab, so automated
   browser checks of playback stay pending; verify with `decodeAudioData`.
+- Feedback cues (`feedback.cue`) work the same way: `CUES` lists each cue's
+  notes, `renderCue()` mixes them to a WAV, played on a **separate** `<audio>`
+  element so a chime never cuts off a tone. Audio is the main feedback channel
+  on iPhone (no haptics), so it must not be the one that goes silent.
 - `word` steps autoplay the spoken word when `hasChineseVoice()`, and fall back
   to the step's `tone` contour only when there is no voice. Tone-teaching steps
   (`tones`, `pickTone`, `teach` with `tone`) always use the contour.
@@ -410,7 +414,7 @@ Built mobile-first against **iPhone 16 (393 x 852pt)**. Rules that are load-bear
 ## Testing
 
 ```bash
-npm test            # both suites, 167 checks
+npm test            # both suites, 172 checks
 npm run test:engine # FSRS maths + alignment scoring (pure logic)
 npm run test:views  # renders every view against a DOM shim
 ```

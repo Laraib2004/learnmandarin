@@ -556,6 +556,41 @@ ok('playTone degrades silently with no AudioContext', pitchThrew === null,
   delete globalThis.Audio;
 }
 
+// Feedback cues follow the tones onto <audio>, for the same iPhone reasons.
+{
+  const fb = await import('../js/feedback.js');
+  const hzIn = (smp, fromMs, toMs) => {
+    const a = Math.round(fromMs * 22.05), b = Math.round(toMs * 22.05);
+    let c = 0;
+    for (let i = a + 1; i < b; i++) if ((smp[i - 1] < 0) !== (smp[i] < 0)) c++;
+    return (c / 2) / ((b - a) / 22050);
+  };
+  const right = fb.renderCue('correct');
+  const lo = hzIn(right, 15, 75), hi = hzIn(right, 110, 200);
+  ok('"correct" cue rises 660 → 880 Hz', Math.abs(lo - 660) < 30 && Math.abs(hi - 880) < 30,
+     `${lo.toFixed(0)} → ${hi.toFixed(0)} Hz`);
+  const wrongHz = hzIn(fb.renderCue('wrong'), 15, 120);
+  ok('"wrong" cue is a low 300 Hz', Math.abs(wrongHz - 300) < 20, `${wrongHz.toFixed(0)} Hz`);
+  ok('every cue renders audible sound', Object.keys(fb.CUES).every((k) =>
+    fb.renderCue(k).some((v) => Math.abs(v) > 500)));
+
+  const calls = [];
+  globalThis.Audio = class {
+    constructor() { this.src = ''; }
+    play() { calls.push(this.src); return Promise.resolve(); }
+    pause() {}
+  };
+  storeMod2.update((st) => { st.settings.sounds = true; });
+  fb.cue('correct');
+  ok('cues play through a media element, inside the tap', calls.length === 1 && calls[0].startsWith('blob:'),
+     calls[0] || 'play() not called synchronously');
+  storeMod2.update((st) => { st.settings.sounds = false; });
+  fb.cue('wrong');
+  ok('the "sounds off" setting still silences cues', calls.length === 1);
+  storeMod2.update((st) => { st.settings.sounds = true; });
+  delete globalThis.Audio;
+}
+
 console.log('\nAccessibility');
 const uiMod = await import('../js/ui.js');
 ok('hanzi elements are marked lang=zh-CN', uiMod.h('div', { class: 'zh zh-lg' }, '你好').getAttribute('lang') === 'zh-CN');

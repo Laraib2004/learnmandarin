@@ -88,6 +88,15 @@ en-GB and de-DE.
   missing voice, works offline, and `contourSVG()` draws the picture from the
   same `CONTOURS` table that generates the audio, so they cannot drift apart.
 - Do not "improve" tone teaching by making it depend on TTS again.
+- **Tones play through an `<audio>` element, not Web Audio.** `renderTone()`
+  renders the contour to samples, `encodeWav()` wraps it, and the blob URL is
+  cached per tone. On iPhone Web Audio is muted by the ring/silent switch and
+  left 'interrupted' by speech, while media elements behave like the voice —
+  the learner heard 你好 and no tones. Web Audio is only the fallback. Reach
+  `play()` synchronously inside the tap, and treat `AbortError` (a newer tone
+  replaced this one) as normal, never as a reason to fall back — that played
+  two sounds at once. Chrome will not load media in a hidden tab, so automated
+  browser checks of playback stay pending; verify with `decodeAudioData`.
 - `word` steps autoplay the spoken word when `hasChineseVoice()`, and fall back
   to the step's `tone` contour only when there is no voice. Tone-teaching steps
   (`tones`, `pickTone`, `teach` with `tone`) always use the contour.
@@ -401,7 +410,7 @@ Built mobile-first against **iPhone 16 (393 x 852pt)**. Rules that are load-bear
 ## Testing
 
 ```bash
-npm test            # both suites, 161 checks
+npm test            # both suites, 167 checks
 npm run test:engine # FSRS maths + alignment scoring (pure logic)
 npm run test:views  # renders every view against a DOM shim
 ```

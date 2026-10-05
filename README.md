@@ -157,7 +157,7 @@ study app: reviews happen on the metro.
 ### Tests
 
 ```bash
-npm test          # 161 checks: scheduler, speech scoring, corpus integrity,
+npm test          # 167 checks: scheduler, speech scoring, corpus integrity,
                   # every view rendered, PWA assets, mobile-layout rules,
                   # session resume, reminder/ICS generation, lesson
                   # integrity and tone-contour synthesis

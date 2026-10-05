@@ -514,6 +514,48 @@ ok('playTone degrades silently with no AudioContext', pitchThrew === null,
   ok('tones ask for a playback audio session (not muted by the silent switch)', session.type === 'playback');
 }
 
+// Tones are rendered to WAV and played through <audio>, because on iPhone
+// Web Audio is muted by the silent switch while speech is not.
+{
+  // Estimate pitch from zero crossings over a window of samples.
+  const pitchAt = (samples, from, to) => {
+    let crossings = 0;
+    for (let i = from + 1; i < to; i++) if ((samples[i - 1] < 0) !== (samples[i] < 0)) crossings++;
+    return (crossings / 2) / ((to - from) / 22050);
+  };
+  const shape = (tone) => {
+    const smp = pitchMod.renderTone(tone);
+    const n = smp.length, w = Math.round(n * 0.15);
+    return { start: pitchAt(smp, Math.round(n * 0.08), Math.round(n * 0.08) + w),
+             mid: pitchAt(smp, Math.round(n * 0.4), Math.round(n * 0.4) + w),
+             end: pitchAt(smp, n - Math.round(n * 0.08) - w, n - Math.round(n * 0.08)) };
+  };
+  const t1 = shape(1), t2 = shape(2), t3 = shape(3), t4 = shape(4);
+  ok('rendered tone 1 stays level', Math.abs(t1.end - t1.start) / t1.start < 0.05,
+     `${t1.start.toFixed(0)} → ${t1.end.toFixed(0)} Hz`);
+  ok('rendered tone 2 rises', t2.end > t2.start * 1.25, `${t2.start.toFixed(0)} → ${t2.end.toFixed(0)} Hz`);
+  ok('rendered tone 3 dips, then rises', t3.mid < t3.start && t3.end > t3.mid * 1.3,
+     `${t3.start.toFixed(0)} → ${t3.mid.toFixed(0)} → ${t3.end.toFixed(0)} Hz`);
+  ok('rendered tone 4 falls', t4.end < t4.start * 0.7, `${t4.start.toFixed(0)} → ${t4.end.toFixed(0)} Hz`);
+  const wav = pitchMod.encodeWav(pitchMod.renderTone(2));
+  const tag = (o) => String.fromCharCode(...wav.slice(o, o + 4));
+  ok('tone WAV has a valid RIFF/WAVE header', tag(0) === 'RIFF' && tag(8) === 'WAVE' && tag(36) === 'data',
+     `${wav.length} bytes`);
+
+  // With <audio> available, play() must be reached synchronously (iOS rule).
+  const calls = [];
+  globalThis.Audio = class {
+    constructor() { this.src = ''; }
+    play() { calls.push(this.src); return Promise.resolve(); }
+    pause() {}
+  };
+  const pending = pitchMod.playTone(3, { rate: 50 });
+  ok('tones play through a media element, inside the tap', calls.length === 1 && calls[0].startsWith('blob:'),
+     calls[0] || 'play() not called synchronously');
+  await pending;
+  delete globalThis.Audio;
+}
+
 console.log('\nAccessibility');
 const uiMod = await import('../js/ui.js');
 ok('hanzi elements are marked lang=zh-CN', uiMod.h('div', { class: 'zh zh-lg' }, '你好').getAttribute('lang') === 'zh-CN');

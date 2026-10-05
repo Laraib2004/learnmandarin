@@ -8,7 +8,7 @@
  * identical. That is not a hypothetical: it is the single most common reason a
  * beginner concludes "I can't hear tones".
  *
- * So we generate the contour directly with an oscillator. A pure tone that
+ * So we generate the contour directly as a synthesised glide. A pure tone that
  * glides exactly the way tone 2 glides is an unambiguous reference: it cannot
  * be mangled by a missing voice, it needs no network, and it works forever
  * offline. Speech is layered on top when a real voice exists — but the contour
@@ -27,22 +27,59 @@ function audio() {
   return ctx;
 }
 
-/**
- * Get the audio context running. Call from inside a real tap.
+/*
+ * HOW THE SOUND IS PLAYED — read this before touching it.
  *
- * Two iPhone traps, both of which made every tone silent while the speech
- * voice kept working:
- *   - When speech synthesis plays, Safari takes the audio session and puts
- *     this context into 'interrupted' — not 'suspended'. Checking only for
- *     'suspended' left it dead after the first spoken word.
- *   - Web Audio obeys the ring/silent switch; speech does not. Declaring a
- *     'playback' audio session (Safari 17+) makes the tones behave like the
- *     voice — this is a learning tool the learner asked to hear.
+ * The contour is rendered to a short WAV in memory and played through an
+ * ordinary <audio> element, not through Web Audio. On iPhone the two follow
+ * different rules, and Web Audio loses on both counts:
+ *   - Web Audio is muted by the ring/silent switch. Media elements and speech
+ *     are not — so the learner heard 你好 but every tone was silent.
+ *   - Speech synthesis takes over the audio session and leaves a Web Audio
+ *     context 'interrupted'.
+ * A media element behaves exactly like the voice does, everywhere. Web Audio
+ * remains only as a fallback where <audio> or Blob URLs do not exist.
+ *
+ * iOS lets an element play outside a tap only after it has played inside one,
+ * so unlock() plays a few milliseconds of silence on the first real tap.
  */
+const SAMPLE_RATE = 22050;
+let el = null;
+let elUnlocked = false;
+const urls = new Map();            // `${tone}@${rate}` -> blob URL, rendered once
+
+function player() {
+  if (el) return el;
+  if (typeof Audio === 'undefined' || typeof URL === 'undefined' || !URL.createObjectURL || typeof Blob === 'undefined') return null;
+  el = new Audio();
+  el.preload = 'auto';
+  return el;
+}
+
+function wavUrl(key, render) {
+  if (!urls.has(key)) urls.set(key, URL.createObjectURL(new Blob([render()], { type: 'audio/wav' })));
+  return urls.get(key);
+}
+
+const silenceUrl = () => wavUrl('silence', () => encodeWav(new Int16Array(Math.round(SAMPLE_RATE * 0.05))));
+
+/** Call from inside a real tap. Wakes both the media element and Web Audio. */
 export function unlock() {
+  const p = player();
+  if (p && !elUnlocked) {
+    const silent = silenceUrl();
+    p.src = silent;
+    const played = p.play();
+    elUnlocked = true;
+    // Only pause the silence — never a tone that started in the meantime.
+    played?.then?.(() => { if (p.src === silent) p.pause(); })
+      // Interrupted by a real tone is fine; only a refusal means still locked.
+      .catch((err) => { if (err?.name !== 'AbortError') elUnlocked = false; });
+  }
   const a = audio();
   if (!a) return Promise.resolve();
   preferPlaybackSession();
+  // 'interrupted', not just 'suspended': Safari's state after speech plays.
   return a.state === 'running' ? Promise.resolve() : a.resume().catch(() => {});
 }
 
@@ -53,7 +90,8 @@ export function preferPlaybackSession() {
   } catch { /* not supported — nothing to do */ }
 }
 
-export const isSupported = () => Boolean(window.AudioContext || window.webkitAudioContext);
+export const isSupported = () =>
+  Boolean(player() || window.AudioContext || window.webkitAudioContext);
 
 /** Chao level 1..5 -> Hz. Roughly one octave across the speaking range. */
 const hz = (level) => 150 * Math.pow(2, (level - 1) / 4);
@@ -68,11 +106,81 @@ export const CONTOURS = {
 };
 
 /**
+ * Render a contour to 16-bit samples. Pure: no DOM, no audio device, so it is
+ * testable, and it is the same glide the Web Audio fallback schedules —
+ * levels evenly spaced, exponential (perceptual) interpolation, triangle wave,
+ * 40ms attack and 60ms release so it never clicks.
+ */
+export function renderTone(tone, { rate = 1, gain = 0.32 } = {}) {
+  const c = CONTOURS[tone] || CONTOURS[1];
+  const dur = (c.ms / 1000) / rate;
+  const n = Math.round(dur * SAMPLE_RATE);
+  const out = new Int16Array(n);
+  const segs = c.levels.length - 1 || 1;
+  let phase = 0;
+  for (let i = 0; i < n; i++) {
+    const t = i / SAMPLE_RATE;
+    const u = Math.min(t / dur, 1) * segs;
+    const k = Math.min(Math.floor(u), segs - 1);
+    const f0 = hz(c.levels[k]);
+    const f1 = hz(c.levels[Math.min(k + 1, c.levels.length - 1)]);
+    const f = f0 * Math.pow(f1 / f0, u - k);
+    phase += (2 * Math.PI * f) / SAMPLE_RATE;
+    const tri = (2 / Math.PI) * Math.asin(Math.sin(phase));
+    const env = Math.min(1, t / 0.04, (dur - t) / 0.06);
+    out[i] = Math.round(Math.max(0, env) * gain * tri * 32767);
+  }
+  return out;
+}
+
+/** Wrap 16-bit mono samples in a minimal RIFF/WAVE header. */
+export function encodeWav(samples, sampleRate = SAMPLE_RATE) {
+  const bytes = new Uint8Array(44 + samples.length * 2);
+  const v = new DataView(bytes.buffer);
+  const str = (o, s) => { for (let i = 0; i < s.length; i++) bytes[o + i] = s.charCodeAt(i); };
+  str(0, 'RIFF'); v.setUint32(4, 36 + samples.length * 2, true); str(8, 'WAVE');
+  str(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, sampleRate, true); v.setUint32(28, sampleRate * 2, true);
+  v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+  str(36, 'data'); v.setUint32(40, samples.length * 2, true);
+  for (let i = 0; i < samples.length; i++) v.setInt16(44 + i * 2, samples[i], true);
+  return bytes;
+}
+
+/**
  * Play a tone as a pure pitch glide.
  * @param {number} tone 1..5
  * @param {object} opts { rate: speed multiplier, gain }
  */
-export async function playTone(tone, opts = {}) {
+export function playTone(tone, opts = {}) {
+  const rate = opts.rate || 1;
+  const c = CONTOURS[tone] || CONTOURS[1];
+  const durMs = c.ms / rate;
+  const p = player();
+  if (!p) return playToneWebAudio(tone, opts);
+
+  // Must reach play() synchronously: iOS only honours it inside the tap.
+  p.pause();
+  p.src = wavUrl(`${tone}@${rate}`, () => encodeWav(renderTone(tone, { rate })));
+  const playing = p.play();
+  elUnlocked = true;
+  return new Promise((resolve) => {
+    let settled = false;
+    const done = () => { if (!settled) { settled = true; resolve(); } };
+    p.onended = done;
+    setTimeout(done, durMs + 250);         // never let a sequence hang on a lost event
+    playing?.catch?.((err) => {
+      // AbortError only means a newer tone (or a pause) replaced this one —
+      // falling back then would play two sounds at once. Fall back only when
+      // media playback itself is refused or unsupported.
+      if (err?.name === 'AbortError') return done();
+      playToneWebAudio(tone, opts).then(done);
+    });
+  });
+}
+
+/** Fallback for browsers without <audio>/Blob URLs. Same glide, scheduled live. */
+async function playToneWebAudio(tone, opts = {}) {
   const a = audio();
   if (!a) return;
   // Schedule only once the context is actually running: notes scheduled on a

@@ -56,6 +56,24 @@ export function listen({ lang = 'zh-CN', timeoutMs = 8000 } = {}) {
   });
 }
 
+/**
+ * One plain sentence per recogniser failure, shared by every view.
+ *
+ * 'network' matters most: Chrome sends audio to a server to recognise it, so
+ * offline the mic "fails" for a reason that has nothing to do with the learner.
+ * Say so, and tell them the speaking still counts — never imply they did it wrong.
+ */
+export function errorText(code) {
+  return {
+    'no-speech': 'Did not catch anything. Check the mic is allowed and speak a little louder.',
+    timeout: 'Timed out waiting for speech. Tap the mic and try again.',
+    'not-allowed': 'Microphone permission was denied. Allow it in your browser’s site settings.',
+    'audio-capture': 'No microphone found.',
+    network: 'Scoring your speech needs an internet connection on this device. Everything else works offline — say it out loud anyway, the speaking still counts.',
+    unsupported: 'This browser cannot score speech. Say it out loud anyway — the speaking still counts.',
+  }[code] || `Could not score that (${code}). Carry on regardless.`;
+}
+
 /** Strip punctuation/whitespace so scoring compares only the spoken content. */
 export function normalize(text) {
   return (text || '')

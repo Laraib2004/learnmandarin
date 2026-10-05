@@ -80,11 +80,21 @@ async function boot() {
     main.replaceChildren();
     const d = document.createElement('div');
     d.className = 'notice warn';
-    d.innerHTML =
-      '<b>Could not load the course data.</b><br>' +
-      'If you opened this file directly, browsers block loading JSON from <code>file://</code>. ' +
-      'Run a local server instead — <code>npm start</code> or <code>python -m http.server 8080</code> — ' +
-      'then open <code>http://localhost:8080</code>.';
+    if (location.protocol === 'file:') {
+      d.innerHTML =
+        '<b>Could not load the course data.</b><br>' +
+        'If you opened this file directly, browsers block loading JSON from <code>file://</code>. ' +
+        'Run a local server instead — <code>npm start</code> or <code>python -m http.server 8080</code> — ' +
+        'then open <code>http://localhost:8080</code>.';
+    } else {
+      // Offline before the course was ever saved on this device — the one case
+      // offline support cannot cover. Say exactly that, not something technical.
+      d.innerHTML =
+        '<b>The course is not saved on this device yet.</b><br>' +
+        'Open the app once with an internet connection and leave it open for a few seconds. ' +
+        'After that it works without internet. On iPhone, do this from the Home Screen icon ' +
+        'if you use one — it keeps its own copy, separate from Safari.';
+    }
     main.append(d);
     return;
   }
@@ -95,6 +105,10 @@ async function boot() {
   setupInstall();
   primeAudioOnFirstTap();
   startReminderLoop((msg) => toast(msg, 'info', 6000));
+  // Losing signal mid-lesson should not feel like the app broke.
+  window.addEventListener('offline', () =>
+    toast('You are offline. Lessons, review and audio keep working; only speech scoring needs internet.', 'info', 5000));
+  window.addEventListener('online', () => toast('Back online.', 'info', 2000));
   window.addEventListener('hashchange', render);
   await render();
 }
@@ -111,6 +125,10 @@ function registerServiceWorker() {
     navigator.serviceWorker.register('sw.js').catch((err) => {
       console.warn('Service worker registration failed:', err);
     });
+    // Ask the browser not to evict the offline copy. Safari otherwise clears
+    // site data after ~7 days without a visit, and "it worked offline last
+    // month" is not a promise worth making. A refusal changes nothing.
+    navigator.storage?.persist?.().catch(() => {});
   };
 
   // This runs after `await loadCorpus()`, so the window `load` event has

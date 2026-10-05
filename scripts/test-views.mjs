@@ -253,6 +253,80 @@ for (const rel of precache) {
 }
 ok('every precached asset exists', missing.length === 0, missing.join(', ') || `${precache.length} files verified`);
 
+// The reverse check: everything the app can load must be precached, or a new
+// module (voicehelp.js was nearly one) silently breaks offline use.
+{
+  const { readdir } = await import('node:fs/promises');
+  const shipped = [];
+  for (const dir of ['js', 'js/views', 'data', 'data/corpus', 'css', 'icons']) {
+    for (const f of await readdir(join(ROOT, dir), { withFileTypes: true })) {
+      if (f.isFile() && /\.(js|json|css|png)$/.test(f.name)) shipped.push(`./${dir}/${f.name}`);
+    }
+  }
+  const notCached = shipped.filter((f) => !precache.includes(f));
+  ok('every shipped file is precached for offline use', notCached.length === 0,
+     notCached.join(', ') || `${shipped.length} files`);
+}
+
+// Run the real sw.js against a fake offline world.
+{
+  const vm = await import('node:vm');
+  const listeners = {};
+  const store = new Map();             // url -> body
+  const norm = (u) => new URL(u, 'https://x.test/app/').href;
+  const strip = (u) => u.split('?')[0];
+  const cacheApi = {
+    async match(req, opts = {}) {
+      const u = norm(typeof req === 'string' ? req : req.url);
+      if (store.has(u)) return { body: store.get(u), ok: true };
+      if (opts.ignoreSearch) for (const [k, v] of store) if (strip(k) === strip(u)) return { body: v, ok: true };
+      return undefined;
+    },
+    async put(req, res) { store.set(norm(req.url || req), res.body); },
+    async add(req) { store.set(norm(req.url || req), `cached:${new URL(norm(req.url || req)).pathname}`); },
+  };
+  let network = 'offline';               // 'offline' | 'hang' | 'online'
+  const sandbox = {
+    self: { addEventListener: (t, fn) => { listeners[t] = fn; }, location: { origin: 'https://x.test' },
+            skipWaiting: async () => {}, clients: { claim: async () => {} } },
+    caches: { open: async () => cacheApi, keys: async () => [], delete: async () => true,
+              match: (r, o) => cacheApi.match(r, o) },
+    fetch: (req) => network === 'offline' ? Promise.reject(new TypeError('Failed to fetch'))
+      : network === 'hang' ? new Promise(() => {})
+      : Promise.resolve({ ok: true, type: 'basic', redirected: false, body: 'fresh', clone() { return this; } }),
+    Request: class { constructor(url) { this.url = norm(url); } },
+    Response: { error: () => ({ error: true }) },
+    URL, setTimeout, clearTimeout, console: { warn() {} },
+  };
+  const swCode = (await rf(join(ROOT, 'sw.js'), 'utf8')).replace(/NAV_TIMEOUT_MS = \d+/, 'NAV_TIMEOUT_MS = 50');
+  vm.runInNewContext(swCode, sandbox);
+  await new Promise((done) => listeners.install({ waitUntil: (p) => p.then(done) }));
+
+  const request = (path, mode = 'cors') => ({ url: norm(path), method: 'GET', mode });
+  const respond = (req) => new Promise((resolve) => listeners.fetch({
+    request: req, respondWith: (p) => Promise.resolve(p).then(resolve), waitUntil() {},
+  }));
+
+  network = 'offline';
+  ok('offline: the home-screen start page opens from cache',
+     (await respond(request('index.html', 'navigate')))?.body === 'cached:/app/index.html');
+  ok('offline: the site root opens from cache',
+     (await respond(request('', 'navigate')))?.body?.startsWith('cached:/app/'));
+  ok('offline: a link with a query string still opens the app',
+     (await respond(request('?ref=share', 'navigate')))?.body?.startsWith('cached:/app/'));
+  ok('offline: course data loads from cache',
+     (await respond(request('data/lessons.json')))?.body === 'cached:/app/data/lessons.json');
+  network = 'hang';
+  const t0 = Date.now();
+  // Raced against a deadline so a regression fails the test instead of hanging the suite.
+  const hung = await Promise.race([respond(request('index.html', 'navigate')),
+    new Promise((r) => setTimeout(() => r(null), 2000))]);
+  ok('a hanging connection falls back to the saved app instead of spinning',
+     hung?.body === 'cached:/app/index.html' && Date.now() - t0 < 1000, `${Date.now() - t0}ms`);
+  network = 'online';
+  ok('online: navigations get the fresh page', (await respond(request('index.html', 'navigate')))?.body === 'fresh');
+}
+
 ok('css honours safe-area insets', css.includes('env(safe-area-inset-bottom'));
 ok('css uses dvh not bare vh for full height', css.includes('100dvh') && !/min-height:\s*100vh/.test(css));
 ok('inputs are >=16px so iOS will not zoom on focus', css.includes('font-size: 16px'));

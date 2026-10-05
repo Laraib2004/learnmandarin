@@ -195,7 +195,7 @@ export default function drill(root) {
       return h('div', { class: 'notice warn' },
         result.error === 'no-speech' ? 'Did not catch that — speak up and try again.'
           : result.error === 'not-allowed' ? 'Microphone blocked. Allow it in your browser settings.'
-          : `Recognition failed: ${result.error}`);
+          : asr.errorText(result.error));
     }
     const { score, marks, exact } = result;
     const colour = score >= 90 ? 'var(--good)' : score >= 60 ? 'var(--warn)' : 'var(--bad)';

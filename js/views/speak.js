@@ -154,14 +154,7 @@ export default function speakView(root) {
 /** Per-character verdict plus a plain-language read on what to fix. */
 function feedback(result, s) {
   if (result.error) {
-    const msg = {
-      'no-speech': 'Did not catch anything. Check the mic is allowed and speak a little louder.',
-      timeout: 'Timed out waiting for speech.',
-      'not-allowed': 'Microphone permission was denied. Allow it in your browser’s site settings.',
-      'audio-capture': 'No microphone found.',
-      network: 'Speech recognition needs a network connection in this browser.',
-    }[result.error] || `Recognition failed: ${result.error}`;
-    return h('div', { class: 'notice warn' }, msg);
+    return h('div', { class: 'notice warn' }, asr.errorText(result.error));
   }
 
   const { score, marks, heard, exact } = result;

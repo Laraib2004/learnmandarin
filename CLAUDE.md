@@ -368,6 +368,20 @@ Built mobile-first against **iPhone 16 (393 x 852pt)**. Rules that are load-bear
   change**, or returning users keep the old files. Each file is added
   individually rather than via `addAll`, so one renamed asset cannot fail the
   entire install.
+- **Offline:** navigations are network-first with a **3s timeout** — a weak
+  connection hangs rather than fails, and without the timeout the app looked
+  broken offline. Cache lookups use `ignoreVary` (GitHub Pages sends
+  `Vary: Accept-Encoding`, which Safari has refused to match) and fallbacks use
+  `ignoreSearch`. Only `ok`, non-redirected, same-origin responses are cached.
+  `scripts/test-views.mjs` runs the real `sw.js` in a `vm` sandbox against fake
+  offline / hanging / online networks, and fails if any shipped js/json/css/png
+  file is missing from `PRECACHE` — add new files there.
+- `navigator.storage.persist()` is requested at registration so Safari does not
+  evict the offline copy after a week unused. iPhone Home Screen apps keep their
+  own storage, separate from Safari: each must be opened online once.
+- Speech *scoring* is the one thing that needs a network (Chrome's recogniser
+  is server-side). `asr.errorText()` holds every view's failure copy; `network`
+  tells the learner it is the connection, not them.
 - `registerServiceWorker()` must check `document.readyState === 'complete'`
   before falling back to a `load` listener. It runs after `await loadCorpus()`,
   by which point `load` has usually already fired — the listener-only version
@@ -387,7 +401,7 @@ Built mobile-first against **iPhone 16 (393 x 852pt)**. Rules that are load-bear
 ## Testing
 
 ```bash
-npm test            # both suites, 152 checks
+npm test            # both suites, 161 checks
 npm run test:engine # FSRS maths + alignment scoring (pure logic)
 npm run test:views  # renders every view against a DOM shim
 ```

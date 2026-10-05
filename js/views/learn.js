@@ -545,7 +545,7 @@ export default function learn(root, { navigate }) {
       return h('div', { class: 'notice warn' },
         r.error === 'no-speech' ? 'Did not catch that — try again a little louder.'
           : r.error === 'not-allowed' ? 'Microphone blocked. Allow it in your browser settings.'
-          : `Could not score that: ${r.error}. Carry on regardless.`);
+          : asr.errorText(r.error));
     }
     const colour = r.score >= 70 ? 'var(--good)' : r.score >= 40 ? 'var(--warn)' : 'var(--bad)';
     return h('div', { class: 'stack' },

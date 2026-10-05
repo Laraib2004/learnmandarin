@@ -107,6 +107,10 @@ en-GB and de-DE.
   `feedback.unlockAudio()` only touch Web Audio in the fallback path; a guard
   test counts constructions (it loads a fresh `pitch.js` instance, since an
   earlier test leaves a context cached).
+- A page cannot read the iPhone silent switch. `voicehelp.silentModeHint()`
+  tells iPhone/iPad learners (`isIOS()`, which also catches iPads reporting as
+  Macs) on the `tones`/`pickTone` steps that Silent mode can mute tones while
+  speech still plays — shown until "Got it" (`settings.silentHintDismissed`).
 - `word` steps autoplay the spoken word when `hasChineseVoice()`, and fall back
   to the step's `tone` contour only when there is no voice. Tone-teaching steps
   (`tones`, `pickTone`, `teach` with `tone`) always use the contour.
@@ -420,7 +424,7 @@ Built mobile-first against **iPhone 16 (393 x 852pt)**. Rules that are load-bear
 ## Testing
 
 ```bash
-npm test            # both suites, 173 checks
+npm test            # both suites, 177 checks
 npm run test:engine # FSRS maths + alignment scoring (pure logic)
 npm run test:views  # renders every view against a DOM shim
 ```

@@ -35,6 +35,7 @@ class Node2 {
   append(...kids) { for (const k of kids) this.children.push(typeof k === 'object' ? k : textNode(k)); }
   replaceChildren(...kids) { this.children = []; this.append(...kids.filter(Boolean)); }
   replaceWith() { /* no-op for the shim */ }
+  remove() { this.removed = true; }
   addEventListener(t, fn) { (this.listeners[t] ||= []).push(fn); }
   removeEventListener() {}
   focus() {}
@@ -610,6 +611,31 @@ ok('playTone degrades silently with no AudioContext', pitchThrew === null,
      `${contexts} AudioContext(s) created`);
   delete window.AudioContext;
   delete globalThis.Audio;
+}
+
+// A page cannot read the iPhone silent switch, so iPhone/iPad learners are told
+// once, on the tone exercises, and never again after "Got it".
+{
+  const vh = await import('../js/voicehelp.js');
+  const prevNav = globalThis.navigator;
+  const as = (ua, maxTouchPoints = 0) => { globalThis.navigator = { ...prevNav, userAgent: ua, maxTouchPoints }; };
+  as('Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15');
+  const iphone = vh.isIOS();
+  as('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15', 5);
+  const ipad = vh.isIOS();
+  as('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15', 0);
+  const mac = vh.isIOS();
+  ok('iPhone and iPad (which reports itself as a Mac) are detected; a Mac is not', iphone && ipad && !mac);
+
+  storeMod2.update((st) => { st.settings.silentHintDismissed = false; });
+  ok('the silent-mode note stays off non-iPhone devices', vh.silentModeHint() === null);
+  as('Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15');
+  const note = vh.silentModeHint();
+  ok('iPhone learners are told Silent mode can mute the tones', /Silent mode/.test(note?.textContent || ''));
+  note.all.find((n) => n.tagName === 'BUTTON' && /Got it/.test(n.textContent)).click();
+  ok('"Got it" hides the note for good', storeMod2.get().settings.silentHintDismissed === true && vh.silentModeHint() === null);
+  storeMod2.update((st) => { st.settings.silentHintDismissed = false; });
+  globalThis.navigator = prevNav;
 }
 
 console.log('\nAccessibility');

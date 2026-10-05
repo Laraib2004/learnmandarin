@@ -24,6 +24,7 @@ const defaultState = () => ({
     reminderOn: false,
     reminderTime: '15:00', // 24h local time
     toneNumbers: false,    // nǐ³ — tone without relying on colour (colour-blind, dyslexic)
+    silentHintDismissed: false, // iPhone "Silent mode can mute the tones" note, shown until "Got it"
   },
   cards: {},               // sentenceId -> FSRS card
   tones: {},               // toneDrillKey -> { seen, correct }

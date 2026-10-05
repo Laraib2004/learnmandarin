@@ -1,4 +1,5 @@
 import { h } from './ui.js';
+import { get, update } from './store.js';
 import { speak, initVoices, hasChineseVoice } from './tts.js';
 import { unlockAudio, toast } from './feedback.js';
 
@@ -12,9 +13,16 @@ import { unlockAudio, toast } from './feedback.js';
  * page they already scrolled past.
  */
 
+/** iPhone, iPod, or iPad — which reports itself as a Mac since iPadOS 13, so check for touch. */
+export function isIOS() {
+  const nav = globalThis.navigator;
+  const ua = nav?.userAgent || '';
+  return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && (nav?.maxTouchPoints || 0) > 1);
+}
+
 function platform() {
   const ua = globalThis.navigator?.userAgent || '';
-  if (/iPhone|iPad|iPod/.test(ua)) return 'ios';
+  if (isIOS()) return 'ios';
   if (/Android/.test(ua)) return 'android';
   if (/Windows/.test(ua)) return 'windows';
   if (/Mac OS X/.test(ua)) return 'mac';
@@ -105,4 +113,25 @@ export function showVoiceHelp(host) {
   if (!card) return;
   host.prepend(card);
   card.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
+}
+
+/**
+ * iPhone Silent mode. A web page cannot read the switch, and tones are muted
+ * by it on some iOS versions even though the voice is not — so a learner hears
+ * 你好 but silent tones and concludes the tone exercise is broken. Say so once,
+ * on the tone exercises only, and never again after "Got it".
+ */
+export function silentModeHint() {
+  if (!isIOS() || get().settings.silentHintDismissed) return null;
+  const note = h('div', { class: 'notice', role: 'note' },
+    h('b', {}, 'No sound from the tones? '),
+    'Silent mode on iPhone can mute them, even when spoken words still play. ' +
+    'Turn Silent mode off — the switch on the side, or the Action button or Control Centre on newer models — ' +
+    'and turn the volume up.',
+    h('div', { style: 'margin-top:.5rem' },
+      h('button', {
+        class: 'btn btn-ghost tappable',
+        onclick: () => { update((s) => { s.settings.silentHintDismissed = true; }); note.remove(); },
+      }, 'Got it')));
+  return note;
 }

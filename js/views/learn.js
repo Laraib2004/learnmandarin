@@ -1,7 +1,7 @@
 import { h, pinyinEl, shuffle, autoSandhi, spokenNote, trapNotes } from '../ui.js';
 import { getCorpus, seedFromLesson, seedCharsFromLesson, lookupGlyph } from '../deck.js';
 import { speak, initVoices, hasChineseVoice } from '../tts.js';
-import { voiceHelpCard } from '../voicehelp.js';
+import { voiceHelpCard, silentModeHint } from '../voicehelp.js';
 import * as pitch from '../pitch.js';
 import * as asr from '../asr.js';
 import { get, update, bumpDaily, saveSession, clearSession } from '../store.js';
@@ -306,6 +306,7 @@ export default function learn(root, { navigate }) {
     return [
       h('h2', { style: 'margin:0' }, s.title),
       h('p', { class: 'muted small', style: 'text-align:left' }, s.body),
+      silentModeHint(),
       h('div', { class: 'contour-row' },
         ...s.items.map((t) =>
           h('button', { class: 'btn tappable contour-btn', onclick: () => pitch.playTone(t) },
@@ -320,6 +321,7 @@ export default function learn(root, { navigate }) {
     const opts = s.only || [1, 2, 3, 4];
     return [
       h('h2', { style: 'margin:0' }, s.question),
+      silentModeHint(),
       h('button', { class: 'mic tappable', 'aria-label': 'Play the tone again', onclick: () => pitch.playTone(s.answer) }, '🔊'),
       h('div', { class: 'muted small' }, 'Tap to hear it again'),
       h('div', { class: 'choices' },
